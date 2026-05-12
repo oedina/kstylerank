@@ -5,177 +5,485 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>KStyleRank — April 2026 Korean Fashion Rankings</title>
 
-<!-- SEO + OG (kept & improved) -->
+<!-- SEO -->
 <meta name="description" content="The data-driven ranking of Korean drama and K-pop fashion styles. Hybrid-scored from Google Trends, drama viewership, hashtag volume, and community votes. Updated weekly.">
 <meta name="keywords" content="Korean fashion, K-drama fashion, Kpop style, Korean drama outfits, Korean street style, Seongsu-dong fashion, kstyle, K-fashion ranking">
-<link rel="canonical" href="https://oedina.github.io/kstylerank/">
+<meta name="author" content="KStyleRank">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://yourusername.github.io/kstylerank/">
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yourusername.github.io/kstylerank/">
+<meta property="og:title" content="KStyleRank — Korean Fashion Style Rankings">
+<meta property="og:description" content="Weekly data-driven rankings of K-drama and K-pop fashion styles. Vote for your favourites and see what's trending in Seoul.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&q=80&fit=crop">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_GB">
+<meta property="og:site_name" content="KStyleRank">
 
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://yourusername.github.io/kstylerank/">
+<meta name="twitter:title" content="KStyleRank — Korean Fashion Style Rankings">
+<meta name="twitter:description" content="Weekly data-driven rankings of K-drama and K-pop fashion styles. Vote for your favourites and see what's trending in Seoul.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&q=80&fit=crop">
+
+<!-- Favicon (emoji fallback — replace with real favicon.ico later) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --ink:#0a0a0a; --cream:#f5f2ee; --warm:#ece7e0; --muted:#7a7672;
-  --gold:#b8975a; --green:#3B6D11; --red:#A32D2D;
-}
-body{
-  background:var(--cream); color:var(--ink); font-family:'Montserrat',sans-serif;
-  font-weight:300; font-size:13px; line-height:1.5; margin:0; transition:0.4s;
-}
-.dark-mode{
-  --ink:#f5f2ee; --cream:#0a0a0a; --warm:#1c1a17; --muted:#a09c97;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#0a0a0a;--cream:#f5f2ee;--warm:#ece7e0;--muted:#7a7672;--hint:#a09c97;--rule:rgba(10,10,10,0.1);--gold:#b8975a;--green:#3B6D11;--red:#A32D2D}
+body{background:var(--cream);color:var(--ink);font-family:'Montserrat',sans-serif;font-weight:300;font-size:13px}
 
-/* MOBILE-FIRST HERO */
-.hero{
-  min-height:100vh; background:linear-gradient(rgba(10,10,10,0.45),rgba(10,10,10,0.55)),
-  url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=2000&q=80') center/cover no-repeat;
-  display:flex; align-items:center; justify-content:center; text-align:center; color:white; position:relative;
-}
-.hero-content h1{
-  font-family:'Cormorant Garamond',serif; font-size:clamp(2.8rem,8vw,4.8rem); font-weight:300; letter-spacing:0.05em;
-}
-.hero-content p{ font-size:1.1rem; max-width:520px; margin:16px auto; opacity:0.95; }
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;background:var(--cream);border-bottom:0.5px solid var(--rule);padding:12px 32px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:20px;letter-spacing:0.18em;text-transform:uppercase}
+.logo b{color:var(--gold);font-weight:300}
+.issue{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--hint)}
+.nav-links{display:flex;gap:24px}
+.nl{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);cursor:pointer;text-decoration:none;transition:color .2s}
+.nl:hover,.nl.active{color:var(--ink)}
 
-/* NAV + SEARCH */
-.nav{
-  position:sticky; top:0; z-index:50; background:var(--cream); border-bottom:0.5px solid var(--rule); 
-  padding:12px 5%; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
-}
-.logo{font-family:'Cormorant Garamond',serif; font-size:22px; letter-spacing:0.18em;}
-.search-bar{
-  flex:1; max-width:420px; background:var(--warm); border:0.5px solid var(--rule); border-radius:30px;
-  padding:8px 16px; display:flex; align-items:center; gap:8px; font-size:13px;
-}
-.search-bar input{
-  border:none; background:none; outline:none; width:100%; font-family:inherit;
-}
+/* ALGO BAR */
+.algo{display:flex;gap:10px;align-items:center;padding:8px 32px;background:var(--warm);border-bottom:0.5px solid var(--rule);flex-wrap:wrap}
+.algo-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted)}
+.algo-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.algo-sep{color:var(--rule);font-size:16px;line-height:1}
 
-/* GRID - Mobile First */
-.grid{
-  display:grid; grid-template-columns:1fr; gap:16px; padding:20px 5% 60px;
-  max-width:1400px; margin:0 auto;
-}
-@media(min-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}}
+/* MAIN */
+.main{padding:20px 32px 40px}
+.filters{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap}
+.fp{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;padding:5px 12px;border:0.5px solid var(--rule);background:var(--cream);color:var(--muted);cursor:pointer;border-radius:4px;transition:all .15s;font-family:'Montserrat',sans-serif;font-weight:400}
+.fp:hover{background:var(--warm);color:var(--ink)}
+.fp.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.sec-label{font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--hint);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.sec-label::after{content:'';flex:1;height:0.5px;background:var(--rule)}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}}
 
 /* CARD */
-.card{
-  background:var(--cream); border:0.5px solid var(--rule); border-radius:12px; overflow:hidden;
-  cursor:pointer; transition:all 0.3s cubic-bezier(0.4,0,0.2,1); box-shadow:0 4px 12px rgba(0,0,0,0.05);
-}
-.card:hover{transform:translateY(-12px); box-shadow:0 20px 40px rgba(10,10,10,0.15); border-color:var(--gold)}
-.photo-wrap{position:relative; overflow:hidden}
-.photo{width:100%; aspect-ratio:3/4; object-fit:cover; transition:transform .4s}
-.card:hover .photo{transform:scale(1.06)}
-.rank-badge{
-  position:absolute; top:12px; left:12px; font-family:'Cormorant Garamond',serif; font-size:13px;
-  padding:4px 10px; border-radius:4px; background:rgba(245,242,238,0.95); color:var(--ink);
-}
-.rank-badge.gold{background:var(--gold); color:white}
+.card{background:var(--cream);border:0.5px solid var(--rule);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.card:hover{border-color:rgba(10,10,10,0.3)}
+.card.top{border-color:var(--gold)}
+.photo-wrap{position:relative;overflow:hidden}
+.photo{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:var(--warm);transition:transform .3s}
+.card:hover .photo{transform:scale(1.04)}
+.rank-badge{position:absolute;top:8px;left:8px;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.1em;background:rgba(245,242,238,0.92);color:var(--ink);padding:2px 7px;border:0.5px solid rgba(10,10,10,0.14)}
+.rank-badge.gold{background:rgba(184,151,90,0.9);color:#fff}
+.view-hint{position:absolute;bottom:0;left:0;right:0;background:rgba(10,10,10,0.55);color:var(--cream);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;text-align:center;padding:6px;opacity:0;transition:opacity .2s}
+.card:hover .view-hint{opacity:1}
 
-/* Trending animation */
-.trending{ animation:trendPulse 2s infinite alternate; }
-@keyframes trendPulse{ from{opacity:0.85} to{opacity:1} }
+/* SIGNALS */
+.signals{display:flex;border-top:0.5px solid var(--rule);border-bottom:0.5px solid var(--rule)}
+.sig{flex:1;padding:4px 0;text-align:center;border-right:0.5px solid var(--rule)}
+.sig:last-child{border-right:none}
+.sig-l{font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--hint);display:block}
+.sig-v{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:300}
+.sig-v.g{color:var(--green)}.sig-v.m{color:var(--gold)}.sig-v.lo{color:var(--muted)}
 
-/* Confetti container */
-#confetti{ position:fixed; inset:0; pointer-events:none; z-index:999; }
+/* CARD BODY */
+.cbody{padding:8px 10px 10px}
+.crank{font-size:7px;letter-spacing:0.2em;text-transform:uppercase;color:var(--hint);margin-bottom:3px}
+.cname{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:300;letter-spacing:0.03em;margin-bottom:2px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.cmeta{font-size:9px;color:var(--muted);font-style:italic;font-family:'Cormorant Garamond',serif;margin-bottom:5px;line-height:1.3}
+.tags{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:7px}
+.tag{font-size:7px;letter-spacing:0.12em;text-transform:uppercase;padding:1px 5px;border:0.5px solid var(--rule);color:var(--muted)}
+.tag.drama{border-color:var(--ink);color:var(--ink)}
+.tag.kpop{border-color:var(--gold);color:var(--gold)}
+.tag.hot{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.cfoot{display:flex;align-items:center;justify-content:space-between}
+.cscore{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;line-height:1}
+.cscore sub{font-size:9px;color:var(--muted);font-family:'Montserrat',sans-serif;vertical-align:baseline}
+.cvotes{font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:var(--hint);margin-top:2px}
+.delta{font-size:9px;font-weight:400}
+.delta.u{color:var(--green)}.delta.d{color:var(--red)}.delta.f{color:var(--hint)}
+.vbtns{display:flex;border:0.5px solid var(--rule)}
+.vb{width:28px;height:22px;background:transparent;border:none;border-right:0.5px solid var(--rule);cursor:pointer;font-size:9px;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .15s}
+.vb:last-child{border-right:none}
+.vb:hover{background:var(--warm);color:var(--ink)}
+.vb.vup{background:var(--ink);color:var(--cream)}
+.vb.vdn{background:#FCEBEB;color:var(--red)}
+.bar-track{height:1px;background:var(--rule);margin-top:7px;overflow:hidden}
+.bar-fill{height:1px;background:var(--ink);transition:width .4s ease}
 
-/* Other styles (kept from original + minor tweaks) */
-.algo, .filters, .signals, .cbody, .drawer, .overlay, .toast { /* ... original styles preserved ... */ }
+/* OVERLAY */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.open{opacity:1;pointer-events:all}
+
+/* DRAWER */
+.drawer{position:fixed;top:0;right:0;width:min(400px,100vw);height:100vh;background:var(--cream);z-index:101;transform:translateX(105%);transition:transform .35s cubic-bezier(.4,0,.2,1);overflow-y:auto;overflow-x:hidden;border-left:0.5px solid var(--rule)}
+.drawer.open{transform:translateX(0)}
+.d-close{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--cream);border-bottom:0.5px solid var(--rule)}
+.d-close-btn{width:28px;height:28px;background:var(--warm);border:0.5px solid var(--rule);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);transition:all .15s}
+.d-close-btn:hover{background:var(--ink);color:var(--cream)}
+.d-close-title{font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--hint)}
+.d-photo{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--warm)}
+.d-body{padding:16px}
+.d-eyebrow{font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.d-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;letter-spacing:0.04em;margin-bottom:3px}
+.d-source{font-size:10px;color:var(--muted);font-style:italic;font-family:'Cormorant Garamond',serif;margin-bottom:12px;line-height:1.5}
+.score-row{display:flex;gap:6px;margin-bottom:14px}
+.score-box{flex:1;padding:8px;background:var(--warm);border:0.5px solid var(--rule);border-radius:4px;text-align:center}
+.score-box-label{font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--hint);margin-bottom:3px}
+.score-box-val{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300}
+.score-box-val.gold{color:var(--gold)}
+.sig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:14px}
+.sig-box{padding:7px;background:var(--warm);border-radius:4px;text-align:center}
+.sig-box-l{font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--hint);margin-bottom:3px}
+.sig-box-v{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:300}
+.d-section{font-size:8px;letter-spacing:0.24em;text-transform:uppercase;color:var(--hint);margin:14px 0 8px;padding-bottom:5px;border-bottom:0.5px solid var(--rule)}
+.outfit-list{display:flex;flex-direction:column;gap:5px}
+.outfit-item{display:flex;align-items:flex-start;gap:9px;padding:8px;background:var(--warm);border-radius:4px}
+.outfit-icon{width:26px;height:26px;background:var(--cream);border:0.5px solid var(--rule);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.outfit-name{font-size:11px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.outfit-desc{font-size:10px;color:var(--muted);line-height:1.4}
+.drama-list{display:flex;flex-direction:column;gap:5px}
+.drama-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 9px;border:0.5px solid var(--rule);border-radius:4px;background:var(--cream)}
+.drama-name{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:300;color:var(--ink)}
+.drama-detail{font-size:9px;color:var(--muted);margin-top:1px}
+.drama-right{text-align:right;flex-shrink:0}
+.dbadge{font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 6px;border-radius:3px;font-weight:400}
+.dbadge.high{background:#EAF3DE;color:#27500A}
+.dbadge.mid{background:#FAEEDA;color:#633806}
+.drating{font-size:8px;color:var(--hint);margin-top:2px}
+.d-vote-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding:10px 12px;border:0.5px solid var(--rule);border-radius:4px;background:var(--warm)}
+.d-vote-label{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+.d-vote-sub{font-size:9px;color:var(--hint);margin-top:2px}
+.d-vbtns{display:flex;gap:5px;flex-shrink:0}
+.d-vb{padding:6px 12px;border:0.5px solid var(--rule);background:var(--cream);cursor:pointer;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);border-radius:4px;transition:all .15s;font-family:'Montserrat',sans-serif;font-weight:400}
+.d-vb:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.d-vb.dvup{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.d-vb.dvdn{background:#FCEBEB;color:var(--red);border-color:#F7C1C1}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(6px);z-index:200;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;background:var(--ink);color:var(--cream);padding:8px 18px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-content">
-    <h1>KStyleRank</h1>
-    <p>April 2026 — The definitive ranking of Korean fashion moments</p>
-    <button onclick="document.getElementById('grid').scrollIntoView({behavior:'smooth'})" 
-            style="margin-top:30px;padding:14px 36px;background:transparent;border:1px solid white;color:white;font-size:10px;letter-spacing:2px;cursor:pointer;">
-      EXPLORE RANKINGS ↓
-    </button>
-  </div>
-</section>
-
 <nav class="nav">
-  <div class="logo">K<b>Style</b>Rank</div>
-  <div class="search-bar">
-    <i class="fas fa-search"></i>
-    <input type="text" id="searchInput" placeholder="Search styles..." onkeyup="filterSearch()">
+  <div class="logo">K<b>Style</b> Rank</div>
+  <div class="nav-links">
+    <a class="nl active" href="#">Rankings</a>
+    <a class="nl" href="#">Dramas</a>
+    <a class="nl" href="#">Idols</a>
+    <a class="nl" href="#">Archive</a>
   </div>
-  <button onclick="toggleDarkMode()" style="background:none;border:none;font-size:22px;cursor:pointer;">☾</button>
+  <div class="issue">Issue No. 04 · April 2026</div>
 </nav>
 
-<!-- Original algo bar + filters kept -->
-<!-- ... (your original algo, filters, etc.) ... -->
+<div class="algo">
+  <div class="algo-item"><div class="algo-dot" style="background:#0a0a0a"></div>60% data signals</div>
+  <div class="algo-sep">·</div>
+  <div class="algo-item"><div class="algo-dot" style="background:#b8975a"></div>40% community votes (30-day decay)</div>
+  <div class="algo-sep">·</div>
+  <div class="algo-item" style="color:#a09c97">Sources: Google Trends · Naver · hashtag volume · drama viewership</div>
+</div>
 
-<div class="main" style="padding:0 5%;">
+<div class="main">
+  <div class="filters">
+    <button class="fp active" onclick="setF(this,'all')">All styles</button>
+    <button class="fp" onclick="setF(this,'drama')">K-Drama</button>
+    <button class="fp" onclick="setF(this,'kpop')">K-Pop</button>
+    <button class="fp" onclick="setF(this,'street')">Seoul street</button>
+    <button class="fp" onclick="setF(this,'hot')">Rising</button>
+  </div>
   <div class="sec-label">Style rankings — April 2026 · click any card for details</div>
   <div class="grid" id="grid"></div>
 </div>
 
-<!-- Drawer, overlay, toast kept from original -->
-<!-- ... paste your original drawer + toast HTML here ... -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="d-close">
+    <div class="d-close-title">Style detail</div>
+    <button class="d-close-btn" onclick="closeDrawer()" aria-label="Close">✕</button>
+  </div>
+  <img id="d-photo" class="d-photo" src="" alt="">
+  <div class="d-body" id="d-body"></div>
+</div>
 
-<div id="confetti"></div>
+<div class="toast" id="toast"></div>
 
 <script>
-// === YOUR ORIGINAL DATA + LOGIC (kept) ===
-const S = [ /* ... paste all your original S array here (I kept it identical) ... */ ];
+const S=[
+  {id:1,name:"Liquid metallics",meta:"aespa · Le Sserafim · Perfect Crown",tags:["kpop","hot"],
+   gt:88,hs:92,vs:85,cv:3820,nlr:0.91,liked:false,disliked:false,delta:"u",dv:8,
+   img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80&fit=crop",
+   source:"K-Pop · aespa Givenchy era + Perfect Crown (tvN) — the highest-rated cable drama of April 2026 at 12.4% viewership",
+   outfit:[
+     {icon:"✦",name:"Liquid silver mini dress",desc:"Structured metallic sheath, mid-thigh, zip front — aespa's comeback stage uniform"},
+     {icon:"◈",name:"Chrome platform boots",desc:"Chunky 7cm platform, mirror-finish — anchors the silhouette, prevents visual shrinkage"},
+     {icon:"○",name:"Hard-shell sculptural bag",desc:"Hexagonal clutch in brushed silver — the key accessory signal of the season"},
+     {icon:"◉",name:"Glass-skin + cheekbone highlight",desc:"Pared-back makeup lets fabric speak — blinding highlight on cheekbone only"}
+   ],
+   dramas:[
+     {name:"Perfect Crown (tvN)",detail:"Ep. 5 gala scene · Kim Ji-won",badge:"high",rating:"12.4% viewership"},
+     {name:"aespa — Supernova comeback",detail:"Stage wardrobe · April 2026",badge:"high",rating:"92M streams"},
+     {name:"Le Sserafim — EASY era",detail:"Fan meet · April 2026",badge:"mid",rating:"68M streams"}
+   ]},
+  {id:2,name:"Office siren",meta:"Perfect Crown · Filing for Love · tvN",tags:["drama","hot"],
+   gt:85,hs:88,vs:90,cv:3540,nlr:0.88,liked:false,disliked:false,delta:"u",dv:5,
+   img:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&q=80&fit=crop",
+   source:"K-Drama · Perfect Crown (tvN) 12.4% April 2026 + Filing for Love (Netflix) lead character wardrobe drove this trend",
+   outfit:[
+     {icon:"◈",name:"Structured blazer dress",desc:"Single-button, strong shoulder, knee-length — belted for the expensive silhouette"},
+     {icon:"✦",name:"Pointed kitten heel",desc:"2–4cm heel, elongates without losing the power read — court or almond toe"},
+     {icon:"△",name:"Minimalist chain top-handle bag",desc:"Camel or black leather — quiet luxury in every scene"},
+     {icon:"◎",name:"Sleek low bun",desc:"No loose hair — control is the message. One gold pin at the nape"}
+   ],
+   dramas:[
+     {name:"Perfect Crown (tvN)",detail:"Lead wardrobe · director's pick",badge:"high",rating:"12.4% viewership"},
+     {name:"Filing for Love (Netflix)",detail:"Shin Hye-sun's full run",badge:"high",rating:"Netflix Top 10 KR"},
+     {name:"Phantom Lawyer (JTBC)",detail:"Courtroom wardrobe",badge:"mid",rating:"8.2% viewership"}
+   ]},
+  {id:3,name:"Balloon silhouette",meta:"ILLIT · 5th-gen groups · Seongsu-dong",tags:["kpop","street"],
+   gt:82,hs:79,vs:78,cv:2980,nlr:0.85,liked:false,disliked:false,delta:"u",dv:4,
+   img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80&fit=crop",
+   source:"K-Pop · 5th-gen idol streetwear + Seongsu-dong spring 2026 editorial — intentional architectural volume replacing shapeless oversize",
+   outfit:[
+     {icon:"○",name:"Balloon cargo trousers",desc:"Wide at hip/knee, cinched at ankle — intentional architecture, not just big pants"},
+     {icon:"◈",name:"Fitted crop hoodie",desc:"Contrast to the volume below — tight top balances extreme wide silhouette"},
+     {icon:"✦",name:"Wide utility belt",desc:"Creates the X-silhouette — worn at natural waist, defines the trend"},
+     {icon:"△",name:"Chunky platform boots",desc:"Grounds the volume — prevents the ballooning from reading as sloppy"}
+   ],
+   dramas:[
+     {name:"ILLIT — My World era",detail:"Stage + airport · April 2026",badge:"high",rating:"58M streams"},
+     {name:"Seongsu-dong street",detail:"Spring 2026 editorial",badge:"high",rating:"Trending district"},
+     {name:"NMIXX — Dare comeback",detail:"Concept wardrobe",badge:"mid",rating:"44M streams"}
+   ]},
+  {id:4,name:"Clean girl aesthetic",meta:"When Life Gives You Tangerines · IU",tags:["drama"],
+   gt:80,hs:84,vs:82,cv:2760,nlr:0.87,liked:false,disliked:false,delta:"f",dv:0,
+   img:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80&fit=crop",
+   source:"K-Drama · IU's When Life Gives You Tangerines (Netflix) — dubbed a 'national drama', dominating global viewing hours in early 2026",
+   outfit:[
+     {icon:"○",name:"Cream linen co-ord set",desc:"Loose wide-leg trousers + relaxed button-down — always slightly undone, never stiff"},
+     {icon:"◉",name:"Slick low ponytail",desc:"Pulled back clean, baby hair laid — the signature. No fuss, pure polish"},
+     {icon:"◈",name:"Minimal gold jewellery",desc:"Fine chain necklace and small hoop — visible but barely-there"},
+     {icon:"✦",name:"Barely-there base",desc:"Dewy skin, brow gel, clear gloss — effortlessly good, not overdone"}
+   ],
+   dramas:[
+     {name:"When Life Gives You Tangerines",detail:"IU · Netflix · national drama tag",badge:"high",rating:"1.2B viewing hours"},
+     {name:"Crash Landing on You",detail:"Yoon Se-ri's daywear references",badge:"mid",rating:"Evergreen"},
+     {name:"The Glory",detail:"Clean contrast to villain styling",badge:"mid",rating:"Evergreen"}
+   ]},
+  {id:5,name:"Granola-chic",meta:"Seongsu-dong · Hannam-dong spring 2026",tags:["street","hot"],
+   gt:72,hs:76,vs:65,cv:2340,nlr:0.82,liked:false,disliked:false,delta:"u",dv:6,
+   img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&q=80&fit=crop",
+   source:"Seoul street · Gorpcore evolved into Granola-Chic — luxury meets nature in Seongsu-dong and Hannam-dong spring 2026",
+   outfit:[
+     {icon:"△",name:"Hand-crocheted knit vest",desc:"Over a linen shirt — craft meets editorial. Vintage or upcycled from Seongsu thrift"},
+     {icon:"○",name:"Floral vintage midi skirt",desc:"Thrifted or indie Korean brand — high-waisted, fluid, season-specific floral print"},
+     {icon:"◈",name:"Futuristic chunky sneakers",desc:"Salomon or Asics GT — old textile meets new-gen footwear, the contrast anchor"},
+     {icon:"✦",name:"Silk scarf as hair accessory",desc:"Wrapped loosely at hairline — the nod to Halmeoni aesthetic"}
+   ],
+   dramas:[
+     {name:"Seongsu-dong street",detail:"Spring 2026 photographic record",badge:"high",rating:"#1 Seoul style district"},
+     {name:"Hannam-dong weekend",detail:"April 2026 street documentation",badge:"high",rating:"Trending"},
+     {name:"IU offstage style",detail:"Airport + café sightings April 2026",badge:"mid",rating:"Organic viral"}
+   ]},
+  {id:6,name:"Unisex power tailoring",meta:"Phantom Lawyer · gender-fluid 2026",tags:["drama","kpop"],
+   gt:70,hs:72,vs:74,cv:2100,nlr:0.80,liked:false,disliked:false,delta:"u",dv:3,
+   img:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop",
+   source:"K-Drama + K-Pop · Gender-fluid tailoring is the defining conceptual shift of 2026 — binary in fashion has dissolved across 5th-gen groups",
+   outfit:[
+     {icon:"◈",name:"Wide-shoulder oversized blazer",desc:"Masculine silhouette worn by all genders — shoulder seam falls off the natural shoulder"},
+     {icon:"○",name:"Cropped wide-leg trousers",desc:"High-rise, tailored in heavy fabric — the power bottom to the slouchy top"},
+     {icon:"△",name:"Lace or pearl accessories",desc:"The feminine counterpoint — one pearl pin or lace collar softens hard tailoring"},
+     {icon:"✦",name:"Oxford shoes or loafers",desc:"Gender-neutral footwear — no heel, no sneaker, maximum gravitas"}
+   ],
+   dramas:[
+     {name:"Phantom Lawyer (JTBC)",detail:"Lead wardrobe across all episodes",badge:"high",rating:"8.2% viewership"},
+     {name:"Stray Kids — ATE comeback",detail:"Stage tailoring concept",badge:"high",rating:"88M streams"},
+     {name:"(G)I-DLE — Power styling",detail:"Suit concept · April 2026",badge:"mid",rating:"62M streams"}
+   ]},
+  {id:7,name:"Sheer spring layers",meta:"Le Sserafim · Filing for Love cast",tags:["drama","kpop"],
+   gt:68,hs:70,vs:69,cv:1890,nlr:0.78,liked:false,disliked:false,delta:"u",dv:2,
+   img:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80&fit=crop",
+   source:"Spring 2026 · Sheer fabrics return as a fusion of traditional Korean textile aesthetics with contemporary layering",
+   outfit:[
+     {icon:"○",name:"Sheer lace blouse",desc:"Worn over fitted camisole or bralette — layering is key, never fully exposed"},
+     {icon:"◈",name:"Mesh overlay dress",desc:"Second skin over structured underlining — ethereal without being impractical"},
+     {icon:"✦",name:"Leather jacket contrast",desc:"Hard-soft pairing anchors sheer pieces — still cool, just warmer"},
+     {icon:"△",name:"Delicate strappy sandal",desc:"Low profile, thin strap — lets sheer fabric flow without competing footwear weight"}
+   ],
+   dramas:[
+     {name:"Filing for Love (Netflix)",detail:"Spring wardrobe · Shin Hye-sun",badge:"high",rating:"Netflix Top 10 KR"},
+     {name:"Le Sserafim — EASY mv",detail:"Mesh layering concept",badge:"high",rating:"72M streams"},
+     {name:"Korean spring street 2026",detail:"Seongsu editorial photography",badge:"mid",rating:"Trending"}
+   ]},
+  {id:8,name:"Halmeoni vintage",meta:"Seongsu-dong thrift · retro street 2026",tags:["street"],
+   gt:60,hs:65,vs:55,cv:1650,nlr:0.75,liked:false,disliked:false,delta:"u",dv:4,
+   img:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80&fit=crop",
+   source:"Seoul street · Halmeoni (grandmother) aesthetic — a 2026 sub-trend blending thrift craftsmanship and modern streetwear contrast",
+   outfit:[
+     {icon:"✦",name:"Vintage cardigan from thrift",desc:"Hand-knit or archival Korean knitwear — worn loosely over a collared shirt"},
+     {icon:"○",name:"Floral wide-leg trouser",desc:"High-waist, 70s silhouette — the Halmeoni's Sunday best, recontextualised"},
+     {icon:"◉",name:"Round tortoiseshell glasses",desc:"Defining accessory — vintage frames from Seongsu optical thrift stores"},
+     {icon:"△",name:"Chunky sneakers or loafers",desc:"Generational contrast that makes it look fresh, not costume"}
+   ],
+   dramas:[
+     {name:"Seongsu thrift district",detail:"Documented April 2026",badge:"high",rating:"#1 trend district"},
+     {name:"Korean indie scene",detail:"Hongdae + Seongsu crossover",badge:"mid",rating:"Organic"},
+     {name:"TikTok KR #할머니패션",detail:"18M views · +31% Apr 2026",badge:"mid",rating:"+31% growth"}
+   ]},
+  {id:9,name:"Organic monochrome",meta:"Seoul minimalists · texture dressing",tags:["drama","street"],
+   gt:58,hs:62,vs:60,cv:1420,nlr:0.72,liked:false,disliked:false,delta:"f",dv:0,
+   img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&fit=crop",
+   source:"2026 evolution of minimalism — monochrome elevated through material contrast rather than color variation",
+   outfit:[
+     {icon:"○",name:"Tonal silk top",desc:"Fluid, bias-cut — identical or analogous color to bottom. Slight sheen adds depth"},
+     {icon:"◈",name:"Textured knit midi skirt",desc:"Same tone, different texture — bouclé or ribbed knit reads rich without color drama"},
+     {icon:"✦",name:"Linen raw-hem trousers",desc:"The unfinished edge is intentional — natural fiber adds tactile interest monochromatically"},
+     {icon:"△",name:"Tone-on-tone accessories",desc:"Bag and shoes within two color stops of outfit — breaking color creates visual static"}
+   ],
+   dramas:[
+     {name:"Seoul Fashion Week showrooms",detail:"Seongsu season · April 2026",badge:"high",rating:"April 2026"},
+     {name:"Spring 2026 dramas",detail:"Background character styling code",badge:"mid",rating:"Aesthetic reference"},
+     {name:"Instagram #유기농모노크롬",detail:"Organic mono · +18% Apr 2026",badge:"mid",rating:"+18% growth"}
+   ]}
+];
 
-// Add trending animation & confetti
-function createConfetti(){
-  const c = document.getElementById('confetti');
-  for(let i=0;i<80;i++){
-    const conf = document.createElement('div');
-    conf.style.position = 'absolute';
-    conf.style.left = Math.random()*100 + 'vw';
-    conf.style.top = '-10px';
-    conf.style.fontSize = '18px';
-    conf.style.opacity = Math.random()*0.8 + 0.4;
-    conf.textContent = ['✦','◈','○','△','✧'][Math.floor(Math.random()*5)];
-    conf.style.animation = `fall ${3+Math.random()*3}s linear forwards`;
-    c.appendChild(conf);
-    setTimeout(()=>conf.remove(), 6000);
-  }
+S.forEach(s=>{
+  s.ds=Math.round(0.35*s.gt+0.35*s.hs+0.30*s.vs);
+  s.vs2=Math.round(s.nlr*100);
+  s.fs=Math.round(0.60*s.ds+0.40*s.vs2);
+});
+
+let filter='all', openId=null;
+
+function gc(v){return v>=80?'g':v>=60?'m':'lo'}
+
+function render(){
+  const sorted=[...S].sort((a,b)=>b.fs-a.fs);
+  const top=sorted[0].fs;
+  const list=filter==='all'?sorted:sorted.filter(s=>s.tags.includes(filter));
+  document.getElementById('grid').innerHTML=list.map(s=>{
+    const rank=sorted.indexOf(s)+1;
+    const bar=Math.round(s.fs/top*100);
+    const dl=s.delta==='u'?`<span class="delta u">▲${s.dv}</span>`:s.delta==='d'?`<span class="delta d">▼${s.dv}</span>`:`<span class="delta f">—</span>`;
+    const tgs=s.tags.map(t=>`<span class="tag ${t}">${t==='drama'?'K-Drama':t==='kpop'?'K-Pop':t==='street'?'Seoul St.':'Rising'}</span>`).join('');
+    return`<div class="card${rank===1?' top':''}" onclick="openDrawer(${s.id})">
+      <div class="photo-wrap">
+        <img class="photo" src="${s.img}" alt="${s.name}" loading="lazy">
+        <div class="rank-badge${rank===1?' gold':''}">No.${String(rank).padStart(2,'0')}</div>
+        <div class="view-hint">View details</div>
+      </div>
+      <div class="signals">
+        <div class="sig"><span class="sig-l">Trends</span><span class="sig-v ${gc(s.gt)}">${s.gt}</span></div>
+        <div class="sig"><span class="sig-l">Hashtag</span><span class="sig-v ${gc(s.hs)}">${s.hs}</span></div>
+        <div class="sig"><span class="sig-l">Drama</span><span class="sig-v ${gc(s.vs)}">${s.vs}</span></div>
+        <div class="sig"><span class="sig-l">Score</span><span class="sig-v">${s.fs}</span></div>
+      </div>
+      <div class="cbody">
+        <div class="crank">No.${String(rank).padStart(2,'0')} · Apr 2026</div>
+        <div class="cname">${s.name} ${dl}</div>
+        <div class="cmeta">${s.meta}</div>
+        <div class="tags">${tgs}</div>
+        <div class="cfoot">
+          <div>
+            <div class="cscore">${s.fs}<sub> /100</sub></div>
+            <div class="cvotes">${s.cv.toLocaleString()} votes</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+            <span style="font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--hint)">Wear · Skip</span>
+            <div class="vbtns">
+              <button class="vb${s.liked?' vup':''}" onclick="event.stopPropagation();vote(${s.id},1)" aria-label="Wear it">▲</button>
+              <button class="vb${s.disliked?' vdn':''}" onclick="event.stopPropagation();vote(${s.id},-1)" aria-label="Skip it">▼</button>
+            </div>
+          </div>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${bar}%"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+  if(openId!==null){const s=S.find(x=>x.id===openId);if(s)fillDrawer(s,sorted.indexOf(s)+1)}
 }
 
-// Improved vote with confetti on strong votes
-function vote(id, dir){
-  // ... your original vote logic ...
-  if(Math.abs(dir) && Math.random() > 0.6) createConfetti(); // celebratory feel
+function fillDrawer(s,rank){
+  document.getElementById('d-photo').src=s.img;
+  document.getElementById('d-photo').alt=s.name;
+  const tgs=s.tags.map(t=>`<span class="tag ${t}" style="font-size:8px;padding:2px 7px">${t==='drama'?'K-Drama':t==='kpop'?'K-Pop':t==='street'?'Seoul Street':'Rising'}</span>`).join('');
+  document.getElementById('d-body').innerHTML=`
+    <div class="d-eyebrow">No.${String(rank).padStart(2,'0')} · April 2026 ranking</div>
+    <div class="d-title">${s.name}</div>
+    <div class="d-source">${s.source}</div>
+    <div class="tags" style="margin-bottom:12px">${tgs}</div>
+    <div class="score-row">
+      <div class="score-box"><div class="score-box-label">Final score</div><div class="score-box-val gold">${s.fs}<span style="font-size:10px;color:var(--hint);font-family:'Montserrat',sans-serif"> /100</span></div></div>
+      <div class="score-box"><div class="score-box-label">Data (60%)</div><div class="score-box-val">${s.ds}</div></div>
+      <div class="score-box"><div class="score-box-label">Votes (40%)</div><div class="score-box-val">${s.vs2}</div></div>
+    </div>
+    <div class="sig-grid">
+      <div class="sig-box"><div class="sig-box-l">Google Trends</div><div class="sig-box-v ${gc(s.gt)}">${s.gt}</div></div>
+      <div class="sig-box"><div class="sig-box-l">Hashtag freq.</div><div class="sig-box-v ${gc(s.hs)}">${s.hs}</div></div>
+      <div class="sig-box"><div class="sig-box-l">Viewership</div><div class="sig-box-v ${gc(s.vs)}">${s.vs}</div></div>
+    </div>
+    <div class="d-section">Outfit breakdown</div>
+    <div class="outfit-list">${s.outfit.map(o=>`<div class="outfit-item"><div class="outfit-icon">${o.icon}</div><div><div class="outfit-name">${o.name}</div><div class="outfit-desc">${o.desc}</div></div></div>`).join('')}</div>
+    <div class="d-section">Drama &amp; idol sources</div>
+    <div class="drama-list">${s.dramas.map(d=>`<div class="drama-item"><div><div class="drama-name">${d.name}</div><div class="drama-detail">${d.detail}</div></div><div class="drama-right"><div class="dbadge ${d.badge}">${d.badge==='high'?'Strong':'Moderate'}</div><div class="drating">${d.rating}</div></div></div>`).join('')}</div>
+    <div class="d-vote-row">
+      <div>
+        <div class="d-vote-label">Cast your vote</div>
+        <div class="d-vote-sub">${s.cv.toLocaleString()} votes · score updates live</div>
+      </div>
+      <div class="d-vbtns">
+        <button class="d-vb${s.liked?' dvup':''}" onclick="vote(${s.id},1)">▲ Wear it</button>
+        <button class="d-vb${s.disliked?' dvdn':''}" onclick="vote(${s.id},-1)">▼ Skip it</button>
+      </div>
+    </div>`;
+}
+
+function openDrawer(id){
+  openId=id;
+  const sorted=[...S].sort((a,b)=>b.fs-a.fs);
+  const s=S.find(x=>x.id===id);
+  fillDrawer(s,sorted.indexOf(s)+1);
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer').scrollTop=0;
+}
+
+function closeDrawer(){
+  openId=null;
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+
+function vote(id,dir){
+  const s=S.find(x=>x.id===id);if(!s)return;
+  if(dir===1){
+    if(s.liked){s.liked=false;s.cv--;s.nlr=Math.max(0,s.nlr-0.01);toast('Vote removed')}
+    else{if(s.disliked){s.disliked=false;s.cv--;s.nlr=Math.min(1,s.nlr+0.01)}s.liked=true;s.cv++;s.nlr=Math.min(1,s.nlr+0.01);toast('Wear it — noted')}
+  } else {
+    if(s.disliked){s.disliked=false;s.cv--;s.nlr=Math.min(1,s.nlr+0.01);toast('Vote removed')}
+    else{if(s.liked){s.liked=false;s.cv--;s.nlr=Math.max(0,s.nlr-0.01)}s.disliked=true;s.cv++;s.nlr=Math.max(0,s.nlr-0.01);toast('Skip it — noted')}
+  }
+  s.vs2=Math.round(s.nlr*100);
+  s.fs=Math.round(0.60*s.ds+0.40*s.vs2);
   render();
 }
 
-// Dark mode
-function toggleDarkMode(){
-  document.body.classList.toggle('dark-mode');
-  localStorage.setItem('dark', document.body.classList.contains('dark-mode'));
+function setF(el,f){
+  document.querySelectorAll('.fp').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');filter=f;render();
 }
 
-// Search
-function filterSearch(){
-  const term = document.getElementById('searchInput').value.toLowerCase();
-  // filter logic here
-  render(); // re-render with search filter
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),1800);
 }
 
-// Infinite scroll feel simulation (lazy load + smooth render)
-window.addEventListener('scroll', () => {
-  if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 300){
-    // could load more in future
-  }
-});
-
-if(localStorage.getItem('dark')==='true') document.body.classList.add('dark-mode');
 render();
 </script>
-
-<!-- Add this to <style> for confetti keyframes if needed -->
-<style>
-@keyframes fall{ to{transform:translateY(120vh) rotate(720deg); opacity:0} }
-</style>
 </body>
 </html>
