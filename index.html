@@ -172,6 +172,68 @@ body{background:var(--cream);color:var(--ink);font-family:'Montserrat',sans-seri
 /* Toast */
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(5px);z-index:200;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;background:var(--ink);color:var(--cream);padding:7px 16px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── SPOTTED IN — prominent clickable source cards ── */
+.spotted-label{
+  font-size:9px;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--gold);font-weight:500;margin-bottom:7px;
+  display:flex;align-items:center;gap:7px;
+}
+.spotted-label::after{content:'';flex:1;height:1px;background:var(--gold);opacity:0.3}
+.spotted-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+
+.spotted-card{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;
+  background:var(--ink);color:var(--cream);
+  border-radius:5px;text-decoration:none;
+  border:1px solid transparent;
+  transition:background .18s,border-color .18s;
+  position:relative;overflow:hidden;
+}
+.spotted-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(184,151,90,0.12) 0%,transparent 60%);
+  pointer-events:none;
+}
+.spotted-card:hover{background:#1e1e1e;border-color:var(--gold)}
+.spotted-card.mid-card{background:var(--warm);border:1px solid var(--rule)}
+.spotted-card.mid-card .spotted-name{color:var(--ink)}
+.spotted-card.mid-card .spotted-detail{color:var(--muted)}
+.spotted-card.mid-card .spotted-rating{color:var(--muted)}
+.spotted-card.mid-card .spotted-cta{color:var(--gold);border-color:var(--gold)}
+.spotted-card.mid-card:hover{border-color:var(--ink)}
+
+.spotted-left{flex-shrink:0}
+.spotted-icon{
+  width:32px;height:32px;border-radius:4px;
+  background:rgba(184,151,90,0.22);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;color:var(--gold);
+}
+.spotted-card.mid-card .spotted-icon{background:rgba(10,10,10,0.08);color:var(--muted)}
+
+.spotted-mid{flex:1;min-width:0}
+.spotted-name{
+  font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:400;
+  letter-spacing:0.03em;color:var(--cream);line-height:1.2;
+  margin-bottom:3px;
+}
+.spotted-detail{font-size:10px;color:rgba(245,242,238,0.65);line-height:1.3;font-weight:300}
+
+.spotted-right{flex-shrink:0;text-align:right}
+.spotted-rating{
+  font-family:'Cormorant Garamond',serif;font-size:13px;
+  color:var(--gold);font-weight:300;margin-bottom:5px;
+}
+.spotted-cta{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:8px;letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(245,242,238,0.7);border:0.5px solid rgba(245,242,238,0.3);
+  padding:3px 8px;border-radius:2px;font-weight:400;
+  transition:color .15s,border-color .15s;white-space:nowrap;
+}
+.spotted-card:hover .spotted-cta{color:var(--gold);border-color:var(--gold)}
 </style>
 </head>
 <body>
@@ -519,8 +581,31 @@ function fillDrawer(s,rank){
   document.getElementById('d-body').innerHTML=`
     <div class="d-eyebrow">No.${String(rank).padStart(2,'0')} · April 2026 ranking</div>
     <div class="d-title">${s.name}</div>
-    <div class="d-source">${s.source}</div>
-    <div class="tags" style="margin-bottom:10px">${tgs}</div>
+    <div class="tags" style="margin:5px 0 14px">${tgs}</div>
+
+    <div class="spotted-label">✦ Spotted in</div>
+    <div class="spotted-list">
+      ${s.dramas.map(d=>{
+        const q=encodeURIComponent(`${d.name} ${s.name} fashion outfit`);
+        const imgQ=encodeURIComponent(`${d.name} ${d.detail} outfit fashion`);
+        const googleImg=`https://www.google.com/search?q=${imgQ}&tbm=isch`;
+        const isHigh=d.badge==='high';
+        return`<a class="spotted-card${isHigh?'':' mid-card'}" href="${googleImg}" target="_blank" rel="noopener noreferrer">
+          <div class="spotted-left">
+            <div class="spotted-icon">${isHigh?'★':'◆'}</div>
+          </div>
+          <div class="spotted-mid">
+            <div class="spotted-name">${d.name}</div>
+            <div class="spotted-detail">${d.detail}</div>
+          </div>
+          <div class="spotted-right">
+            <div class="spotted-rating">${d.rating}</div>
+            <div class="spotted-cta">See photos ↗</div>
+          </div>
+        </a>`;
+      }).join('')}
+    </div>
+
     <div class="score-row">
       <div class="score-box"><div class="score-box-l">Final score</div><div class="score-box-v gold">${s.fs}<span style="font-size:9px;color:var(--hint);font-family:'Montserrat',sans-serif"> /100</span></div></div>
       <div class="score-box"><div class="score-box-l">Data 60%</div><div class="score-box-v">${s.ds}</div></div>
@@ -544,14 +629,6 @@ function fillDrawer(s,rank){
     <div class="d-section">Outfit breakdown</div>
     <div class="outfit-list">
       ${s.outfit.map(o=>`<div class="outfit-item"><div class="outfit-icon">${o.icon}</div><div><div class="outfit-name">${o.name}</div><div class="outfit-desc">${o.desc}</div></div></div>`).join('')}
-    </div>
-
-    <div class="d-section">Drama &amp; idol sources</div>
-    <div class="drama-list">
-      ${s.dramas.map(d=>`<div class="drama-item">
-        <div><div class="drama-name">${d.name}</div><div class="drama-detail">${d.detail}</div></div>
-        <div class="drama-right"><div class="dbadge ${d.badge}">${d.badge==='high'?'Strong':'Moderate'}</div><div class="drating">${d.rating}</div></div>
-      </div>`).join('')}
     </div>
 
     <div class="d-section">Shop this look</div>
