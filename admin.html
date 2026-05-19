@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KStyleRank — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#0a0a0a;--cream:#f5f2ee;--warm:#ece7e0;--muted:#5a5652;--hint:#8a8480;--rule:rgba(10,10,10,0.12);--gold:#b8975a;--green:#2d5a0e;--red:#8b1a1a;--blue:#1a3a8b}
+body{background:#f0eeeb;color:var(--ink);font-family:'Montserrat',sans-serif;font-weight:400;font-size:13px}
+
+/* LOGIN SCREEN */
+#login-screen{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:999}
+.login-box{background:var(--cream);padding:40px;width:320px;border-radius:6px}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;margin-bottom:6px}
+.login-logo b{color:var(--gold);font-weight:500}
+.login-sub{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:28px;font-weight:500}
+.login-label{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;font-weight:600}
+.login-input{width:100%;padding:9px 12px;border:0.5px solid var(--rule);background:var(--warm);font-family:'Montserrat',sans-serif;font-size:13px;color:var(--ink);margin-bottom:14px;border-radius:3px;font-weight:400}
+.login-input:focus{outline:none;border-color:var(--ink)}
+.login-btn{width:100%;padding:10px;background:var(--ink);color:var(--cream);border:none;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;border-radius:3px;font-weight:600;transition:background .2s}
+.login-btn:hover{background:#1e1e1e}
+.login-err{font-size:10px;color:var(--red);margin-top:8px;display:none;font-weight:500}
+
+/* ADMIN LAYOUT */
+.admin{display:none}
+.admin-nav{background:var(--ink);padding:12px 28px;display:flex;align-items:center;justify-content:space-between}
+.admin-logo{font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cream);font-weight:500}
+.admin-logo b{color:var(--gold);font-weight:500}
+.admin-nav-links{display:flex;gap:20px;align-items:center}
+.admin-nl{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,242,238,0.6);cursor:pointer;transition:color .2s;font-weight:500}
+.admin-nl:hover,.admin-nl.active{color:var(--cream)}
+.admin-logout{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:5px 12px;border:0.5px solid rgba(245,242,238,0.3);color:rgba(245,242,238,0.6);cursor:pointer;border-radius:3px;font-weight:500;transition:all .2s}
+.admin-logout:hover{border-color:var(--gold);color:var(--gold)}
+
+.admin-body{padding:24px 28px;max-width:1000px;margin:0 auto}
+.admin-section{background:var(--cream);border:0.5px solid var(--rule);border-radius:6px;margin-bottom:20px;overflow:hidden}
+.admin-section-head{padding:14px 18px;border-bottom:0.5px solid var(--rule);display:flex;align-items:center;justify-content:space-between;background:var(--warm)}
+.admin-section-title{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;color:var(--ink)}
+.admin-section-sub{font-size:9px;color:var(--muted);font-weight:400}
+.admin-section-body{padding:18px}
+
+/* TAB PANELS */
+.tab-panels .panel{display:none}
+.tab-panels .panel.active{display:block}
+.tab-bar{display:flex;border-bottom:0.5px solid var(--rule);margin-bottom:20px}
+.tab{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;padding:10px 16px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-0.5px;font-weight:600;transition:all .15s}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--ink);border-bottom-color:var(--ink)}
+
+/* FORM ELEMENTS */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-row.full{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-label{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.form-input,.form-textarea,.form-select{padding:8px 10px;border:0.5px solid var(--rule);background:var(--warm);font-family:'Montserrat',sans-serif;font-size:12px;color:var(--ink);border-radius:3px;font-weight:400;transition:border-color .15s}
+.form-input:focus,.form-textarea:focus,.form-select:focus{outline:none;border-color:var(--ink)}
+.form-textarea{resize:vertical;min-height:70px;line-height:1.5}
+.form-hint{font-size:9px;color:var(--hint);line-height:1.4;font-weight:400}
+.form-divider{height:0.5px;background:var(--rule);margin:18px 0}
+
+/* BANNER SLIDES */
+.slide-editor{display:flex;flex-direction:column;gap:12px}
+.slide-card{border:0.5px solid var(--rule);border-radius:5px;overflow:hidden;background:var(--cream)}
+.slide-card-head{padding:10px 14px;background:var(--warm);border-bottom:0.5px solid var(--rule);display:flex;align-items:center;justify-content:space-between}
+.slide-num{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.slide-card-body{padding:14px}
+.img-preview{width:100%;aspect-ratio:16/5;object-fit:cover;display:block;background:var(--warm);border-radius:3px;margin-bottom:10px;border:0.5px solid var(--rule)}
+
+/* STYLE CARDS ADMIN */
+.style-admin-list{display:flex;flex-direction:column;gap:10px}
+.style-admin-card{border:0.5px solid var(--rule);border-radius:5px;overflow:hidden}
+.style-admin-head{padding:10px 14px;background:var(--warm);border-bottom:0.5px solid var(--rule);display:flex;align-items:center;gap:12px;cursor:pointer}
+.style-admin-rank{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--gold);min-width:30px}
+.style-admin-name{font-size:12px;font-weight:600;color:var(--ink);flex:1}
+.style-admin-score{font-size:10px;color:var(--muted);font-weight:500}
+.style-admin-toggle{font-size:11px;color:var(--muted)}
+.style-admin-body{padding:14px;display:none}
+.style-admin-body.open{display:block}
+
+/* SEARCH LINK PREVIEW */
+.search-preview{margin-top:8px;padding:8px 10px;background:var(--warm);border-radius:3px;font-size:10px;color:var(--muted);border:0.5px solid var(--rule);word-break:break-all;font-weight:400}
+.search-preview a{color:var(--blue);text-decoration:underline;font-weight:500}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border:none;border-radius:3px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;transition:all .15s}
+.btn-primary{background:var(--ink);color:var(--cream)}
+.btn-primary:hover{background:#1e1e1e}
+.btn-secondary{background:var(--warm);color:var(--ink);border:0.5px solid var(--rule)}
+.btn-secondary:hover{background:#ddd8d2}
+.btn-danger{background:#FCEBEB;color:var(--red);border:0.5px solid #F7C1C1}
+.btn-danger:hover{background:#f7d5d5}
+.btn-green{background:#EAF3DE;color:var(--green);border:0.5px solid #b8d89a}
+.btn-green:hover{background:#d8ecbc}
+.btn-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.stat-box{background:var(--cream);border:0.5px solid var(--rule);border-radius:5px;padding:14px}
+.stat-label{font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:var(--ink);line-height:1}
+.stat-sub{font-size:9px;color:var(--hint);margin-top:3px;font-weight:400}
+
+/* TOAST */
+.toast{position:fixed;bottom:18px;right:24px;z-index:500;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;background:var(--ink);color:var(--cream);padding:9px 18px;opacity:0;transform:translateY(5px);transition:all .25s;pointer-events:none;font-weight:600;border-radius:3px}
+.toast.on{opacity:1;transform:translateY(0)}
+.toast.green{background:#2d5a0e}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">K<b>Style</b> Rank</div>
+    <div class="login-sub">Admin panel</div>
+    <label class="login-label">Username</label>
+    <input class="login-input" id="l-user" type="text" placeholder="admin" autocomplete="username">
+    <label class="login-label">Password</label>
+    <input class="login-input" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+    <button class="login-btn" onclick="doLogin()">Sign in →</button>
+    <div class="login-err" id="login-err">Incorrect credentials. Try admin / kstyle2026</div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="admin" id="admin">
+<nav class="admin-nav">
+  <div class="admin-logo">K<b>Style</b> Rank <span style="font-size:9px;color:rgba(245,242,238,0.4);letter-spacing:0.2em;margin-left:8px">ADMIN</span></div>
+  <div class="admin-nav-links">
+    <span class="admin-nl active" onclick="showTab('dashboard')">Dashboard</span>
+    <span class="admin-nl" onclick="showTab('banners')">Banners</span>
+    <span class="admin-nl" onclick="showTab('styles')">Styles</span>
+    <span class="admin-nl" onclick="showTab('sources')">Image sources</span>
+    <a href="index.html" class="admin-nl" target="_blank">View site ↗</a>
+    <span class="admin-logout" onclick="doLogout()">Sign out</span>
+  </div>
+</nav>
+
+<div class="admin-body">
+
+  <div class="tab-panels">
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div style="margin-bottom:18px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:4px">Good morning, Admin</div>
+        <div style="font-size:10px;color:var(--muted);font-weight:400">Week of 19 May 2026 · Issue No. 05</div>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-box"><div class="stat-label">Total votes</div><div class="stat-val">18,432</div><div class="stat-sub">+2,341 this week</div></div>
+        <div class="stat-box"><div class="stat-label">Styles ranked</div><div class="stat-val">9</div><div class="stat-sub">April 2026 issue</div></div>
+        <div class="stat-box"><div class="stat-label">Top style</div><div class="stat-val" style="font-size:14px;line-height:1.2;margin-top:2px">Met Gala<br>Hanbok-luxury</div><div class="stat-sub">Score: 92/100</div></div>
+        <div class="stat-box"><div class="stat-label">Next update</div><div class="stat-val" style="font-size:14px;line-height:1.2;margin-top:2px">Jun 1<br>2026</div><div class="stat-sub">Monthly refresh</div></div>
+      </div>
+      <div class="admin-section">
+        <div class="admin-section-head"><div><div class="admin-section-title">Quick actions</div><div class="admin-section-sub">Common admin tasks</div></div></div>
+        <div class="admin-section-body">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+            <button class="btn btn-primary" onclick="showTab('banners')">✏️ Edit hero banners</button>
+            <button class="btn btn-primary" onclick="showTab('styles')">📊 Update style scores</button>
+            <button class="btn btn-primary" onclick="showTab('sources')">🖼️ Manage image sources</button>
+            <button class="btn btn-secondary" onclick="saveAll()">💾 Save &amp; publish all changes</button>
+            <button class="btn btn-secondary" onclick="window.open('index.html','_blank')">👁️ Preview live site</button>
+            <button class="btn btn-secondary" onclick="exportJSON()">📤 Export data as JSON</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BANNERS -->
+    <div class="panel" id="panel-banners">
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div><div class="admin-section-title">Hero banner slides</div><div class="admin-section-sub">3 rotating slides · auto-plays every 5 seconds</div></div>
+          <button class="btn btn-green" onclick="saveBanners()">Save banners</button>
+        </div>
+        <div class="admin-section-body">
+          <div class="slide-editor" id="slide-editor"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STYLES -->
+    <div class="panel" id="panel-styles">
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div><div class="admin-section-title">Style rankings</div><div class="admin-section-sub">Edit scores, sources, outfits, shop links · changes go live on save</div></div>
+          <button class="btn btn-green" onclick="saveStyles()">Save styles</button>
+        </div>
+        <div class="admin-section-body">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:14px;padding:8px 10px;background:var(--warm);border-radius:3px;border-left:2px solid var(--gold)">
+            💡 Final score = 60% × DataScore + 40% × VoteScore. DataScore = 35% Google Trends + 35% Hashtag + 30% Drama viewership.
+          </div>
+          <div class="style-admin-list" id="style-admin-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMAGE SOURCES -->
+    <div class="panel" id="panel-sources">
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div><div class="admin-section-title">Image sourcing guide</div><div class="admin-section-sub">Where to get K-drama &amp; Kpop fashion photos legally</div></div>
+        </div>
+        <div class="admin-section-body">
+
+          <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:12px">Licensed &amp; safe sources</div>
+
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+            <div style="padding:10px 12px;background:var(--warm);border-radius:4px;border-left:3px solid var(--green)">
+              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px">1. Official press kits (FREE)</div>
+              <div style="font-size:10px;color:var(--muted);line-height:1.6">Email press offices directly: Netflix Korea (press.kr@netflix.com), tvN (tvn_pr@cjenm.com), JTBC. Request episode stills and character wardrobe shots. Usually free for editorial/media use with credit. Best quality.</div>
+            </div>
+            <div style="padding:10px 12px;background:var(--warm);border-radius:4px;border-left:3px solid var(--green)">
+              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px">2. InkiStyle.com — editorial partnership</div>
+              <div style="font-size:10px;color:var(--muted);line-height:1.6">inkistyle.com documents every K-drama outfit per episode. Contact them for image sharing agreement. They are a small team and often open to cross-promotion with credits.</div>
+              <a href="https://inkistyle.com" target="_blank" style="font-size:9px;color:var(--blue);font-weight:600;margin-top:4px;display:block">→ inkistyle.com</a>
+            </div>
+            <div style="padding:10px 12px;background:var(--warm);border-radius:4px;border-left:3px solid var(--gold)">
+              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px">3. Getty Images editorial license (~$200/mo)</div>
+              <div style="font-size:10px;color:var(--muted);line-height:1.6">Covers red carpet, concert, and press tour photos for media reporting. Search "[idol name] [event] 2026" — gives legitimate photos from MAMA, Melon Music Awards, press tours.</div>
+              <a href="https://www.gettyimages.com" target="_blank" style="font-size:9px;color:var(--blue);font-weight:600;margin-top:4px;display:block">→ gettyimages.com</a>
+            </div>
+            <div style="padding:10px 12px;background:var(--warm);border-radius:4px;border-left:3px solid var(--gold)">
+              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px">4. Unsplash editorial (FREE — current placeholder source)</div>
+              <div style="font-size:10px;color:var(--muted);line-height:1.6">Current placeholder. Good for generic Korean street style photos. Not specific enough for drama character looks — replace with press kit images when available.</div>
+              <a href="https://unsplash.com/s/photos/korean-fashion" target="_blank" style="font-size:9px;color:var(--blue);font-weight:600;margin-top:4px;display:block">→ unsplash.com</a>
+            </div>
+            <div style="padding:10px 12px;background:var(--warm);border-radius:4px;border-left:3px solid var(--hint)">
+              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px">5. AI-generated illustrations (FREE, original IP)</div>
+              <div style="font-size:10px;color:var(--muted);line-height:1.6">Use Midjourney or Stable Diffusion: prompt "Korean fashion editorial illustration, [style name], no face visible, flat lay style, cream and [color] tones" — legally your own IP, copyright-free, consistent visual style.</div>
+            </div>
+          </div>
+
+          <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:12px">Google Image Search keyword formula</div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.8;margin-bottom:10px">The "See photos" links in the drawer use Google Image Search. For better results, use this formula:</div>
+          <div style="padding:10px 12px;background:var(--warm);border-radius:4px;font-family:monospace;font-size:11px;color:var(--ink);line-height:1.8">
+            [Idol name] [group] [event/era] [year] outfit<br>
+            e.g.: "aespa Karina Met Gala 2026 Prada outfit"<br>
+            e.g.: "IU Perfect Crown MBC drama fashion 2026"<br>
+            e.g.: "Le Sserafim Chaewon EASY mv outfit 2026"
+          </div>
+
+          <div style="margin-top:20px">
+            <div style="font-size:11px;font-weight:600;margin-bottom:10px">Test a search keyword now</div>
+            <div style="display:flex;gap:8px">
+              <input class="form-input" id="test-keyword" style="flex:1" placeholder="e.g. aespa Karina Met Gala 2026 Prada outfit" value="aespa Karina Met Gala 2026 Prada outfit">
+              <button class="btn btn-primary" onclick="testSearch()">Test search ↗</button>
+            </div>
+            <div class="search-preview" id="search-preview-result"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end tab-panels -->
+</div><!-- end admin-body -->
+</div><!-- end admin -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── AUTH ─────────────────────────────────────────────────────────────
+// NOTE: This is a simple client-side password for demo.
+// For production, replace with server-side auth (Supabase, Clerk, etc.)
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'kstyle2026';
+
+function doLogin(){
+  const u=document.getElementById('l-user').value;
+  const p=document.getElementById('l-pass').value;
+  if(u===ADMIN_USER && p===ADMIN_PASS){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('admin').style.display='block';
+    init();
+  } else {
+    document.getElementById('login-err').style.display='block';
+  }
+}
+function doLogout(){
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('admin').style.display='none';
+}
+document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+
+// ── TAB NAVIGATION ────────────────────────────────────────────────────
+function showTab(name){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.admin-nl').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.querySelectorAll('.admin-nl').forEach(n=>{if(n.textContent.toLowerCase().includes(name))n.classList.add('active')});
+}
+
+// ── DATA ─────────────────────────────────────────────────────────────
+// May 19, 2026 — updated with real current data
+const banners=[
+  {
+    eyebrow:"✦ Met Gala 2026 · K-Pop takeover · May 2026",
+    title:"Hanbok-luxury\nleads the world",
+    sub:"aespa Karina's Prada hanbok-inspired gown + BLACKPINK Lisa, Rosé, Jennie — K-pop dominated Met Gala 2026 and set the global style agenda for the month",
+    img:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=1400&q=80&fit=crop",
+    link:"idols/index.html"
+  },
+  {
+    eyebrow:"✦ K-Drama fashion · May 2026",
+    title:"Filing for Love\n& Perfect Crown",
+    sub:"Shin Hye-sun's Shin Hye-sun's wardrobe in Filing for Love (tvN) and IU's final episodes of Perfect Crown are driving office siren and clean girl to new highs this week",
+    img:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=80&fit=crop",
+    link:"drama/index.html"
+  },
+  {
+    eyebrow:"✦ Seoul street · Seongsu-dong · May 2026",
+    title:"Acubi quiet cool\ntakes over Seoul",
+    sub:"The Seoul-born Acubi aesthetic — oversized silhouettes and muted layers — is peaking globally. #Acubi hits 65K TikTok posts daily, driven by NewJeans, aespa and BLACKPINK",
+    img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=1400&q=80&fit=crop",
+    link:"index.html"
+  }
+];
+
+const styles=[
+  {id:1,rank:1,name:"Met Gala hanbok-luxury",gt:96,hs:98,vs:94,cv:5210,nlr:0.94,delta:"u",dv:12,
+   img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=75&fit=crop",
+   tags:["kpop","hot"],meta:"aespa Karina Prada · BLACKPINK · Met Gala May 4 2026",
+   googleSearch:"aespa Karina Met Gala 2026 Prada hanbok outfit fashion",
+   dramas:[
+     {name:"aespa Karina — Met Gala 2026",detail:"Prada sleeveless gown · hanbok-inspired",badge:"high",rating:"Best dressed"},
+     {name:"BLACKPINK Rosé",detail:"Silver bird focal-point dress · Met Gala",badge:"high",rating:"Most searched"},
+     {name:"BLACKPINK Lisa",detail:"Robert Wun white gown · host committee",badge:"high",rating:"#1 TikTok"}
+   ]},
+  {id:2,rank:2,name:"Acubi quiet cool",gt:92,hs:89,vs:82,cv:4380,nlr:0.91,delta:"u",dv:8,
+   img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=75&fit=crop",
+   tags:["kpop","street","hot"],meta:"NewJeans · aespa · BLACKPINK · Musinsa street",
+   googleSearch:"Acubi Korean fashion aesthetic NewJeans aespa 2026 oversized muted layers outfit",
+   dramas:[
+     {name:"NewJeans — Acubi ambassadors",detail:"Oversized silhouettes · muted layers",badge:"high",rating:"65K TikTok/day"},
+     {name:"aespa — off-stage street style",detail:"Musinsa Standard pieces · airport looks",badge:"high",rating:"87K IG posts"},
+     {name:"BLACKPINK — London Fashion Week",detail:"Burberry FW26 front row · Feb 2026",badge:"mid",rating:"Peak Feb 2026"}
+   ]},
+  {id:3,rank:3,name:"Office siren",gt:85,hs:88,vs:90,cv:3540,nlr:0.88,delta:"u",dv:5,
+   img:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&q=75&fit=crop",
+   tags:["drama","hot"],meta:"Perfect Crown (MBC) · Filing for Love (tvN) · IU",
+   googleSearch:"IU Perfect Crown MBC drama fashion 2026 office siren blazer dress outfit",
+   dramas:[
+     {name:"Perfect Crown (MBC)",detail:"IU + Byun Woo-seok · Ep.11-12 final",badge:"high",rating:"11.2% viewership"},
+     {name:"Filing for Love (tvN)",detail:"Shin Hye-sun · Ep.9-10 this week",badge:"high",rating:"Airing now"},
+     {name:"We Are All Trying Here (JTBC)",detail:"Go Youn-jung · weekend slot",badge:"mid",rating:"Airing now"}
+   ]},
+  {id:4,rank:4,name:"Sheer &amp; mesh layering",gt:82,hs:86,vs:78,cv:3120,nlr:0.85,delta:"u",dv:6,
+   img:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=75&fit=crop",
+   tags:["kpop","drama"],meta:"Le Sserafim Chaewon · Filing for Love · spring 2026",
+   googleSearch:"Le Sserafim Chaewon EASY outfit sheer mesh 2026 Korean fashion spring",
+   dramas:[
+     {name:"Le Sserafim — EASY era",detail:"Chaewon sheer ribbed knit · beige asymmetric",badge:"high",rating:"72M streams"},
+     {name:"Filing for Love (tvN)",detail:"Shin Hye-sun spring wardrobe Ep.9",badge:"high",rating:"Airing now"},
+     {name:"Korean spring street 2026",detail:"Seongsu-dong editorial May",badge:"mid",rating:"Trending"}
+   ]},
+  {id:5,rank:5,name:"Clean girl aesthetic",gt:80,hs:84,vs:82,cv:2760,nlr:0.87,delta:"f",dv:0,
+   img:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&q=75&fit=crop",
+   tags:["drama"],meta:"IU Perfect Crown finale · When Life Gives You Tangerines",
+   googleSearch:"IU clean girl aesthetic Korean drama outfit 2026 linen minimal fashion",
+   dramas:[
+     {name:"Perfect Crown (MBC) — finale",detail:"IU minimal wardrobe · final episodes",badge:"high",rating:"11.2% viewership"},
+     {name:"When Life Gives You Tangerines",detail:"IU · Netflix evergreen",badge:"high",rating:"1.2B viewing hrs"},
+     {name:"Crash Landing on You",detail:"Yoon Se-ri's daywear references",badge:"mid",rating:"Evergreen"}
+   ]},
+  {id:6,rank:6,name:"Gender-fluid tailoring",gt:70,hs:76,vs:72,cv:2280,nlr:0.82,delta:"u",dv:3,
+   img:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=75&fit=crop",
+   tags:["kpop","drama"],meta:"Stray Kids · My Royal Nemesis (Netflix) · Lim Ji-yeon",
+   googleSearch:"Stray Kids Seungmin Burberry 2026 unisex tailoring Korean fashion gender fluid outfit",
+   dramas:[
+     {name:"Stray Kids — Seungmin at Burberry",detail:"London Fashion Week FW26",badge:"high",rating:"Feb 2026 trend peak"},
+     {name:"My Royal Nemesis (Netflix)",detail:"Lim Ji-yeon · Joseon-modern fusion",badge:"high",rating:"Airing May 2026"},
+     {name:"(G)I-DLE — power tailoring",detail:"Suit concept ongoing",badge:"mid",rating:"Active"}
+   ]},
+  {id:7,rank:7,name:"Balloon &amp; oversized silhouette",gt:72,hs:70,vs:68,cv:2100,nlr:0.80,delta:"f",dv:0,
+   img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=75&fit=crop",
+   tags:["kpop","street"],meta:"ILLIT · 5th-gen groups · Seongsu-dong May 2026",
+   googleSearch:"ILLIT My World era 2026 balloon cargo trousers Kpop oversized silhouette street style",
+   dramas:[
+     {name:"ILLIT — My World era",detail:"Stage + airport · ongoing 2026",badge:"high",rating:"58M streams"},
+     {name:"Seongsu-dong street May 2026",detail:"Spring oversized editorial",badge:"mid",rating:"Trending"},
+     {name:"NMIXX — Dare comeback",detail:"Concept wardrobe",badge:"mid",rating:"44M streams"}
+   ]},
+  {id:8,rank:8,name:"Granola-chic &amp; Acubi street",gt:68,hs:72,vs:60,cv:1890,nlr:0.78,delta:"u",dv:4,
+   img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=75&fit=crop",
+   tags:["street","hot"],meta:"Seongsu-dong · Musinsa Standard · upcycled spring",
+   googleSearch:"Granola chic Korean street style Seongsu 2026 crochet vest floral skirt Salomon sneakers",
+   dramas:[
+     {name:"Seongsu-dong May 2026",detail:"Spring granola editorial",badge:"high",rating:"#1 Seoul district"},
+     {name:"Musinsa Standard",detail:"Peak search interest Feb 2026",badge:"high",rating:"Global peak Feb"},
+     {name:"Upcycled Korean fashion 2026",detail:"Eco-fabric idol trend",badge:"mid",rating:"Growing"}
+   ]},
+  {id:9,rank:9,name:"Hanbok modernised",gt:65,hs:68,vs:64,cv:1650,nlr:0.76,delta:"u",dv:5,
+   img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=75&fit=crop",
+   tags:["kpop","drama"],meta:"aespa Karina Met Gala · ATEEZ · My Royal Nemesis",
+   googleSearch:"Hanbok modern Korean fashion 2026 ATEEZ traditional fusion outfit street style",
+   dramas:[
+     {name:"aespa Karina — Met Gala 2026",detail:"Prada hanbok-inspired gown elements",badge:"high",rating:"Best dressed lists"},
+     {name:"My Royal Nemesis (Netflix)",detail:"Joseon-modern fusion · Lim Ji-yeon",badge:"high",rating:"Airing May 2026"},
+     {name:"ATEEZ — hanbok street fusion",detail:"Heritage motifs in streetwear 2026",badge:"mid",rating:"Active trend"}
+   ]}
+];
+
+styles.forEach(s=>{
+  s.ds=Math.round(0.35*s.gt+0.35*s.hs+0.30*s.vs);
+  s.vs2=Math.round(s.nlr*100);
+  s.fs=Math.round(0.60*s.ds+0.40*s.vs2);
+});
+
+// ── RENDER BANNERS ───────────────────────────────────────────────────
+function renderBanners(){
+  document.getElementById('slide-editor').innerHTML=banners.map((b,i)=>`
+    <div class="slide-card">
+      <div class="slide-card-head">
+        <div class="slide-num">Slide ${i+1} of ${banners.length}</div>
+        <div style="font-size:9px;color:var(--muted)">Auto-rotates every 5 seconds</div>
+      </div>
+      <div class="slide-card-body">
+        <img class="img-preview" id="banner-img-preview-${i}" src="${b.img}" alt="Banner ${i+1}">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Image URL</label>
+            <input class="form-input" id="b-img-${i}" value="${b.img}" onchange="updateBannerPreview(${i})">
+            <div class="form-hint">Unsplash URL or your own hosted image URL. Recommended: 1400×500px</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Link (where it goes when clicked)</label>
+            <input class="form-input" id="b-link-${i}" value="${b.link}" placeholder="drama/index.html">
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Eyebrow text (small top label)</label>
+            <input class="form-input" id="b-eyebrow-${i}" value="${b.eyebrow}">
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Headline (large serif text)</label>
+            <input class="form-input" id="b-title-${i}" value="${b.title.replace('\n',' | ')}">
+            <div class="form-hint">Use | to create a line break in the headline</div>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Subtext</label>
+            <textarea class="form-textarea" id="b-sub-${i}">${b.sub}</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateBannerPreview(i){
+  const url=document.getElementById(`b-img-${i}`).value;
+  document.getElementById(`banner-img-preview-${i}`).src=url;
+}
+
+// ── RENDER STYLE EDITORS ──────────────────────────────────────────────
+function renderStyles(){
+  const sorted=[...styles].sort((a,b)=>b.fs-a.fs);
+  document.getElementById('style-admin-list').innerHTML=sorted.map((s,idx)=>`
+    <div class="style-admin-card">
+      <div class="style-admin-head" onclick="toggleStyle(${s.id})">
+        <div class="style-admin-rank">${String(idx+1).padStart(2,'0')}</div>
+        <div class="style-admin-name">${s.name}</div>
+        <div class="style-admin-score">Score: ${s.fs}/100 · Data: ${s.ds} · Votes: ${s.vs2}</div>
+        <div class="style-admin-toggle" id="toggle-${s.id}">▼</div>
+      </div>
+      <div class="style-admin-body" id="style-body-${s.id}">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Google Trends score (0-100)</label>
+            <input class="form-input" type="number" min="0" max="100" id="s-gt-${s.id}" value="${s.gt}" onchange="recalcScore(${s.id})">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hashtag frequency score (0-100)</label>
+            <input class="form-input" type="number" min="0" max="100" id="s-hs-${s.id}" value="${s.hs}" onchange="recalcScore(${s.id})">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Drama/viewership score (0-100)</label>
+            <input class="form-input" type="number" min="0" max="100" id="s-vs-${s.id}" value="${s.vs}" onchange="recalcScore(${s.id})">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Computed final score</label>
+            <input class="form-input" id="s-fs-${s.id}" value="${s.fs}" readonly style="background:#f0eeeb;color:var(--gold);font-weight:600">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Style name</label>
+            <input class="form-input" id="s-name-${s.id}" value="${s.name}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Meta (drama · idol references)</label>
+            <input class="form-input" id="s-meta-${s.id}" value="${s.meta}">
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Card photo URL</label>
+            <input class="form-input" id="s-img-${s.id}" value="${s.img}">
+            <div class="form-hint">Unsplash: add ?w=500&q=75&fit=crop · Or use press kit URL · Or Midjourney output hosted on Cloudinary</div>
+          </div>
+        </div>
+        <div class="form-divider"></div>
+        <div style="font-size:10px;font-weight:600;margin-bottom:10px">Google Image Search keyword</div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Search query for "See photos ↗" button</label>
+            <input class="form-input" id="s-search-${s.id}" value="${s.googleSearch}" oninput="updateSearchPreview(${s.id})">
+            <div class="form-hint">Formula: [Idol name] [group] [event] [year] outfit · Be very specific for accurate results</div>
+            <div class="search-preview" id="s-search-preview-${s.id}">
+              Preview: <a href="https://www.google.com/search?q=${encodeURIComponent(s.googleSearch)}&tbm=isch" target="_blank">${s.googleSearch}</a>
+            </div>
+          </div>
+        </div>
+        <div class="form-divider"></div>
+        <div style="font-size:10px;font-weight:600;margin-bottom:10px">Spotted in sources (up to 3)</div>
+        ${s.dramas.map((d,di)=>`
+          <div style="padding:10px;background:var(--warm);border-radius:4px;margin-bottom:6px">
+            <div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:600">Source ${di+1}</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Source name</label>
+                <input class="form-input" id="s-dname-${s.id}-${di}" value="${d.name}">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Detail / episode / event</label>
+                <input class="form-input" id="s-ddetail-${s.id}-${di}" value="${d.detail}">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Rating / metric</label>
+                <input class="form-input" id="s-drating-${s.id}-${di}" value="${d.rating}">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Signal strength</label>
+                <select class="form-select" id="s-dbadge-${s.id}-${di}">
+                  <option value="high" ${d.badge==='high'?'selected':''}>★ Strong</option>
+                  <option value="mid" ${d.badge==='mid'?'selected':''}>◆ Moderate</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleStyle(id){
+  const body=document.getElementById('style-body-'+id);
+  const toggle=document.getElementById('toggle-'+id);
+  const isOpen=body.classList.contains('open');
+  body.classList.toggle('open',!isOpen);
+  toggle.textContent=isOpen?'▼':'▲';
+}
+
+function recalcScore(id){
+  const s=styles.find(x=>x.id===id);
+  const gt=parseInt(document.getElementById('s-gt-'+id).value)||0;
+  const hs=parseInt(document.getElementById('s-hs-'+id).value)||0;
+  const vs=parseInt(document.getElementById('s-vs-'+id).value)||0;
+  const ds=Math.round(0.35*gt+0.35*hs+0.30*vs);
+  const vs2=Math.round(s.nlr*100);
+  const fs=Math.round(0.60*ds+0.40*vs2);
+  document.getElementById('s-fs-'+id).value=fs+'/100';
+}
+
+function updateSearchPreview(id){
+  const val=document.getElementById('s-search-'+id).value;
+  const url=`https://www.google.com/search?q=${encodeURIComponent(val)}&tbm=isch`;
+  document.getElementById('s-search-preview-'+id).innerHTML=`Preview: <a href="${url}" target="_blank">${val}</a>`;
+}
+
+function testSearch(){
+  const kw=document.getElementById('test-keyword').value;
+  const url=`https://www.google.com/search?q=${encodeURIComponent(kw)}&tbm=isch`;
+  document.getElementById('search-preview-result').innerHTML=`<a href="${url}" target="_blank">→ Open Google Image Search for: "${kw}"</a>`;
+  window.open(url,'_blank');
+}
+
+// ── SAVE FUNCTIONS ────────────────────────────────────────────────────
+function saveBanners(){
+  // In production: POST to your API/Supabase
+  // For now: show success and log to console for manual index.html update
+  banners.forEach((b,i)=>{
+    b.img=document.getElementById(`b-img-${i}`).value;
+    b.eyebrow=document.getElementById(`b-eyebrow-${i}`).value;
+    b.title=document.getElementById(`b-title-${i}`).value.replace(' | ','\n');
+    b.sub=document.getElementById(`b-sub-${i}`).value;
+    b.link=document.getElementById(`b-link-${i}`).value;
+  });
+  console.log('Updated banners:', JSON.stringify(banners,null,2));
+  showToast('Banners saved · Copy JSON from console to index.html to deploy','green');
+}
+
+function saveStyles(){
+  styles.forEach(s=>{
+    s.gt=parseInt(document.getElementById('s-gt-'+s.id).value)||s.gt;
+    s.hs=parseInt(document.getElementById('s-hs-'+s.id).value)||s.hs;
+    s.vs=parseInt(document.getElementById('s-vs-'+s.id).value)||s.vs;
+    s.name=document.getElementById('s-name-'+s.id).value||s.name;
+    s.meta=document.getElementById('s-meta-'+s.id).value||s.meta;
+    s.img=document.getElementById('s-img-'+s.id).value||s.img;
+    s.googleSearch=document.getElementById('s-search-'+s.id).value||s.googleSearch;
+    s.dramas.forEach((d,di)=>{
+      d.name=document.getElementById(`s-dname-${s.id}-${di}`).value||d.name;
+      d.detail=document.getElementById(`s-ddetail-${s.id}-${di}`).value||d.detail;
+      d.rating=document.getElementById(`s-drating-${s.id}-${di}`).value||d.rating;
+      d.badge=document.getElementById(`s-dbadge-${s.id}-${di}`).value||d.badge;
+    });
+    s.ds=Math.round(0.35*s.gt+0.35*s.hs+0.30*s.vs);
+    s.vs2=Math.round(s.nlr*100);
+    s.fs=Math.round(0.60*s.ds+0.40*s.vs2);
+  });
+  renderStyles();
+  console.log('Updated styles:', JSON.stringify(styles,null,2));
+  showToast('Styles saved · Copy JSON from console to index.html','green');
+}
+
+function saveAll(){saveBanners();saveStyles();showToast('All changes saved · See browser console for updated JSON','green')}
+
+function exportJSON(){
+  const data={banners,styles};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='kstylerank-data.json';a.click();
+  showToast('JSON exported · Use to update index.html data','green');
+}
+
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast on'+(type?' '+type:'');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),3000);
+}
+
+function init(){renderBanners();renderStyles()}
+</script>
+</body>
+</html>
