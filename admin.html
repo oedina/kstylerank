@@ -6,165 +6,265 @@
 <title>KStyleRank — Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#0a0a0a;--cream:#f5f2ee;--warm:#ece7e0;--muted:#5a5652;--hint:#8a8480;--rule:rgba(10,10,10,0.12);--gold:#b8975a;--green:#2d5a0e;--red:#8b1a1a;--blue:#1a3a8b}
+:root{--ink:#0a0a0a;--cream:#f5f2ee;--warm:#ece7e0;--muted:#5a5652;--hint:#8a8480;--rule:rgba(10,10,10,0.12);--gold:#b8975a;--green:#2d5a0e;--red:#8b1a1a}
 body{background:#f0eeeb;color:var(--ink);font-family:'Montserrat',sans-serif;font-weight:400;font-size:13px}
 
-/* LOGIN SCREEN */
-#login-screen{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:999}
-.login-box{background:var(--cream);padding:40px;width:320px;border-radius:6px}
-.login-logo{font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;margin-bottom:6px}
+/* ── SETUP NOTICE ── */
+#setup-notice{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.setup-box{background:var(--cream);max-width:520px;width:100%;padding:32px;border-radius:6px}
+.setup-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:8px}
+.setup-sub{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-weight:600}
+.setup-step{display:flex;gap:12px;margin-bottom:14px;padding:10px 12px;background:var(--warm);border-radius:4px;border-left:3px solid var(--gold)}
+.setup-num{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);font-weight:500;flex-shrink:0;margin-top:1px}
+.setup-text{font-size:11px;color:var(--muted);line-height:1.6;font-weight:400}
+.setup-text strong{color:var(--ink);font-weight:600}
+.setup-input{width:100%;padding:9px 12px;border:0.5px solid var(--rule);background:var(--warm);font-family:'Montserrat',sans-serif;font-size:12px;color:var(--ink);margin-top:5px;border-radius:3px;font-weight:400}
+.setup-input:focus{outline:none;border-color:var(--ink)}
+.setup-btn{width:100%;margin-top:16px;padding:10px;background:var(--ink);color:var(--cream);border:none;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;border-radius:3px;font-weight:600;transition:background .2s}
+.setup-btn:hover{background:#1e1e1e}
+.setup-note{font-size:9px;color:var(--hint);margin-top:10px;line-height:1.5;font-weight:400}
+
+/* ── LOGIN SCREEN ── */
+#login-screen{position:fixed;inset:0;background:var(--ink);display:none;align-items:center;justify-content:center;z-index:999;padding:20px}
+.login-box{background:var(--cream);padding:40px;width:340px;border-radius:6px}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;margin-bottom:4px}
 .login-logo b{color:var(--gold);font-weight:500}
-.login-sub{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:28px;font-weight:500}
+.login-badge{display:inline-block;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;background:var(--ink);color:var(--cream);padding:2px 8px;border-radius:2px;margin-bottom:24px;font-weight:600}
 .login-label{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;font-weight:600}
 .login-input{width:100%;padding:9px 12px;border:0.5px solid var(--rule);background:var(--warm);font-family:'Montserrat',sans-serif;font-size:13px;color:var(--ink);margin-bottom:14px;border-radius:3px;font-weight:400}
 .login-input:focus{outline:none;border-color:var(--ink)}
 .login-btn{width:100%;padding:10px;background:var(--ink);color:var(--cream);border:none;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;border-radius:3px;font-weight:600;transition:background .2s}
 .login-btn:hover{background:#1e1e1e}
-.login-err{font-size:10px;color:var(--red);margin-top:8px;display:none;font-weight:500}
+.login-err{font-size:10px;color:var(--red);margin-top:8px;display:none;font-weight:500;padding:6px 8px;background:#FCEBEB;border-radius:3px}
+.login-security{font-size:9px;color:var(--hint);margin-top:14px;line-height:1.5;padding:8px 10px;background:var(--warm);border-radius:3px;font-weight:400}
 
-/* ADMIN LAYOUT */
+/* ── ADMIN ── */
 .admin{display:none}
-.admin-nav{background:var(--ink);padding:12px 28px;display:flex;align-items:center;justify-content:space-between}
+.admin-nav{background:var(--ink);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .admin-logo{font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cream);font-weight:500}
 .admin-logo b{color:var(--gold);font-weight:500}
-.admin-nav-links{display:flex;gap:20px;align-items:center}
-.admin-nl{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,242,238,0.6);cursor:pointer;transition:color .2s;font-weight:500}
+.admin-user{font-size:9px;letter-spacing:0.12em;color:rgba(245,242,238,0.5);font-weight:400}
+.admin-nav-right{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.admin-nl{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,242,238,0.6);cursor:pointer;transition:color .2s;font-weight:500;text-decoration:none}
 .admin-nl:hover,.admin-nl.active{color:var(--cream)}
-.admin-logout{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:5px 12px;border:0.5px solid rgba(245,242,238,0.3);color:rgba(245,242,238,0.6);cursor:pointer;border-radius:3px;font-weight:500;transition:all .2s}
+.admin-logout{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:5px 12px;border:0.5px solid rgba(245,242,238,0.3);color:rgba(245,242,238,0.6);cursor:pointer;border-radius:3px;font-weight:500;transition:all .2s;background:transparent}
 .admin-logout:hover{border-color:var(--gold);color:var(--gold)}
 
 .admin-body{padding:24px 28px;max-width:1000px;margin:0 auto}
-.admin-section{background:var(--cream);border:0.5px solid var(--rule);border-radius:6px;margin-bottom:20px;overflow:hidden}
-.admin-section-head{padding:14px 18px;border-bottom:0.5px solid var(--rule);display:flex;align-items:center;justify-content:space-between;background:var(--warm)}
-.admin-section-title{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;color:var(--ink)}
-.admin-section-sub{font-size:9px;color:var(--muted);font-weight:400}
-.admin-section-body{padding:18px}
 
 /* TAB PANELS */
-.tab-panels .panel{display:none}
-.tab-panels .panel.active{display:block}
-.tab-bar{display:flex;border-bottom:0.5px solid var(--rule);margin-bottom:20px}
+.tab-bar{display:flex;border-bottom:0.5px solid var(--rule);margin-bottom:20px;flex-wrap:wrap}
 .tab{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;padding:10px 16px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-0.5px;font-weight:600;transition:all .15s}
 .tab:hover{color:var(--ink)}
 .tab.active{color:var(--ink);border-bottom-color:var(--ink)}
+.panel{display:none}
+.panel.active{display:block}
 
-/* FORM ELEMENTS */
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.form-row.full{grid-template-columns:1fr}
-.form-group{display:flex;flex-direction:column;gap:5px}
-.form-label{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.form-input,.form-textarea,.form-select{padding:8px 10px;border:0.5px solid var(--rule);background:var(--warm);font-family:'Montserrat',sans-serif;font-size:12px;color:var(--ink);border-radius:3px;font-weight:400;transition:border-color .15s}
-.form-input:focus,.form-textarea:focus,.form-select:focus{outline:none;border-color:var(--ink)}
-.form-textarea{resize:vertical;min-height:70px;line-height:1.5}
-.form-hint{font-size:9px;color:var(--hint);line-height:1.4;font-weight:400}
-.form-divider{height:0.5px;background:var(--rule);margin:18px 0}
+/* CARDS */
+.admin-section{background:var(--cream);border:0.5px solid var(--rule);border-radius:6px;margin-bottom:20px;overflow:hidden}
+.admin-section-head{padding:14px 18px;border-bottom:0.5px solid var(--rule);display:flex;align-items:center;justify-content:space-between;background:var(--warm);flex-wrap:wrap;gap:8px}
+.admin-section-title{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;color:var(--ink)}
+.admin-section-sub{font-size:9px;color:var(--muted);font-weight:400;margin-top:2px}
+.admin-section-body{padding:18px}
 
-/* BANNER SLIDES */
-.slide-editor{display:flex;flex-direction:column;gap:12px}
-.slide-card{border:0.5px solid var(--rule);border-radius:5px;overflow:hidden;background:var(--cream)}
-.slide-card-head{padding:10px 14px;background:var(--warm);border-bottom:0.5px solid var(--rule);display:flex;align-items:center;justify-content:space-between}
-.slide-num{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
-.slide-card-body{padding:14px}
-.img-preview{width:100%;aspect-ratio:16/5;object-fit:cover;display:block;background:var(--warm);border-radius:3px;margin-bottom:10px;border:0.5px solid var(--rule)}
-
-/* STYLE CARDS ADMIN */
-.style-admin-list{display:flex;flex-direction:column;gap:10px}
-.style-admin-card{border:0.5px solid var(--rule);border-radius:5px;overflow:hidden}
-.style-admin-head{padding:10px 14px;background:var(--warm);border-bottom:0.5px solid var(--rule);display:flex;align-items:center;gap:12px;cursor:pointer}
-.style-admin-rank{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--gold);min-width:30px}
-.style-admin-name{font-size:12px;font-weight:600;color:var(--ink);flex:1}
-.style-admin-score{font-size:10px;color:var(--muted);font-weight:500}
-.style-admin-toggle{font-size:11px;color:var(--muted)}
-.style-admin-body{padding:14px;display:none}
-.style-admin-body.open{display:block}
-
-/* SEARCH LINK PREVIEW */
-.search-preview{margin-top:8px;padding:8px 10px;background:var(--warm);border-radius:3px;font-size:10px;color:var(--muted);border:0.5px solid var(--rule);word-break:break-all;font-weight:400}
-.search-preview a{color:var(--blue);text-decoration:underline;font-weight:500}
-
-/* BUTTONS */
-.btn{padding:8px 16px;border:none;border-radius:3px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;transition:all .15s}
-.btn-primary{background:var(--ink);color:var(--cream)}
-.btn-primary:hover{background:#1e1e1e}
-.btn-secondary{background:var(--warm);color:var(--ink);border:0.5px solid var(--rule)}
-.btn-secondary:hover{background:#ddd8d2}
-.btn-danger{background:#FCEBEB;color:var(--red);border:0.5px solid #F7C1C1}
-.btn-danger:hover{background:#f7d5d5}
-.btn-green{background:#EAF3DE;color:var(--green);border:0.5px solid #b8d89a}
-.btn-green:hover{background:#d8ecbc}
-.btn-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
-
-/* STATS BAR */
+/* STATS */
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+@media(max-width:600px){.stats-bar{grid-template-columns:repeat(2,1fr)}}
 .stat-box{background:var(--cream);border:0.5px solid var(--rule);border-radius:5px;padding:14px}
 .stat-label{font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600}
 .stat-val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:var(--ink);line-height:1}
 .stat-sub{font-size:9px;color:var(--hint);margin-top:3px;font-weight:400}
 
+/* FORM */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-row.full{grid-template-columns:1fr}
+.form-row.tri{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:600px){.form-row,.form-row.tri{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-label{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.form-input,.form-textarea,.form-select{padding:8px 10px;border:0.5px solid var(--rule);background:var(--warm);font-family:'Montserrat',sans-serif;font-size:12px;color:var(--ink);border-radius:3px;font-weight:400;transition:border-color .15s}
+.form-input:focus,.form-textarea:focus,.form-select:focus{outline:none;border-color:var(--ink)}
+.form-textarea{resize:vertical;min-height:70px;line-height:1.5}
+.form-hint{font-size:9px;color:var(--hint);line-height:1.5;font-weight:400}
+.form-divider{height:0.5px;background:var(--rule);margin:18px 0}
+
+/* SLIDE CARDS */
+.slide-editor{display:flex;flex-direction:column;gap:12px}
+.slide-card{border:0.5px solid var(--rule);border-radius:5px;overflow:hidden}
+.slide-card-head{padding:10px 14px;background:var(--warm);border-bottom:0.5px solid var(--rule);display:flex;align-items:center;justify-content:space-between}
+.slide-num{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.slide-card-body{padding:14px;background:var(--cream)}
+.img-preview{width:100%;aspect-ratio:21/6;object-fit:cover;display:block;background:var(--warm);border-radius:3px;margin-bottom:10px;border:0.5px solid var(--rule)}
+
+/* STYLE ADMIN */
+.style-admin-list{display:flex;flex-direction:column;gap:10px}
+.style-admin-card{border:0.5px solid var(--rule);border-radius:5px;overflow:hidden}
+.style-admin-head{padding:10px 14px;background:var(--warm);border-bottom:0.5px solid var(--rule);display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .15s}
+.style-admin-head:hover{background:#ddd8d2}
+.style-admin-rank{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--gold);min-width:28px}
+.style-admin-name{font-size:12px;font-weight:700;color:var(--ink);flex:1}
+.style-admin-score{font-size:10px;color:var(--muted);font-weight:500}
+.style-admin-toggle{font-size:11px;color:var(--muted);font-weight:600}
+.style-admin-body{padding:16px;display:none;background:var(--cream)}
+.style-admin-body.open{display:block}
+
+/* PHOTO GUIDE */
+.source-card{padding:12px 14px;border-radius:4px;margin-bottom:8px}
+.source-card.green{background:#EAF3DE;border-left:3px solid #2d5a0e}
+.source-card.gold{background:#FDF5E8;border-left:3px solid var(--gold)}
+.source-card.grey{background:var(--warm);border-left:3px solid var(--hint)}
+.source-name{font-size:11px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.source-desc{font-size:10px;color:var(--muted);line-height:1.6;font-weight:400}
+.source-link{font-size:9px;color:#1a3a8b;font-weight:600;margin-top:5px;display:block;text-decoration:underline}
+
+/* KEYWORD TESTER */
+.keyword-tester{display:flex;gap:8px;margin-top:12px}
+.kt-input{flex:1;padding:8px 10px;border:0.5px solid var(--rule);background:var(--warm);font-family:'Montserrat',sans-serif;font-size:12px;color:var(--ink);border-radius:3px;font-weight:400}
+.kt-input:focus{outline:none;border-color:var(--ink)}
+.kt-preview{margin-top:8px;padding:8px 10px;background:var(--warm);border-radius:3px;font-size:10px;color:var(--muted);border:0.5px solid var(--rule);word-break:break-all;font-weight:400}
+.kt-preview a{color:#1a3a8b;text-decoration:underline;font-weight:600}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border:none;border-radius:3px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;transition:all .15s}
+.btn-primary{background:var(--ink);color:var(--cream)}
+.btn-primary:hover{background:#1e1e1e}
+.btn-secondary{background:var(--warm);color:var(--ink);border:0.5px solid var(--rule)}
+.btn-secondary:hover{background:#ddd8d2}
+.btn-green{background:#EAF3DE;color:var(--green);border:0.5px solid #b8d89a}
+.btn-green:hover{background:#d8ecbc}
+.btn-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+
+/* SEARCH PREVIEW */
+.search-preview{margin-top:6px;padding:7px 9px;background:var(--warm);border-radius:3px;font-size:10px;color:var(--muted);border:0.5px solid var(--rule);word-break:break-all;font-weight:400}
+.search-preview a{color:#1a3a8b;text-decoration:underline;font-weight:600}
+
+/* STATUS */
+.status-badge{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;padding:3px 8px;border-radius:2px;font-weight:600;display:inline-block}
+.status-ok{background:#EAF3DE;color:var(--green)}
+.status-warn{background:#FAEEDA;color:#633806}
+.status-err{background:#FCEBEB;color:var(--red)}
+
+/* SAVING INDICATOR */
+.saving{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+
 /* TOAST */
 .toast{position:fixed;bottom:18px;right:24px;z-index:500;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;background:var(--ink);color:var(--cream);padding:9px 18px;opacity:0;transform:translateY(5px);transition:all .25s;pointer-events:none;font-weight:600;border-radius:3px}
 .toast.on{opacity:1;transform:translateY(0)}
-.toast.green{background:#2d5a0e}
+.toast.green{background:var(--green)}
+.toast.red{background:var(--red)}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">K<b>Style</b> Rank</div>
-    <div class="login-sub">Admin panel</div>
-    <label class="login-label">Username</label>
-    <input class="login-input" id="l-user" type="text" placeholder="admin" autocomplete="username">
-    <label class="login-label">Password</label>
-    <input class="login-input" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password">
-    <button class="login-btn" onclick="doLogin()">Sign in →</button>
-    <div class="login-err" id="login-err">Incorrect credentials. Try admin / kstyle2026</div>
+<!-- STEP 1: SUPABASE SETUP — replace with your credentials -->
+<script>
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  REPLACE THESE TWO VALUES with your Supabase project credentials ║
+// ║  Found at: Supabase Dashboard → Project Settings → Data API      ║
+// ║  The anon key is SAFE to expose — RLS protects your data         ║
+// ╚══════════════════════════════════════════════════════════════════╝
+const SUPABASE_URL  = 'https://YOUR_PROJECT_ID.supabase.co';
+const SUPABASE_ANON = 'YOUR_ANON_KEY_HERE';
+const IS_CONFIGURED = !SUPABASE_URL.includes('YOUR_PROJECT');
+</script>
+
+<!-- SETUP NOTICE (shown until credentials are added) -->
+<div id="setup-notice">
+  <div class="setup-box">
+    <div class="setup-title">Complete setup first</div>
+    <div class="setup-sub">Supabase credentials required</div>
+    <div class="setup-step">
+      <div class="setup-num">1</div>
+      <div class="setup-text">Go to <strong>supabase.com</strong> → create a free project → open <strong>Project Settings → Data API</strong></div>
+    </div>
+    <div class="setup-step">
+      <div class="setup-num">2</div>
+      <div class="setup-text">Copy your <strong>Project URL</strong> and <strong>anon public key</strong></div>
+    </div>
+    <div class="setup-step">
+      <div class="setup-num">3</div>
+      <div class="setup-text">Open <strong>admin.html</strong> in a text editor and paste them into the two variables at the top of the &lt;script&gt; block</div>
+    </div>
+    <div class="setup-step">
+      <div class="setup-num">4</div>
+      <div class="setup-text">Run the SQL schema from <strong>SUPABASE_SETUP.md</strong> in your Supabase SQL Editor, then create your admin user</div>
+    </div>
+    <div class="setup-note">📖 Full instructions in SUPABASE_SETUP.md included in this zip · Your password is never stored in this file — Supabase handles all authentication securely server-side</div>
   </div>
 </div>
 
-<!-- ADMIN -->
-<div class="admin" id="admin">
-<nav class="admin-nav">
-  <div class="admin-logo">K<b>Style</b> Rank <span style="font-size:9px;color:rgba(245,242,238,0.4);letter-spacing:0.2em;margin-left:8px">ADMIN</span></div>
-  <div class="admin-nav-links">
-    <span class="admin-nl active" onclick="showTab('dashboard')">Dashboard</span>
-    <span class="admin-nl" onclick="showTab('banners')">Banners</span>
-    <span class="admin-nl" onclick="showTab('styles')">Styles</span>
-    <span class="admin-nl" onclick="showTab('sources')">Image sources</span>
-    <a href="index.html" class="admin-nl" target="_blank">View site ↗</a>
-    <span class="admin-logout" onclick="doLogout()">Sign out</span>
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">K<b>Style</b> Rank</div>
+    <div class="login-badge">Admin panel</div>
+    <label class="login-label">Email</label>
+    <input class="login-input" id="l-email" type="email" placeholder="your@email.com" autocomplete="email">
+    <label class="login-label">Password</label>
+    <input class="login-input" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Sign in →</button>
+    <div class="login-err" id="login-err"></div>
+    <div class="login-security">
+      🔒 Authentication is handled by Supabase Auth · Passwords are hashed server-side with bcrypt and never stored in this file · Sessions use JWT tokens that expire automatically
+    </div>
   </div>
-</nav>
+</div>
 
-<div class="admin-body">
+<!-- ADMIN PANEL -->
+<div class="admin" id="admin">
+  <nav class="admin-nav">
+    <div>
+      <div class="admin-logo">K<b>Style</b> Rank <span style="font-size:9px;color:rgba(245,242,238,0.4);letter-spacing:0.2em;margin-left:8px">ADMIN</span></div>
+      <div class="admin-user" id="admin-user-email"></div>
+    </div>
+    <div class="admin-nav-right">
+      <span class="admin-nl active" onclick="showTab('dashboard',this)">Dashboard</span>
+      <span class="admin-nl" onclick="showTab('banners',this)">Banners</span>
+      <span class="admin-nl" onclick="showTab('styles',this)">Styles</span>
+      <span class="admin-nl" onclick="showTab('dramas',this)">Drama ranking</span>
+      <span class="admin-nl" onclick="showTab('idols',this)">Idol ranking</span>
+      <span class="admin-nl" onclick="showTab('photos',this)">Photo guide</span>
+      <a href="index.html" class="admin-nl" target="_blank">View site ↗</a>
+      <button class="admin-logout" onclick="doLogout()">Sign out</button>
+    </div>
+  </nav>
 
-  <div class="tab-panels">
+  <div class="admin-body">
+    <div class="tab-bar">
+      <div class="tab active" onclick="showTab('dashboard',this)">Dashboard</div>
+      <div class="tab" onclick="showTab('banners',this)">Banners</div>
+      <div class="tab" onclick="showTab('styles',this)">Styles</div>
+      <div class="tab" onclick="showTab('dramas',this)">Drama ranking</div>
+      <div class="tab" onclick="showTab('idols',this)">Idol ranking</div>
+      <div class="tab" onclick="showTab('photos',this)">Photo guide</div>
+    </div>
 
     <!-- DASHBOARD -->
     <div class="panel active" id="panel-dashboard">
       <div style="margin-bottom:18px">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:4px">Good morning, Admin</div>
-        <div style="font-size:10px;color:var(--muted);font-weight:400">Week of 19 May 2026 · Issue No. 05</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:4px">Welcome back</div>
+        <div style="font-size:10px;color:var(--muted)">Week of 19 May 2026 · Issue No. 05 · <span class="status-badge status-ok" id="db-status">Connecting…</span></div>
       </div>
-      <div class="stats-bar">
-        <div class="stat-box"><div class="stat-label">Total votes</div><div class="stat-val">18,432</div><div class="stat-sub">+2,341 this week</div></div>
-        <div class="stat-box"><div class="stat-label">Styles ranked</div><div class="stat-val">9</div><div class="stat-sub">April 2026 issue</div></div>
-        <div class="stat-box"><div class="stat-label">Top style</div><div class="stat-val" style="font-size:14px;line-height:1.2;margin-top:2px">Met Gala<br>Hanbok-luxury</div><div class="stat-sub">Score: 92/100</div></div>
-        <div class="stat-box"><div class="stat-label">Next update</div><div class="stat-val" style="font-size:14px;line-height:1.2;margin-top:2px">Jun 1<br>2026</div><div class="stat-sub">Monthly refresh</div></div>
+      <div class="stats-bar" id="stats-bar">
+        <div class="stat-box"><div class="stat-label">Loading</div><div class="stat-val">…</div></div>
+        <div class="stat-box"><div class="stat-label">Loading</div><div class="stat-val">…</div></div>
+        <div class="stat-box"><div class="stat-label">Loading</div><div class="stat-val">…</div></div>
+        <div class="stat-box"><div class="stat-label">Loading</div><div class="stat-val">…</div></div>
       </div>
       <div class="admin-section">
-        <div class="admin-section-head"><div><div class="admin-section-title">Quick actions</div><div class="admin-section-sub">Common admin tasks</div></div></div>
+        <div class="admin-section-head"><div><div class="admin-section-title">Quick actions</div></div></div>
         <div class="admin-section-body">
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-            <button class="btn btn-primary" onclick="showTab('banners')">✏️ Edit hero banners</button>
-            <button class="btn btn-primary" onclick="showTab('styles')">📊 Update style scores</button>
-            <button class="btn btn-primary" onclick="showTab('sources')">🖼️ Manage image sources</button>
-            <button class="btn btn-secondary" onclick="saveAll()">💾 Save &amp; publish all changes</button>
-            <button class="btn btn-secondary" onclick="window.open('index.html','_blank')">👁️ Preview live site</button>
-            <button class="btn btn-secondary" onclick="exportJSON()">📤 Export data as JSON</button>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="showTab('banners',null);document.querySelector('[onclick*=banners]').click()">✏️ Edit hero banners</button>
+            <button class="btn btn-primary" onclick="showTab('styles',null)">📊 Update style scores</button>
+            <button class="btn btn-primary" onclick="showTab('photos',null)">🖼️ Photo sourcing guide</button>
+            <button class="btn btn-secondary" onclick="window.open('index.html','_blank')">👁️ Preview live site ↗</button>
+            <button class="btn btn-secondary" onclick="showTab('dramas',null)">🎬 Update drama ranking</button>
+            <button class="btn btn-secondary" onclick="showTab('idols',null)">🎤 Update idol ranking</button>
           </div>
         </div>
       </div>
@@ -174,11 +274,13 @@ body{background:#f0eeeb;color:var(--ink);font-family:'Montserrat',sans-serif;fon
     <div class="panel" id="panel-banners">
       <div class="admin-section">
         <div class="admin-section-head">
-          <div><div class="admin-section-title">Hero banner slides</div><div class="admin-section-sub">3 rotating slides · auto-plays every 5 seconds</div></div>
-          <button class="btn btn-green" onclick="saveBanners()">Save banners</button>
+          <div><div class="admin-section-title">Hero banner slides</div><div class="admin-section-sub">3 rotating slides · 5-second interval · changes save to Supabase instantly</div></div>
+          <button class="btn btn-green" onclick="saveBanners()">💾 Save all banners</button>
         </div>
         <div class="admin-section-body">
-          <div class="slide-editor" id="slide-editor"></div>
+          <div class="slide-editor" id="slide-editor">
+            <div style="color:var(--muted);font-size:11px">Loading banners from database…</div>
+          </div>
         </div>
       </div>
     </div>
@@ -187,459 +289,483 @@ body{background:#f0eeeb;color:var(--ink);font-family:'Montserrat',sans-serif;fon
     <div class="panel" id="panel-styles">
       <div class="admin-section">
         <div class="admin-section-head">
-          <div><div class="admin-section-title">Style rankings</div><div class="admin-section-sub">Edit scores, sources, outfits, shop links · changes go live on save</div></div>
-          <button class="btn btn-green" onclick="saveStyles()">Save styles</button>
+          <div><div class="admin-section-title">Style rankings</div><div class="admin-section-sub">Click any style to expand · scores auto-calculate · saves to Supabase</div></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="saving" id="styles-saving"></span>
+            <button class="btn btn-green" onclick="saveAllStyles()">💾 Save all</button>
+          </div>
         </div>
         <div class="admin-section-body">
           <div style="font-size:10px;color:var(--muted);margin-bottom:14px;padding:8px 10px;background:var(--warm);border-radius:3px;border-left:2px solid var(--gold)">
-            💡 Final score = 60% × DataScore + 40% × VoteScore. DataScore = 35% Google Trends + 35% Hashtag + 30% Drama viewership.
+            💡 Score = 60% × (35%×Google Trends + 35%×Hashtag + 30%×Drama) + 40% × Vote ratio
           </div>
-          <div class="style-admin-list" id="style-admin-list"></div>
+          <div class="style-admin-list" id="style-admin-list">
+            <div style="color:var(--muted);font-size:11px">Loading styles from database…</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- IMAGE SOURCES -->
-    <div class="panel" id="panel-sources">
+    <!-- DRAMA RANKING -->
+    <div class="panel" id="panel-dramas">
       <div class="admin-section">
         <div class="admin-section-head">
-          <div><div class="admin-section-title">Image sourcing guide</div><div class="admin-section-sub">Where to get K-drama &amp; Kpop fashion photos legally</div></div>
+          <div><div class="admin-section-title">Drama rankings sidebar</div><div class="admin-section-sub">Shown in the right column of the Dramas page</div></div>
+          <button class="btn btn-green" onclick="saveDramas()">💾 Save drama rankings</button>
         </div>
         <div class="admin-section-body">
-
-          <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:12px">Licensed &amp; safe sources</div>
-
-          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-            <div style="padding:10px 12px;background:var(--warm);border-radius:4px;border-left:3px solid var(--green)">
-              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px">1. Official press kits (FREE)</div>
-              <div style="font-size:10px;color:var(--muted);line-height:1.6">Email press offices directly: Netflix Korea (press.kr@netflix.com), tvN (tvn_pr@cjenm.com), JTBC. Request episode stills and character wardrobe shots. Usually free for editorial/media use with credit. Best quality.</div>
-            </div>
-            <div style="padding:10px 12px;background:var(--warm);border-radius:4px;border-left:3px solid var(--green)">
-              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px">2. InkiStyle.com — editorial partnership</div>
-              <div style="font-size:10px;color:var(--muted);line-height:1.6">inkistyle.com documents every K-drama outfit per episode. Contact them for image sharing agreement. They are a small team and often open to cross-promotion with credits.</div>
-              <a href="https://inkistyle.com" target="_blank" style="font-size:9px;color:var(--blue);font-weight:600;margin-top:4px;display:block">→ inkistyle.com</a>
-            </div>
-            <div style="padding:10px 12px;background:var(--warm);border-radius:4px;border-left:3px solid var(--gold)">
-              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px">3. Getty Images editorial license (~$200/mo)</div>
-              <div style="font-size:10px;color:var(--muted);line-height:1.6">Covers red carpet, concert, and press tour photos for media reporting. Search "[idol name] [event] 2026" — gives legitimate photos from MAMA, Melon Music Awards, press tours.</div>
-              <a href="https://www.gettyimages.com" target="_blank" style="font-size:9px;color:var(--blue);font-weight:600;margin-top:4px;display:block">→ gettyimages.com</a>
-            </div>
-            <div style="padding:10px 12px;background:var(--warm);border-radius:4px;border-left:3px solid var(--gold)">
-              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px">4. Unsplash editorial (FREE — current placeholder source)</div>
-              <div style="font-size:10px;color:var(--muted);line-height:1.6">Current placeholder. Good for generic Korean street style photos. Not specific enough for drama character looks — replace with press kit images when available.</div>
-              <a href="https://unsplash.com/s/photos/korean-fashion" target="_blank" style="font-size:9px;color:var(--blue);font-weight:600;margin-top:4px;display:block">→ unsplash.com</a>
-            </div>
-            <div style="padding:10px 12px;background:var(--warm);border-radius:4px;border-left:3px solid var(--hint)">
-              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:3px">5. AI-generated illustrations (FREE, original IP)</div>
-              <div style="font-size:10px;color:var(--muted);line-height:1.6">Use Midjourney or Stable Diffusion: prompt "Korean fashion editorial illustration, [style name], no face visible, flat lay style, cream and [color] tones" — legally your own IP, copyright-free, consistent visual style.</div>
-            </div>
-          </div>
-
-          <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:12px">Google Image Search keyword formula</div>
-          <div style="font-size:10px;color:var(--muted);line-height:1.8;margin-bottom:10px">The "See photos" links in the drawer use Google Image Search. For better results, use this formula:</div>
-          <div style="padding:10px 12px;background:var(--warm);border-radius:4px;font-family:monospace;font-size:11px;color:var(--ink);line-height:1.8">
-            [Idol name] [group] [event/era] [year] outfit<br>
-            e.g.: "aespa Karina Met Gala 2026 Prada outfit"<br>
-            e.g.: "IU Perfect Crown MBC drama fashion 2026"<br>
-            e.g.: "Le Sserafim Chaewon EASY mv outfit 2026"
-          </div>
-
-          <div style="margin-top:20px">
-            <div style="font-size:11px;font-weight:600;margin-bottom:10px">Test a search keyword now</div>
-            <div style="display:flex;gap:8px">
-              <input class="form-input" id="test-keyword" style="flex:1" placeholder="e.g. aespa Karina Met Gala 2026 Prada outfit" value="aespa Karina Met Gala 2026 Prada outfit">
-              <button class="btn btn-primary" onclick="testSearch()">Test search ↗</button>
-            </div>
-            <div class="search-preview" id="search-preview-result"></div>
-          </div>
+          <div id="drama-ranking-editor">Loading…</div>
         </div>
       </div>
     </div>
 
-  </div><!-- end tab-panels -->
-</div><!-- end admin-body -->
-</div><!-- end admin -->
+    <!-- IDOL RANKING -->
+    <div class="panel" id="panel-idols">
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div><div class="admin-section-title">Idol rankings sidebar</div><div class="admin-section-sub">Shown in the right column of the Idols page</div></div>
+          <button class="btn btn-green" onclick="saveIdols()">💾 Save idol rankings</button>
+        </div>
+        <div class="admin-section-body">
+          <div id="idol-ranking-editor">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHOTO GUIDE -->
+    <div class="panel" id="panel-photos">
+      <div class="admin-section">
+        <div class="admin-section-head"><div><div class="admin-section-title">Photo sourcing guide</div><div class="admin-section-sub">How to get real K-drama and K-pop fashion photos legally</div></div></div>
+        <div class="admin-section-body">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;margin-bottom:14px;color:var(--red)">⚠️ Current problem: Unsplash photos are generic Western editorial — not Korean</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:18px;line-height:1.6;padding:10px 12px;background:#FAEEDA;border-radius:4px;border-left:3px solid var(--gold)">The card photos currently show random Western fashion editorial images from Unsplash. They have nothing to do with K-dramas or K-pop. There is no free API that automatically serves matching Korean fashion photos. This requires manual curation — but here is the fastest path to fix it.</div>
+
+          <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500;margin-bottom:12px">Best sources in order of ease</div>
+
+          <div class="source-card green">
+            <div class="source-name">1. InkiStyle.com — K-drama outfit photos (BEST, FREE)</div>
+            <div class="source-desc">InkiStyle documents every K-drama outfit with episode stills, character names, and brand info. Email them at contact@inkistyle.com for an editorial image-sharing agreement. Small team, usually open to cross-promotion. Best quality for drama-specific photos.</div>
+            <a class="source-link" href="https://inkistyle.com" target="_blank">→ inkistyle.com</a>
+          </div>
+          <div class="source-card green">
+            <div class="source-name">2. Official press kits (FREE)</div>
+            <div class="source-desc">Email press offices directly: <strong>Netflix Korea press</strong> — pressroom.netflix.com/ko · <strong>MBC PR</strong> — tvcast.naver.com/mbc · <strong>tvN</strong> — search "tvN press kit [drama name]". Request episode stills. Usually free for editorial use with credit.</div>
+          </div>
+          <div class="source-card gold">
+            <div class="source-name">3. Pinterest boards (Free, manually curated)</div>
+            <div class="source-desc">Search "[Drama name] fashion outfit" or "[Idol name] airport fashion 2026" on Pinterest. Fan boards are extensive and episode-specific. Use the photo URL directly in admin if it's a press or promotional image — not paparazzi shots.</div>
+            <a class="source-link" href="https://pinterest.com" target="_blank">→ pinterest.com</a>
+          </div>
+          <div class="source-card gold">
+            <div class="source-name">4. Getty Images editorial license (~$200/mo)</div>
+            <div class="source-desc">Covers red carpet, concert, press tour photos for media reporting. Search "[idol] [event] 2026". The cleanest paid option. Use the embed code Getty provides — it includes attribution automatically.</div>
+            <a class="source-link" href="https://www.gettyimages.com" target="_blank">→ gettyimages.com</a>
+          </div>
+          <div class="source-card grey">
+            <div class="source-name">5. Midjourney / Stable Diffusion (FREE, original IP)</div>
+            <div class="source-desc">Prompt: "Korean fashion editorial illustration, [style name] aesthetic, no face visible, flat lay style, cream and [palette] tones, Vogue Korea editorial". Legally your own IP. Consistent visual language. Good stopgap while sourcing real photos.</div>
+          </div>
+
+          <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500;margin:20px 0 10px">Test a Google Image Search keyword</div>
+          <div style="font-size:10px;color:var(--muted);margin-bottom:8px">Formula: <strong>[Idol name] [group] [event] [year] outfit fashion</strong> — be very specific</div>
+          <div class="keyword-tester">
+            <input class="kt-input" id="kt-input" value="aespa Karina Met Gala 2026 Prada hanbok gown best dressed" placeholder="e.g. IU Perfect Crown MBC 2026 outfit fashion">
+            <button class="btn btn-primary" onclick="testKeyword()">Test ↗</button>
+          </div>
+          <div class="kt-preview" id="kt-preview"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- admin-body -->
+</div><!-- admin -->
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ── AUTH ─────────────────────────────────────────────────────────────
-// NOTE: This is a simple client-side password for demo.
-// For production, replace with server-side auth (Supabase, Clerk, etc.)
-const ADMIN_USER = 'admin';
-const ADMIN_PASS = 'kstyle2026';
+// ── INIT ──────────────────────────────────────────────────────────────
+let supabase, currentUser;
+let localBanners=[], localStyles=[], localDramas=[], localIdols=[];
 
-function doLogin(){
-  const u=document.getElementById('l-user').value;
-  const p=document.getElementById('l-pass').value;
-  if(u===ADMIN_USER && p===ADMIN_PASS){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('admin').style.display='block';
-    init();
+function initSupabase(){
+  if(!IS_CONFIGURED){
+    document.getElementById('setup-notice').style.display='flex';
+    return;
+  }
+  document.getElementById('setup-notice').style.display='none';
+  supabase=window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  checkSession();
+}
+
+// ── AUTH ──────────────────────────────────────────────────────────────
+async function checkSession(){
+  const {data:{session}}=await supabase.auth.getSession();
+  if(session){
+    currentUser=session.user;
+    showAdmin(currentUser.email);
   } else {
-    document.getElementById('login-err').style.display='block';
+    showLogin();
   }
 }
-function doLogout(){
+
+async function doLogin(){
+  const email=document.getElementById('l-email').value.trim();
+  const pass=document.getElementById('l-pass').value;
+  const btn=document.getElementById('login-btn');
+  const err=document.getElementById('login-err');
+  err.style.display='none';
+  btn.textContent='Signing in…';btn.disabled=true;
+  try{
+    const {data,error}=await supabase.auth.signInWithPassword({email,password:pass});
+    if(error)throw error;
+    // Verify admin role
+    const {data:adminCheck}=await supabase.from('admin_users').select('role').eq('id',data.user.id).single();
+    if(!adminCheck||adminCheck.role!=='admin'){
+      await supabase.auth.signOut();
+      throw new Error('Access denied. This account does not have admin privileges.');
+    }
+    currentUser=data.user;
+    showAdmin(currentUser.email);
+  } catch(e){
+    err.textContent=e.message||'Sign in failed';
+    err.style.display='block';
+  } finally{
+    btn.textContent='Sign in →';btn.disabled=false;
+  }
+}
+
+async function doLogout(){
+  await supabase.auth.signOut();
+  document.getElementById('admin').style.display='none';
+  showLogin();
+}
+
+function showLogin(){
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('admin').style.display='none';
 }
-document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 
-// ── TAB NAVIGATION ────────────────────────────────────────────────────
-function showTab(name){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.admin-nl').forEach(n=>n.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
-  document.querySelectorAll('.admin-nl').forEach(n=>{if(n.textContent.toLowerCase().includes(name))n.classList.add('active')});
+async function showAdmin(email){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('admin').style.display='block';
+  document.getElementById('admin-user-email').textContent=email;
+  await loadAll();
 }
 
-// ── DATA ─────────────────────────────────────────────────────────────
-// May 19, 2026 — updated with real current data
-const banners=[
-  {
-    eyebrow:"✦ Met Gala 2026 · K-Pop takeover · May 2026",
-    title:"Hanbok-luxury\nleads the world",
-    sub:"aespa Karina's Prada hanbok-inspired gown + BLACKPINK Lisa, Rosé, Jennie — K-pop dominated Met Gala 2026 and set the global style agenda for the month",
-    img:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=1400&q=80&fit=crop",
-    link:"idols/index.html"
-  },
-  {
-    eyebrow:"✦ K-Drama fashion · May 2026",
-    title:"Filing for Love\n& Perfect Crown",
-    sub:"Shin Hye-sun's Shin Hye-sun's wardrobe in Filing for Love (tvN) and IU's final episodes of Perfect Crown are driving office siren and clean girl to new highs this week",
-    img:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=80&fit=crop",
-    link:"drama/index.html"
-  },
-  {
-    eyebrow:"✦ Seoul street · Seongsu-dong · May 2026",
-    title:"Acubi quiet cool\ntakes over Seoul",
-    sub:"The Seoul-born Acubi aesthetic — oversized silhouettes and muted layers — is peaking globally. #Acubi hits 65K TikTok posts daily, driven by NewJeans, aespa and BLACKPINK",
-    img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=1400&q=80&fit=crop",
-    link:"index.html"
+// ── LOAD DATA ─────────────────────────────────────────────────────────
+async function loadAll(){
+  try{
+    const [b,s,d,i]=await Promise.all([
+      supabase.from('banners').select('*').order('slot'),
+      supabase.from('styles').select('*').order('id'),
+      supabase.from('drama_rankings').select('*').order('rank'),
+      supabase.from('idol_rankings').select('*').order('rank'),
+    ]);
+    localBanners=b.data||[];
+    localStyles=s.data||[];
+    localDramas=d.data||[];
+    localIdols=i.data||[];
+    document.getElementById('db-status').textContent='Connected';
+    document.getElementById('db-status').className='status-badge status-ok';
+    renderDashboard();renderBanners();renderStyles();renderDramas();renderIdols();
+  } catch(e){
+    document.getElementById('db-status').textContent='Error: '+e.message;
+    document.getElementById('db-status').className='status-badge status-err';
   }
-];
+}
 
-const styles=[
-  {id:1,rank:1,name:"Met Gala hanbok-luxury",gt:96,hs:98,vs:94,cv:5210,nlr:0.94,delta:"u",dv:12,
-   img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=75&fit=crop",
-   tags:["kpop","hot"],meta:"aespa Karina Prada · BLACKPINK · Met Gala May 4 2026",
-   googleSearch:"aespa Karina Met Gala 2026 Prada hanbok outfit fashion",
-   dramas:[
-     {name:"aespa Karina — Met Gala 2026",detail:"Prada sleeveless gown · hanbok-inspired",badge:"high",rating:"Best dressed"},
-     {name:"BLACKPINK Rosé",detail:"Silver bird focal-point dress · Met Gala",badge:"high",rating:"Most searched"},
-     {name:"BLACKPINK Lisa",detail:"Robert Wun white gown · host committee",badge:"high",rating:"#1 TikTok"}
-   ]},
-  {id:2,rank:2,name:"Acubi quiet cool",gt:92,hs:89,vs:82,cv:4380,nlr:0.91,delta:"u",dv:8,
-   img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=75&fit=crop",
-   tags:["kpop","street","hot"],meta:"NewJeans · aespa · BLACKPINK · Musinsa street",
-   googleSearch:"Acubi Korean fashion aesthetic NewJeans aespa 2026 oversized muted layers outfit",
-   dramas:[
-     {name:"NewJeans — Acubi ambassadors",detail:"Oversized silhouettes · muted layers",badge:"high",rating:"65K TikTok/day"},
-     {name:"aespa — off-stage street style",detail:"Musinsa Standard pieces · airport looks",badge:"high",rating:"87K IG posts"},
-     {name:"BLACKPINK — London Fashion Week",detail:"Burberry FW26 front row · Feb 2026",badge:"mid",rating:"Peak Feb 2026"}
-   ]},
-  {id:3,rank:3,name:"Office siren",gt:85,hs:88,vs:90,cv:3540,nlr:0.88,delta:"u",dv:5,
-   img:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&q=75&fit=crop",
-   tags:["drama","hot"],meta:"Perfect Crown (MBC) · Filing for Love (tvN) · IU",
-   googleSearch:"IU Perfect Crown MBC drama fashion 2026 office siren blazer dress outfit",
-   dramas:[
-     {name:"Perfect Crown (MBC)",detail:"IU + Byun Woo-seok · Ep.11-12 final",badge:"high",rating:"11.2% viewership"},
-     {name:"Filing for Love (tvN)",detail:"Shin Hye-sun · Ep.9-10 this week",badge:"high",rating:"Airing now"},
-     {name:"We Are All Trying Here (JTBC)",detail:"Go Youn-jung · weekend slot",badge:"mid",rating:"Airing now"}
-   ]},
-  {id:4,rank:4,name:"Sheer &amp; mesh layering",gt:82,hs:86,vs:78,cv:3120,nlr:0.85,delta:"u",dv:6,
-   img:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=75&fit=crop",
-   tags:["kpop","drama"],meta:"Le Sserafim Chaewon · Filing for Love · spring 2026",
-   googleSearch:"Le Sserafim Chaewon EASY outfit sheer mesh 2026 Korean fashion spring",
-   dramas:[
-     {name:"Le Sserafim — EASY era",detail:"Chaewon sheer ribbed knit · beige asymmetric",badge:"high",rating:"72M streams"},
-     {name:"Filing for Love (tvN)",detail:"Shin Hye-sun spring wardrobe Ep.9",badge:"high",rating:"Airing now"},
-     {name:"Korean spring street 2026",detail:"Seongsu-dong editorial May",badge:"mid",rating:"Trending"}
-   ]},
-  {id:5,rank:5,name:"Clean girl aesthetic",gt:80,hs:84,vs:82,cv:2760,nlr:0.87,delta:"f",dv:0,
-   img:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&q=75&fit=crop",
-   tags:["drama"],meta:"IU Perfect Crown finale · When Life Gives You Tangerines",
-   googleSearch:"IU clean girl aesthetic Korean drama outfit 2026 linen minimal fashion",
-   dramas:[
-     {name:"Perfect Crown (MBC) — finale",detail:"IU minimal wardrobe · final episodes",badge:"high",rating:"11.2% viewership"},
-     {name:"When Life Gives You Tangerines",detail:"IU · Netflix evergreen",badge:"high",rating:"1.2B viewing hrs"},
-     {name:"Crash Landing on You",detail:"Yoon Se-ri's daywear references",badge:"mid",rating:"Evergreen"}
-   ]},
-  {id:6,rank:6,name:"Gender-fluid tailoring",gt:70,hs:76,vs:72,cv:2280,nlr:0.82,delta:"u",dv:3,
-   img:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=75&fit=crop",
-   tags:["kpop","drama"],meta:"Stray Kids · My Royal Nemesis (Netflix) · Lim Ji-yeon",
-   googleSearch:"Stray Kids Seungmin Burberry 2026 unisex tailoring Korean fashion gender fluid outfit",
-   dramas:[
-     {name:"Stray Kids — Seungmin at Burberry",detail:"London Fashion Week FW26",badge:"high",rating:"Feb 2026 trend peak"},
-     {name:"My Royal Nemesis (Netflix)",detail:"Lim Ji-yeon · Joseon-modern fusion",badge:"high",rating:"Airing May 2026"},
-     {name:"(G)I-DLE — power tailoring",detail:"Suit concept ongoing",badge:"mid",rating:"Active"}
-   ]},
-  {id:7,rank:7,name:"Balloon &amp; oversized silhouette",gt:72,hs:70,vs:68,cv:2100,nlr:0.80,delta:"f",dv:0,
-   img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=75&fit=crop",
-   tags:["kpop","street"],meta:"ILLIT · 5th-gen groups · Seongsu-dong May 2026",
-   googleSearch:"ILLIT My World era 2026 balloon cargo trousers Kpop oversized silhouette street style",
-   dramas:[
-     {name:"ILLIT — My World era",detail:"Stage + airport · ongoing 2026",badge:"high",rating:"58M streams"},
-     {name:"Seongsu-dong street May 2026",detail:"Spring oversized editorial",badge:"mid",rating:"Trending"},
-     {name:"NMIXX — Dare comeback",detail:"Concept wardrobe",badge:"mid",rating:"44M streams"}
-   ]},
-  {id:8,rank:8,name:"Granola-chic &amp; Acubi street",gt:68,hs:72,vs:60,cv:1890,nlr:0.78,delta:"u",dv:4,
-   img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=75&fit=crop",
-   tags:["street","hot"],meta:"Seongsu-dong · Musinsa Standard · upcycled spring",
-   googleSearch:"Granola chic Korean street style Seongsu 2026 crochet vest floral skirt Salomon sneakers",
-   dramas:[
-     {name:"Seongsu-dong May 2026",detail:"Spring granola editorial",badge:"high",rating:"#1 Seoul district"},
-     {name:"Musinsa Standard",detail:"Peak search interest Feb 2026",badge:"high",rating:"Global peak Feb"},
-     {name:"Upcycled Korean fashion 2026",detail:"Eco-fabric idol trend",badge:"mid",rating:"Growing"}
-   ]},
-  {id:9,rank:9,name:"Hanbok modernised",gt:65,hs:68,vs:64,cv:1650,nlr:0.76,delta:"u",dv:5,
-   img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=75&fit=crop",
-   tags:["kpop","drama"],meta:"aespa Karina Met Gala · ATEEZ · My Royal Nemesis",
-   googleSearch:"Hanbok modern Korean fashion 2026 ATEEZ traditional fusion outfit street style",
-   dramas:[
-     {name:"aespa Karina — Met Gala 2026",detail:"Prada hanbok-inspired gown elements",badge:"high",rating:"Best dressed lists"},
-     {name:"My Royal Nemesis (Netflix)",detail:"Joseon-modern fusion · Lim Ji-yeon",badge:"high",rating:"Airing May 2026"},
-     {name:"ATEEZ — hanbok street fusion",detail:"Heritage motifs in streetwear 2026",badge:"mid",rating:"Active trend"}
-   ]}
-];
+// ── DASHBOARD ─────────────────────────────────────────────────────────
+function renderDashboard(){
+  const totalVotes=localStyles.reduce((a,s)=>a+s.cv,0);
+  const topStyle=localStyles.sort((a,b)=>{
+    const fa=Math.round(0.60*(0.35*a.gt+0.35*a.hs+0.30*a.vs)+0.40*Math.round(a.nlr*100));
+    const fb=Math.round(0.60*(0.35*b.gt+0.35*b.hs+0.30*b.vs)+0.40*Math.round(b.nlr*100));
+    return fb-fa;
+  })[0];
+  document.getElementById('stats-bar').innerHTML=`
+    <div class="stat-box"><div class="stat-label">Total votes</div><div class="stat-val">${totalVotes.toLocaleString()}</div><div class="stat-sub">All styles combined</div></div>
+    <div class="stat-box"><div class="stat-label">Styles ranked</div><div class="stat-val">${localStyles.length}</div><div class="stat-sub">May 2026 issue</div></div>
+    <div class="stat-box"><div class="stat-label">Top style</div><div class="stat-val" style="font-size:13px;line-height:1.3;margin-top:2px">${topStyle?.name||'—'}</div></div>
+    <div class="stat-box"><div class="stat-label">Active dramas</div><div class="stat-val">${localDramas.length}</div><div class="stat-sub">In sidebar</div></div>`;
+}
 
-styles.forEach(s=>{
-  s.ds=Math.round(0.35*s.gt+0.35*s.hs+0.30*s.vs);
-  s.vs2=Math.round(s.nlr*100);
-  s.fs=Math.round(0.60*s.ds+0.40*s.vs2);
-});
-
-// ── RENDER BANNERS ───────────────────────────────────────────────────
+// ── BANNERS ───────────────────────────────────────────────────────────
 function renderBanners(){
-  document.getElementById('slide-editor').innerHTML=banners.map((b,i)=>`
+  if(!localBanners.length){
+    document.getElementById('slide-editor').innerHTML='<div style="color:var(--muted);font-size:11px;padding:20px;text-align:center">No banners found. Run the SQL seed from SUPABASE_SETUP.md first.</div>';
+    return;
+  }
+  document.getElementById('slide-editor').innerHTML=localBanners.map((b,i)=>`
     <div class="slide-card">
       <div class="slide-card-head">
-        <div class="slide-num">Slide ${i+1} of ${banners.length}</div>
-        <div style="font-size:9px;color:var(--muted)">Auto-rotates every 5 seconds</div>
+        <div class="slide-num">Slide ${b.slot} of 3</div>
+        <span class="status-badge ${b.active?'status-ok':'status-warn'}">${b.active?'Active':'Hidden'}</span>
       </div>
       <div class="slide-card-body">
-        <img class="img-preview" id="banner-img-preview-${i}" src="${b.img}" alt="Banner ${i+1}">
+        <img class="img-preview" id="bp-${b.id}" src="${b.img||''}" alt="Slide ${b.slot}">
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Image URL</label>
-            <input class="form-input" id="b-img-${i}" value="${b.img}" onchange="updateBannerPreview(${i})">
-            <div class="form-hint">Unsplash URL or your own hosted image URL. Recommended: 1400×500px</div>
+            <input class="form-input" id="b-img-${b.id}" value="${b.img||''}" onchange="document.getElementById('bp-${b.id}').src=this.value">
+            <div class="form-hint">Unsplash: add ?w=1400&q=80&fit=crop · Or hosted image URL · 16:5 ratio ideal</div>
           </div>
           <div class="form-group">
-            <label class="form-label">Link (where it goes when clicked)</label>
-            <input class="form-input" id="b-link-${i}" value="${b.link}" placeholder="drama/index.html">
-          </div>
-        </div>
-        <div class="form-row full">
-          <div class="form-group">
-            <label class="form-label">Eyebrow text (small top label)</label>
-            <input class="form-input" id="b-eyebrow-${i}" value="${b.eyebrow}">
+            <label class="form-label">Link (page when banner clicked)</label>
+            <input class="form-input" id="b-link-${b.id}" value="${b.link||''}">
           </div>
         </div>
         <div class="form-row full">
           <div class="form-group">
-            <label class="form-label">Headline (large serif text)</label>
-            <input class="form-input" id="b-title-${i}" value="${b.title.replace('\n',' | ')}">
-            <div class="form-hint">Use | to create a line break in the headline</div>
+            <label class="form-label">Eyebrow text (small gold label)</label>
+            <input class="form-input" id="b-eyebrow-${b.id}" value="${b.eyebrow||''}">
           </div>
         </div>
         <div class="form-row full">
           <div class="form-group">
-            <label class="form-label">Subtext</label>
-            <textarea class="form-textarea" id="b-sub-${i}">${b.sub}</textarea>
+            <label class="form-label">Headline</label>
+            <input class="form-input" id="b-title-${b.id}" value="${b.title||''}">
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Sub text</label>
+            <textarea class="form-textarea" id="b-sub-${b.id}">${b.sub||''}</textarea>
           </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-function updateBannerPreview(i){
-  const url=document.getElementById(`b-img-${i}`).value;
-  document.getElementById(`banner-img-preview-${i}`).src=url;
+async function saveBanners(){
+  const updates=localBanners.map(b=>({
+    id:b.id,slot:b.slot,
+    img:document.getElementById('b-img-'+b.id)?.value||b.img,
+    link:document.getElementById('b-link-'+b.id)?.value||b.link,
+    eyebrow:document.getElementById('b-eyebrow-'+b.id)?.value||b.eyebrow,
+    title:document.getElementById('b-title-'+b.id)?.value||b.title,
+    sub:document.getElementById('b-sub-'+b.id)?.value||b.sub,
+    updated_at:new Date().toISOString()
+  }));
+  const {error}=await supabase.from('banners').upsert(updates);
+  if(error)showToast('Error: '+error.message,'red');
+  else{showToast('Banners saved ✓','green');await loadAll();}
 }
 
-// ── RENDER STYLE EDITORS ──────────────────────────────────────────────
+// ── STYLES ─────────────────────────────────────────────────────────────
+function calcScore(s){
+  const ds=Math.round(0.35*s.gt+0.35*s.hs+0.30*s.vs);
+  const vs2=Math.round(s.nlr*100);
+  const fs=Math.round(0.60*ds+0.40*vs2);
+  return{ds,vs2,fs};
+}
+
 function renderStyles(){
-  const sorted=[...styles].sort((a,b)=>b.fs-a.fs);
-  document.getElementById('style-admin-list').innerHTML=sorted.map((s,idx)=>`
-    <div class="style-admin-card">
+  const sorted=[...localStyles].sort((a,b)=>calcScore(b).fs-calcScore(a).fs);
+  document.getElementById('style-admin-list').innerHTML=sorted.map((s,i)=>{
+    const sc=calcScore(s);
+    return`<div class="style-admin-card">
       <div class="style-admin-head" onclick="toggleStyle(${s.id})">
-        <div class="style-admin-rank">${String(idx+1).padStart(2,'0')}</div>
+        <div class="style-admin-rank">${String(i+1).padStart(2,'0')}</div>
         <div class="style-admin-name">${s.name}</div>
-        <div class="style-admin-score">Score: ${s.fs}/100 · Data: ${s.ds} · Votes: ${s.vs2}</div>
-        <div class="style-admin-toggle" id="toggle-${s.id}">▼</div>
+        <div class="style-admin-score">Score: ${sc.fs}/100 · Data: ${sc.ds} · Vote: ${sc.vs2}</div>
+        <div class="style-admin-toggle" id="stoggle-${s.id}">▼</div>
       </div>
-      <div class="style-admin-body" id="style-body-${s.id}">
+      <div class="style-admin-body" id="sbody-${s.id}">
+        <div class="form-row tri">
+          <div class="form-group"><label class="form-label">Google Trends (0-100)</label><input class="form-input" type="number" min="0" max="100" id="sgt-${s.id}" value="${s.gt}" oninput="liveScore(${s.id})"></div>
+          <div class="form-group"><label class="form-label">Hashtag freq. (0-100)</label><input class="form-input" type="number" min="0" max="100" id="shs-${s.id}" value="${s.hs}" oninput="liveScore(${s.id})"></div>
+          <div class="form-group"><label class="form-label">Drama viewership (0-100)</label><input class="form-input" type="number" min="0" max="100" id="svs-${s.id}" value="${s.vs}" oninput="liveScore(${s.id})"></div>
+        </div>
         <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Google Trends score (0-100)</label>
-            <input class="form-input" type="number" min="0" max="100" id="s-gt-${s.id}" value="${s.gt}" onchange="recalcScore(${s.id})">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Hashtag frequency score (0-100)</label>
-            <input class="form-input" type="number" min="0" max="100" id="s-hs-${s.id}" value="${s.hs}" onchange="recalcScore(${s.id})">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Drama/viewership score (0-100)</label>
-            <input class="form-input" type="number" min="0" max="100" id="s-vs-${s.id}" value="${s.vs}" onchange="recalcScore(${s.id})">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Computed final score</label>
-            <input class="form-input" id="s-fs-${s.id}" value="${s.fs}" readonly style="background:#f0eeeb;color:var(--gold);font-weight:600">
+          <div class="form-group"><label class="form-label">Computed final score</label><input class="form-input" id="sfs-${s.id}" value="${sc.fs}/100" readonly style="background:#f0eeeb;color:var(--gold);font-weight:700"></div>
+          <div class="form-group"><label class="form-label">Delta direction</label>
+            <select class="form-select" id="sdelta-${s.id}">
+              <option value="u" ${s.delta==='u'?'selected':''}>▲ Rising</option>
+              <option value="f" ${s.delta==='f'?'selected':''}>— Flat</option>
+              <option value="d" ${s.delta==='d'?'selected':''}>▼ Falling</option>
+            </select>
           </div>
         </div>
         <div class="form-row">
+          <div class="form-group"><label class="form-label">Style name</label><input class="form-input" id="sname-${s.id}" value="${s.name}"></div>
+          <div class="form-group"><label class="form-label">Meta line (dramas · idols)</label><input class="form-input" id="smeta-${s.id}" value="${s.meta||''}"></div>
+        </div>
+        <div class="form-row full">
           <div class="form-group">
-            <label class="form-label">Style name</label>
-            <input class="form-input" id="s-name-${s.id}" value="${s.name}">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Meta (drama · idol references)</label>
-            <input class="form-input" id="s-meta-${s.id}" value="${s.meta}">
+            <label class="form-label">Card photo URL — ⚠️ Replace with real K-drama/Kpop image</label>
+            <input class="form-input" id="simg-${s.id}" value="${s.img||''}">
+            <div class="form-hint" style="color:var(--red);font-weight:500">Current image is generic Unsplash. See Photo Guide tab for how to get real Korean fashion photos. Ideal: press kit PNG from Netflix/tvN/agency · Minimum: Pinterest fan photo URL · Goal: InkiStyle editorial partnership</div>
           </div>
         </div>
         <div class="form-row full">
           <div class="form-group">
-            <label class="form-label">Card photo URL</label>
-            <input class="form-input" id="s-img-${s.id}" value="${s.img}">
-            <div class="form-hint">Unsplash: add ?w=500&q=75&fit=crop · Or use press kit URL · Or Midjourney output hosted on Cloudinary</div>
-          </div>
-        </div>
-        <div class="form-divider"></div>
-        <div style="font-size:10px;font-weight:600;margin-bottom:10px">Google Image Search keyword</div>
-        <div class="form-row full">
-          <div class="form-group">
-            <label class="form-label">Search query for "See photos ↗" button</label>
-            <input class="form-input" id="s-search-${s.id}" value="${s.googleSearch}" oninput="updateSearchPreview(${s.id})">
-            <div class="form-hint">Formula: [Idol name] [group] [event] [year] outfit · Be very specific for accurate results</div>
-            <div class="search-preview" id="s-search-preview-${s.id}">
-              Preview: <a href="https://www.google.com/search?q=${encodeURIComponent(s.googleSearch)}&tbm=isch" target="_blank">${s.googleSearch}</a>
+            <label class="form-label">Google Image Search keyword — "See photos ↗" in drawer</label>
+            <input class="form-input" id="ssearch-${s.id}" value="${s.google_search||''}" oninput="updateSearchPrev(${s.id})">
+            <div class="form-hint">Formula: [Idol name] [group] [event] [year] outfit · Be very specific for accurate image results</div>
+            <div class="search-preview" id="sprv-${s.id}">
+              <a href="https://www.google.com/search?q=${encodeURIComponent(s.google_search||s.name)}&tbm=isch" target="_blank">Preview search ↗</a>
             </div>
           </div>
         </div>
-        <div class="form-divider"></div>
-        <div style="font-size:10px;font-weight:600;margin-bottom:10px">Spotted in sources (up to 3)</div>
-        ${s.dramas.map((d,di)=>`
-          <div style="padding:10px;background:var(--warm);border-radius:4px;margin-bottom:6px">
-            <div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:600">Source ${di+1}</div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Source name</label>
-                <input class="form-input" id="s-dname-${s.id}-${di}" value="${d.name}">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Detail / episode / event</label>
-                <input class="form-input" id="s-ddetail-${s.id}-${di}" value="${d.detail}">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Rating / metric</label>
-                <input class="form-input" id="s-drating-${s.id}-${di}" value="${d.rating}">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Signal strength</label>
-                <select class="form-select" id="s-dbadge-${s.id}-${di}">
-                  <option value="high" ${d.badge==='high'?'selected':''}>★ Strong</option>
-                  <option value="mid" ${d.badge==='mid'?'selected':''}>◆ Moderate</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        `).join('')}
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function toggleStyle(id){
-  const body=document.getElementById('style-body-'+id);
-  const toggle=document.getElementById('toggle-'+id);
-  const isOpen=body.classList.contains('open');
-  body.classList.toggle('open',!isOpen);
-  toggle.textContent=isOpen?'▼':'▲';
+  const body=document.getElementById('sbody-'+id);
+  const tog=document.getElementById('stoggle-'+id);
+  const open=body.classList.toggle('open');
+  tog.textContent=open?'▲':'▼';
 }
 
-function recalcScore(id){
-  const s=styles.find(x=>x.id===id);
-  const gt=parseInt(document.getElementById('s-gt-'+id).value)||0;
-  const hs=parseInt(document.getElementById('s-hs-'+id).value)||0;
-  const vs=parseInt(document.getElementById('s-vs-'+id).value)||0;
+function liveScore(id){
+  const gt=parseInt(document.getElementById('sgt-'+id)?.value)||0;
+  const hs=parseInt(document.getElementById('shs-'+id)?.value)||0;
+  const vs=parseInt(document.getElementById('svs-'+id)?.value)||0;
+  const s=localStyles.find(x=>x.id===id);
   const ds=Math.round(0.35*gt+0.35*hs+0.30*vs);
-  const vs2=Math.round(s.nlr*100);
+  const vs2=Math.round((s?.nlr||0.8)*100);
   const fs=Math.round(0.60*ds+0.40*vs2);
-  document.getElementById('s-fs-'+id).value=fs+'/100';
+  const el=document.getElementById('sfs-'+id);
+  if(el)el.value=fs+'/100';
 }
 
-function updateSearchPreview(id){
-  const val=document.getElementById('s-search-'+id).value;
+function updateSearchPrev(id){
+  const val=document.getElementById('ssearch-'+id)?.value||'';
+  const el=document.getElementById('sprv-'+id);
+  if(el)el.innerHTML=`<a href="https://www.google.com/search?q=${encodeURIComponent(val)}&tbm=isch" target="_blank">Preview: "${val}" ↗</a>`;
+}
+
+async function saveAllStyles(){
+  document.getElementById('styles-saving').textContent='Saving…';
+  const updates=localStyles.map(s=>({
+    id:s.id,
+    gt:parseInt(document.getElementById('sgt-'+s.id)?.value)||s.gt,
+    hs:parseInt(document.getElementById('shs-'+s.id)?.value)||s.hs,
+    vs:parseInt(document.getElementById('svs-'+s.id)?.value)||s.vs,
+    delta:document.getElementById('sdelta-'+s.id)?.value||s.delta,
+    name:document.getElementById('sname-'+s.id)?.value||s.name,
+    meta:document.getElementById('smeta-'+s.id)?.value||s.meta,
+    img:document.getElementById('simg-'+s.id)?.value||s.img,
+    google_search:document.getElementById('ssearch-'+s.id)?.value||s.google_search,
+    updated_at:new Date().toISOString()
+  }));
+  const {error}=await supabase.from('styles').upsert(updates);
+  if(error){showToast('Error: '+error.message,'red');}
+  else{showToast('All styles saved ✓','green');document.getElementById('styles-saving').textContent='Saved';await loadAll();}
+}
+
+// ── DRAMA RANKINGS ────────────────────────────────────────────────────
+function renderDramas(){
+  document.getElementById('drama-ranking-editor').innerHTML=`
+    <div style="font-size:10px;color:var(--muted);margin-bottom:14px;padding:8px 10px;background:var(--warm);border-radius:3px;border-left:2px solid var(--gold)">
+      These appear in the right sidebar of the Dramas page. Update weekly to reflect current airing dramas.
+    </div>
+    ${localDramas.map(d=>`
+      <div style="border:0.5px solid var(--rule);border-radius:4px;padding:12px;margin-bottom:8px;background:var(--cream)">
+        <div class="form-row tri">
+          <div class="form-group"><label class="form-label">Rank</label><input class="form-input" type="number" id="dr-rank-${d.id}" value="${d.rank}"></div>
+          <div class="form-group"><label class="form-label">Drama name</label><input class="form-input" id="dr-name-${d.id}" value="${d.name}"></div>
+          <div class="form-group"><label class="form-label">Channel</label><input class="form-input" id="dr-ch-${d.id}" value="${d.channel||''}"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Episode</label><input class="form-input" id="dr-ep-${d.id}" value="${d.episode||''}"></div>
+          <div class="form-group"><label class="form-label">Viewership / metric</label><input class="form-input" id="dr-vw-${d.id}" value="${d.viewership||''}"></div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group"><label class="form-label">Photo URL</label><input class="form-input" id="dr-img-${d.id}" value="${d.img||''}"><div class="form-hint" style="color:var(--red);font-weight:500">⚠️ Replace with actual drama poster or scene still — not generic Unsplash</div></div>
+        </div>
+      </div>`).join('')}
+    <button class="btn btn-secondary" onclick="addDramaRow()">+ Add drama</button>`;
+}
+
+async function saveDramas(){
+  const updates=localDramas.map(d=>({
+    id:d.id,issue:d.issue||'2026-05',active:true,
+    rank:parseInt(document.getElementById('dr-rank-'+d.id)?.value)||d.rank,
+    name:document.getElementById('dr-name-'+d.id)?.value||d.name,
+    channel:document.getElementById('dr-ch-'+d.id)?.value||d.channel,
+    episode:document.getElementById('dr-ep-'+d.id)?.value||d.episode,
+    viewership:document.getElementById('dr-vw-'+d.id)?.value||d.viewership,
+    img:document.getElementById('dr-img-'+d.id)?.value||d.img,
+  }));
+  const {error}=await supabase.from('drama_rankings').upsert(updates);
+  if(error)showToast('Error: '+error.message,'red');
+  else{showToast('Drama rankings saved ✓','green');await loadAll();}
+}
+
+// ── IDOL RANKINGS ─────────────────────────────────────────────────────
+function renderIdols(){
+  document.getElementById('idol-ranking-editor').innerHTML=`
+    <div style="font-size:10px;color:var(--muted);margin-bottom:14px;padding:8px 10px;background:var(--warm);border-radius:3px;border-left:2px solid var(--gold)">
+      These appear in the right sidebar of the Idols page. Update weekly to reflect current trending idols and events.
+    </div>
+    ${localIdols.map(d=>`
+      <div style="border:0.5px solid var(--rule);border-radius:4px;padding:12px;margin-bottom:8px;background:var(--cream)">
+        <div class="form-row tri">
+          <div class="form-group"><label class="form-label">Rank</label><input class="form-input" type="number" id="ir-rank-${d.id}" value="${d.rank}"></div>
+          <div class="form-group"><label class="form-label">Idol name</label><input class="form-input" id="ir-name-${d.id}" value="${d.name}"></div>
+          <div class="form-group"><label class="form-label">Group</label><input class="form-input" id="ir-grp-${d.id}" value="${d.group_name||''}"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Event / era</label><input class="form-input" id="ir-ev-${d.id}" value="${d.event||''}"></div>
+          <div class="form-group"><label class="form-label">Metric (streams, rating)</label><input class="form-input" id="ir-met-${d.id}" value="${d.metric||''}"></div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group"><label class="form-label">Photo URL</label><input class="form-input" id="ir-img-${d.id}" value="${d.img||''}"><div class="form-hint" style="color:var(--red);font-weight:500">⚠️ Replace with official agency/press photo — not Unsplash</div></div>
+        </div>
+      </div>`).join('')}
+    <button class="btn btn-secondary" onclick="addIdolRow()">+ Add idol</button>`;
+}
+
+async function saveIdols(){
+  const updates=localIdols.map(d=>({
+    id:d.id,issue:d.issue||'2026-05',active:true,
+    rank:parseInt(document.getElementById('ir-rank-'+d.id)?.value)||d.rank,
+    name:document.getElementById('ir-name-'+d.id)?.value||d.name,
+    group_name:document.getElementById('ir-grp-'+d.id)?.value||d.group_name,
+    event:document.getElementById('ir-ev-'+d.id)?.value||d.event,
+    metric:document.getElementById('ir-met-'+d.id)?.value||d.metric,
+    img:document.getElementById('ir-img-'+d.id)?.value||d.img,
+  }));
+  const {error}=await supabase.from('idol_rankings').upsert(updates);
+  if(error)showToast('Error: '+error.message,'red');
+  else{showToast('Idol rankings saved ✓','green');await loadAll();}
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+function showTab(name,clickedEl){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab,.admin-nl').forEach(t=>t.classList.remove('active'));
+  const panel=document.getElementById('panel-'+name);
+  if(panel)panel.classList.add('active');
+  if(clickedEl)clickedEl.classList.add('active');
+}
+
+function testKeyword(){
+  const val=document.getElementById('kt-input').value;
   const url=`https://www.google.com/search?q=${encodeURIComponent(val)}&tbm=isch`;
-  document.getElementById('s-search-preview-'+id).innerHTML=`Preview: <a href="${url}" target="_blank">${val}</a>`;
-}
-
-function testSearch(){
-  const kw=document.getElementById('test-keyword').value;
-  const url=`https://www.google.com/search?q=${encodeURIComponent(kw)}&tbm=isch`;
-  document.getElementById('search-preview-result').innerHTML=`<a href="${url}" target="_blank">→ Open Google Image Search for: "${kw}"</a>`;
+  document.getElementById('kt-preview').innerHTML=`<a href="${url}" target="_blank">→ "${val}" ↗</a>`;
   window.open(url,'_blank');
 }
 
-// ── SAVE FUNCTIONS ────────────────────────────────────────────────────
-function saveBanners(){
-  // In production: POST to your API/Supabase
-  // For now: show success and log to console for manual index.html update
-  banners.forEach((b,i)=>{
-    b.img=document.getElementById(`b-img-${i}`).value;
-    b.eyebrow=document.getElementById(`b-eyebrow-${i}`).value;
-    b.title=document.getElementById(`b-title-${i}`).value.replace(' | ','\n');
-    b.sub=document.getElementById(`b-sub-${i}`).value;
-    b.link=document.getElementById(`b-link-${i}`).value;
-  });
-  console.log('Updated banners:', JSON.stringify(banners,null,2));
-  showToast('Banners saved · Copy JSON from console to index.html to deploy','green');
-}
+function addDramaRow(){showToast('Add drama: insert row directly in Supabase dashboard → Table Editor → drama_rankings','');}
+function addIdolRow(){showToast('Add idol: insert row directly in Supabase dashboard → Table Editor → idol_rankings','');}
 
-function saveStyles(){
-  styles.forEach(s=>{
-    s.gt=parseInt(document.getElementById('s-gt-'+s.id).value)||s.gt;
-    s.hs=parseInt(document.getElementById('s-hs-'+s.id).value)||s.hs;
-    s.vs=parseInt(document.getElementById('s-vs-'+s.id).value)||s.vs;
-    s.name=document.getElementById('s-name-'+s.id).value||s.name;
-    s.meta=document.getElementById('s-meta-'+s.id).value||s.meta;
-    s.img=document.getElementById('s-img-'+s.id).value||s.img;
-    s.googleSearch=document.getElementById('s-search-'+s.id).value||s.googleSearch;
-    s.dramas.forEach((d,di)=>{
-      d.name=document.getElementById(`s-dname-${s.id}-${di}`).value||d.name;
-      d.detail=document.getElementById(`s-ddetail-${s.id}-${di}`).value||d.detail;
-      d.rating=document.getElementById(`s-drating-${s.id}-${di}`).value||d.rating;
-      d.badge=document.getElementById(`s-dbadge-${s.id}-${di}`).value||d.badge;
-    });
-    s.ds=Math.round(0.35*s.gt+0.35*s.hs+0.30*s.vs);
-    s.vs2=Math.round(s.nlr*100);
-    s.fs=Math.round(0.60*s.ds+0.40*s.vs2);
-  });
-  renderStyles();
-  console.log('Updated styles:', JSON.stringify(styles,null,2));
-  showToast('Styles saved · Copy JSON from console to index.html','green');
-}
-
-function saveAll(){saveBanners();saveStyles();showToast('All changes saved · See browser console for updated JSON','green')}
-
-function exportJSON(){
-  const data={banners,styles};
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='kstylerank-data.json';a.click();
-  showToast('JSON exported · Use to update index.html data','green');
-}
-
-function showToast(msg,type=''){
+function showToast(msg,type){
   const t=document.getElementById('toast');
   t.textContent=msg;t.className='toast on'+(type?' '+type:'');
   clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),3000);
 }
 
-function init(){renderBanners();renderStyles()}
+// Key bindings
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('login-screen').style.display==='flex')doLogin();
+});
+
+// Start
+initSupabase();
 </script>
 </body>
 </html>
