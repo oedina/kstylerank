@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KStyleRank — K-Pop Idol Fashion April 2026</title>
+<meta name="description" content="Fashion styles ranked by K-pop idol influence. See which groups are setting the biggest style trends in April 2026.">
+<meta property="og:title" content="KStyleRank — K-Pop Idol Fashion Rankings">
+<meta property="og:image" content="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&q=80">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#0a0a0a;--cream:#f5f2ee;--warm:#ece7e0;--muted:#7a7672;--hint:#a09c97;--rule:rgba(10,10,10,0.1);--gold:#b8975a;--green:#3B6D11;--red:#A32D2D}
+body{background:var(--cream);color:var(--ink);font-family:'Montserrat',sans-serif;font-weight:300;font-size:13px}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;background:var(--cream);border-bottom:0.5px solid var(--rule);padding:11px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:19px;letter-spacing:0.18em;text-transform:uppercase;white-space:nowrap;text-decoration:none;color:var(--ink)}
+.logo b{color:var(--gold);font-weight:300}
+.nav-links{display:flex;gap:20px}
+.nl{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nl:hover,.nl.active{color:var(--ink)}
+.issue{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--hint);white-space:nowrap}
+
+/* PAGE HEADER */
+.page-header{padding:32px 28px 24px;border-bottom:0.5px solid var(--rule)}
+.ph-eyebrow{font-size:8px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.ph-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;letter-spacing:0.04em;line-height:1.1;margin-bottom:8px}
+.ph-title em{font-style:italic;color:var(--muted)}
+.ph-sub{font-size:10px;color:var(--muted);letter-spacing:0.1em;line-height:1.8}
+
+/* IDOL GROUP STRIP */
+.idol-strip{padding:18px 28px;border-bottom:0.5px solid var(--rule);display:flex;gap:6px;overflow-x:auto}
+.idol-strip::-webkit-scrollbar{display:none}
+.idol-pill{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:7px 12px;border:0.5px solid var(--rule);border-radius:100px;text-decoration:none;transition:all .15s;background:var(--cream)}
+.idol-pill:hover{border-color:rgba(10,10,10,0.3);background:var(--warm)}
+.idol-pill.active{background:var(--ink);border-color:var(--ink)}
+.idol-pill-img{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--warm);flex-shrink:0}
+.idol-pill-name{font-size:10px;letter-spacing:0.08em;color:var(--ink);font-weight:400;white-space:nowrap}
+.idol-pill.active .idol-pill-name{color:var(--cream)}
+.idol-pill-streams{font-size:8px;color:var(--hint);white-space:nowrap}
+.idol-pill.active .idol-pill-streams{color:rgba(245,242,238,0.6)}
+
+/* TRENDING BANNER */
+.trending-banner{margin:20px 28px 0;padding:14px 16px;background:var(--ink);border-radius:6px;display:flex;align-items:center;gap:14px}
+.tb-icon{font-size:20px;flex-shrink:0}
+.tb-label{font-size:8px;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
+.tb-text{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:300;color:var(--cream);line-height:1.3}
+.tb-right{margin-left:auto;text-align:right;flex-shrink:0}
+.tb-stat{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold)}
+.tb-stat-l{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,242,238,0.5)}
+
+/* MAIN */
+.main{padding:20px 28px 40px}
+.sec-label{font-size:8px;letter-spacing:0.26em;text-transform:uppercase;color:var(--hint);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-label::after{content:'';flex:1;height:0.5px;background:var(--rule)}
+
+/* IDOL STYLE GRID — 2 cols */
+.idol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(max-width:480px){.idol-grid{grid-template-columns:1fr}}
+
+/* IDOL CARD */
+.idol-card{background:var(--cream);border:0.5px solid var(--rule);border-radius:6px;overflow:hidden;cursor:pointer;transition:border-color .15s;display:flex;flex-direction:column}
+.idol-card:hover{border-color:rgba(10,10,10,0.28)}
+.idol-card.top{border-color:var(--gold)}
+.ic-photo-wrap{position:relative;overflow:hidden}
+.ic-photo{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:var(--warm);transition:transform .3s}
+.idol-card:hover .ic-photo{transform:scale(1.04)}
+.ic-rank-badge{position:absolute;top:7px;left:7px;font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:0.1em;background:rgba(245,242,238,0.92);color:var(--ink);padding:1px 6px;border:0.5px solid rgba(10,10,10,0.14)}
+.ic-rank-badge.gold{background:rgba(184,151,90,0.9);color:#fff}
+.ic-group-badge{position:absolute;bottom:7px;left:7px;right:7px;background:rgba(10,10,10,0.72);color:var(--cream);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 8px;border-radius:2px}
+.ic-view-hint{position:absolute;top:7px;right:7px;background:rgba(10,10,10,0.6);color:var(--cream);font-size:7px;letter-spacing:0.12em;text-transform:uppercase;padding:3px 6px;border-radius:2px;opacity:0;transition:opacity .2s}
+.idol-card:hover .ic-view-hint{opacity:1}
+
+/* IDOL CARD SIGNALS */
+.ic-signals{display:flex;border-top:0.5px solid var(--rule);border-bottom:0.5px solid var(--rule)}
+.ic-sig{flex:1;padding:3px 0;text-align:center;border-right:0.5px solid var(--rule);font-size:6px;letter-spacing:0.06em;text-transform:uppercase;color:var(--hint)}
+.ic-sig:last-child{border-right:none}
+.ic-sig-v{font-family:'Cormorant Garamond',serif;font-size:11px;font-weight:300;display:block;margin-top:1px}
+.ic-sig-v.g{color:var(--green)}.ic-sig-v.m{color:var(--gold)}.ic-sig-v.lo{color:var(--muted)}
+
+/* IDOL CARD BODY */
+.ic-body{padding:8px 9px}
+.ic-rank{font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--hint);margin-bottom:2px}
+.ic-name{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:300;letter-spacing:0.03em;margin-bottom:2px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.ic-meta{font-size:8px;color:var(--muted);font-style:italic;font-family:'Cormorant Garamond',serif;margin-bottom:5px;line-height:1.3}
+.ic-idol-ref{display:flex;align-items:center;gap:5px;padding:4px 7px;background:var(--warm);border-radius:3px;margin-bottom:6px;text-decoration:none;transition:background .15s;cursor:pointer}
+.ic-idol-ref:hover{background:#ddd8d2}
+.ic-idol-icon{font-size:10px}
+.ic-idol-text{font-size:9px;color:var(--ink);font-weight:400;flex:1}
+.ic-idol-sub{font-size:8px;color:var(--muted)}
+.ic-idol-arrow{font-size:9px;color:var(--gold)}
+.tags{display:flex;gap:3px;flex-wrap:wrap}
+.tag{font-size:6.5px;letter-spacing:0.1em;text-transform:uppercase;padding:1px 4px;border:0.5px solid var(--rule);color:var(--muted)}
+.tag.drama{border-color:var(--ink);color:var(--ink)}
+.tag.kpop{border-color:var(--gold);color:var(--gold)}
+.tag.hot{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.ic-foot{display:flex;align-items:center;justify-content:space-between;padding:6px 9px;border-top:0.5px solid var(--rule)}
+.ic-score{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:300;line-height:1}
+.ic-score sub{font-size:8px;color:var(--muted);font-family:'Montserrat',sans-serif;vertical-align:baseline}
+.ic-votes{font-size:7px;letter-spacing:0.07em;text-transform:uppercase;color:var(--hint);margin-top:1px}
+.delta{font-size:8px;font-weight:400}
+.delta.u{color:var(--green)}.delta.d{color:var(--red)}.delta.f{color:var(--hint)}
+.vbtns{display:flex;border:0.5px solid var(--rule)}
+.vb{width:24px;height:20px;background:transparent;border:none;border-right:0.5px solid var(--rule);cursor:pointer;font-size:8px;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .15s}
+.vb:last-child{border-right:none}
+.vb:hover{background:var(--warm);color:var(--ink)}
+.vb.vup{background:var(--ink);color:var(--cream)}
+.vb.vdn{background:#FCEBEB;color:var(--red)}
+.bar-track{height:1px;background:var(--rule);margin-top:4px;overflow:hidden}
+.bar-fill{height:1px;background:var(--ink);transition:width .4s ease}
+
+/* DRAWER */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.open{opacity:1;pointer-events:all}
+.drawer{position:fixed;top:0;right:0;width:min(420px,100vw);height:100vh;background:var(--cream);z-index:101;transform:translateX(105%);transition:transform .35s cubic-bezier(.4,0,.2,1);overflow-y:auto;border-left:0.5px solid var(--rule)}
+.drawer.open{transform:translateX(0)}
+.d-topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:var(--cream);border-bottom:0.5px solid var(--rule)}
+.d-topbar-title{font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--hint)}
+.d-close-btn{width:26px;height:26px;background:var(--warm);border:0.5px solid var(--rule);border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);transition:all .15s}
+.d-close-btn:hover{background:var(--ink);color:var(--cream)}
+.d-hero{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--warm)}
+.d-body{padding:13px}
+.d-eyebrow{font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.d-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:300;letter-spacing:0.04em;margin-bottom:3px}
+.score-row{display:flex;gap:4px;margin-bottom:10px}
+.score-box{flex:1;padding:6px;background:var(--warm);border:0.5px solid var(--rule);border-radius:3px;text-align:center}
+.score-box-l{font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--hint);margin-bottom:2px}
+.score-box-v{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300}
+.score-box-v.gold{color:var(--gold)}
+.sig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:10px}
+.sig-box{padding:5px;background:var(--warm);border-radius:3px;text-align:center}
+.sig-box-l{font-size:6.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--hint);margin-bottom:2px}
+.sig-box-v{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:300}
+.d-section{font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--hint);margin:11px 0 6px;padding-bottom:4px;border-bottom:0.5px solid var(--rule)}
+.drama-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:3px}
+.dp-wrap{border-radius:3px;overflow:hidden}
+.dp-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:var(--warm)}
+.dp-cap{font-size:8px;color:var(--muted);text-align:center;font-style:italic;font-family:'Cormorant Garamond',serif;line-height:1.3;margin-top:2px}
+.photo-note{font-size:8px;color:var(--hint);margin:6px 0 10px;padding:5px 7px;background:var(--warm);border-radius:3px;border-left:2px solid var(--gold);line-height:1.5}
+.outfit-list{display:flex;flex-direction:column;gap:4px}
+.outfit-item{display:flex;align-items:flex-start;gap:7px;padding:6px;background:var(--warm);border-radius:3px}
+.outfit-icon{width:22px;height:22px;background:var(--cream);border:0.5px solid var(--rule);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.outfit-name{font-size:11px;font-weight:500;color:var(--ink);margin-bottom:1px}
+.outfit-desc{font-size:9.5px;color:var(--muted);line-height:1.4}
+.shop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+.shop-card{border:0.5px solid var(--rule);border-radius:3px;overflow:hidden;text-decoration:none;display:block;transition:border-color .15s;background:var(--cream)}
+.shop-card:hover{border-color:rgba(10,10,10,0.3)}
+.shop-photo{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:var(--warm)}
+.shop-body{padding:6px 7px 8px}
+.shop-name{font-size:10px;font-weight:500;color:var(--ink);margin-bottom:1px;line-height:1.3}
+.shop-brand{font-size:9px;color:var(--muted);margin-bottom:3px}
+.shop-price{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--ink)}
+.shop-cta{display:inline-block;margin-top:4px;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);border:0.5px solid var(--gold);padding:2px 6px;border-radius:2px}
+.shop-disclaimer{font-size:8px;color:var(--hint);margin-top:7px;padding:5px 7px;background:var(--warm);border-radius:3px;line-height:1.5}
+.d-vote-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px;padding:8px 10px;border:0.5px solid var(--rule);border-radius:3px;background:var(--warm)}
+.d-vote-label{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+.d-vote-sub{font-size:9px;color:var(--hint);margin-top:1px}
+.d-vbtns{display:flex;gap:4px;flex-shrink:0}
+.d-vb{padding:5px 10px;border:0.5px solid var(--rule);background:var(--cream);cursor:pointer;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);border-radius:3px;transition:all .15s;font-family:'Montserrat',sans-serif}
+.d-vb:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.d-vb.dvup{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.d-vb.dvdn{background:#FCEBEB;color:var(--red);border-color:#F7C1C1}
+.spotted-label{font-size:9px;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:7px;display:flex;align-items:center;gap:7px}
+.spotted-label::after{content:'';flex:1;height:1px;background:var(--gold);opacity:0.3}
+.spotted-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.spotted-card{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--ink);color:var(--cream);border-radius:5px;text-decoration:none;border:1px solid transparent;transition:background .18s,border-color .18s;position:relative;overflow:hidden}
+.spotted-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,151,90,0.12) 0%,transparent 60%);pointer-events:none}
+.spotted-card:hover{background:#1e1e1e;border-color:var(--gold)}
+.spotted-card.mid-card{background:var(--warm);border:1px solid var(--rule)}
+.spotted-card.mid-card .spotted-name{color:var(--ink)}
+.spotted-card.mid-card .spotted-detail{color:var(--muted)}
+.spotted-card.mid-card .spotted-rating{color:var(--muted)}
+.spotted-card.mid-card .spotted-cta{color:var(--gold);border-color:var(--gold)}
+.spotted-card.mid-card:hover{border-color:var(--ink)}
+.spotted-left{flex-shrink:0}
+.spotted-icon{width:32px;height:32px;border-radius:4px;background:rgba(184,151,90,0.22);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--gold)}
+.spotted-card.mid-card .spotted-icon{background:rgba(10,10,10,0.08);color:var(--muted)}
+.spotted-mid{flex:1;min-width:0}
+.spotted-name{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:400;letter-spacing:0.03em;color:var(--cream);line-height:1.2;margin-bottom:3px}
+.spotted-detail{font-size:10px;color:rgba(245,242,238,0.65);line-height:1.3;font-weight:300}
+.spotted-right{flex-shrink:0;text-align:right}
+.spotted-rating{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--gold);font-weight:300;margin-bottom:5px}
+.spotted-cta{display:inline-flex;align-items:center;gap:3px;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,242,238,0.7);border:0.5px solid rgba(245,242,238,0.3);padding:3px 8px;border-radius:2px;font-weight:400;transition:color .15s,border-color .15s;white-space:nowrap}
+.spotted-card:hover .spotted-cta{color:var(--gold);border-color:var(--gold)}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(5px);z-index:200;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;background:var(--ink);color:var(--cream);padding:7px 16px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="logo" href="../index.html">K<b>Style</b> Rank</a>
+  <div class="nav-links">
+    <a class="nl" href="../index.html">Rankings</a>
+    <a class="nl" href="../drama/index.html">Dramas</a>
+    <a class="nl active" href="#">Idols</a>
+    <a class="nl" href="../archive/index.html">Archive</a>
+  </div>
+  <div class="issue">April 2026</div>
+</nav>
+
+<div class="page-header">
+  <div class="ph-eyebrow">K-Pop idol fashion · April 2026</div>
+  <div class="ph-title">What the <em>idols</em><br>are wearing</div>
+  <div class="ph-sub">
+    Styles ranked by hashtag volume &amp; stream data · Tap any card for full breakdown &amp; shop links
+  </div>
+</div>
+
+<!-- Idol group pills -->
+<div class="idol-strip">
+  <div class="idol-pill active">
+    <img class="idol-pill-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=50&q=70&fit=crop" alt="aespa">
+    <div><div class="idol-pill-name">aespa</div><div class="idol-pill-streams">92M streams</div></div>
+  </div>
+  <div class="idol-pill">
+    <img class="idol-pill-img" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=50&q=70&fit=crop" alt="Le Sserafim">
+    <div><div class="idol-pill-name">Le Sserafim</div><div class="idol-pill-streams">68M streams</div></div>
+  </div>
+  <div class="idol-pill">
+    <img class="idol-pill-img" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=50&q=70&fit=crop" alt="ILLIT">
+    <div><div class="idol-pill-name">ILLIT</div><div class="idol-pill-streams">58M streams</div></div>
+  </div>
+  <div class="idol-pill">
+    <img class="idol-pill-img" src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=50&q=70&fit=crop" alt="Stray Kids">
+    <div><div class="idol-pill-name">Stray Kids</div><div class="idol-pill-streams">88M streams</div></div>
+  </div>
+  <div class="idol-pill">
+    <img class="idol-pill-img" src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=50&q=70&fit=crop" alt="NewJeans">
+    <div><div class="idol-pill-name">NewJeans</div><div class="idol-pill-streams">74M streams</div></div>
+  </div>
+  <div class="idol-pill">
+    <img class="idol-pill-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=50&q=70&fit=crop" alt="NMIXX">
+    <div><div class="idol-pill-name">NMIXX</div><div class="idol-pill-streams">44M streams</div></div>
+  </div>
+</div>
+
+<!-- Trending banner -->
+<div class="trending-banner" style="margin:18px 28px 0">
+  <div class="tb-icon">🔥</div>
+  <div>
+    <div class="tb-label">Fastest rising · April 2026</div>
+    <div class="tb-text">Liquid metallics — aespa's Supernova comeback is the style moment of the month</div>
+  </div>
+  <div class="tb-right">
+    <div class="tb-stat">+41%</div>
+    <div class="tb-stat-l">weekly growth</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="sec-label">Idol-driven style rankings — April 2026</div>
+  <div class="idol-grid" id="grid"></div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="d-topbar">
+    <div class="d-topbar-title">K-Pop style detail</div>
+    <button class="d-close-btn" onclick="closeDrawer()">✕</button>
+  </div>
+  <img id="d-hero" class="d-hero" src="" alt="">
+  <div class="d-body" id="d-body"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const S=[
+  {id:1,name:"Liquid metallics",meta:"aespa · Le Sserafim · Perfect Crown",tags:["kpop","hot"],
+   gt:88,hs:92,vs:85,cv:3820,nlr:0.91,liked:false,disliked:false,delta:"u",dv:8,
+   img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80&fit=crop",
+   idolRef:"aespa — Supernova comeback stage",idolRating:"92M streams",idolGroup:"aespa",
+   dramaPhotos:[
+     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80&fit=crop&crop=top",cap:"aespa · Supernova comeback"},
+     {url:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80&fit=crop&crop=top",cap:"Perfect Crown · Ep.5 gala"},
+     {url:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80&fit=crop&crop=top",cap:"Le Sserafim · EASY fanmeet"}
+   ],
+   outfit:[
+     {icon:"✦",name:"Liquid silver mini dress",desc:"Structured metallic sheath, mid-thigh, zip front — aespa's stage signature"},
+     {icon:"◈",name:"Chrome platform boots",desc:"Chunky 7cm platform, mirror-finish — grounds the silhouette"},
+     {icon:"○",name:"Hard-shell sculptural bag",desc:"Hexagonal brushed-silver clutch — key accessory signal"},
+     {icon:"◉",name:"Glass-skin + cheekbone highlight",desc:"Pared-back base, blinding highlight on cheekbone only"}
+   ],
+   dramas:[
+     {name:"aespa — Supernova comeback",detail:"Stage wardrobe · April 2026",badge:"high",rating:"92M streams"},
+     {name:"Perfect Crown (tvN)",detail:"Ep.5 gala · Kim Ji-won",badge:"high",rating:"12.4% viewership"},
+     {name:"Le Sserafim — EASY era",detail:"Fan meet · April 2026",badge:"mid",rating:"68M streams"}
+   ],
+   shop:[
+     {name:"Metallic mini dress",brand:"Mango",price:"$89",retailer:"ASOS",url:"https://www.asos.com",img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=70&fit=crop"},
+     {name:"Silver platform boots",brand:"Public Desire",price:"$65",retailer:"ASOS",url:"https://www.asos.com",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&q=70&fit=crop"},
+     {name:"Chrome mini dress dupe",brand:"YesStyle",price:"$38",retailer:"YesStyle",url:"https://www.yesstyle.com",img:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=300&q=70&fit=crop"},
+     {name:"Metallic shoulder bag",brand:"H&M",price:"$29",retailer:"H&M",url:"https://www.hm.com",img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&q=70&fit=crop"}
+   ]},
+  {id:3,name:"Balloon silhouette",meta:"ILLIT · 5th-gen groups · Seongsu-dong",tags:["kpop","street"],
+   gt:82,hs:79,vs:78,cv:2980,nlr:0.85,liked:false,disliked:false,delta:"u",dv:4,
+   img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80&fit=crop",
+   idolRef:"ILLIT — My World era airport looks",idolRating:"58M streams",idolGroup:"ILLIT",
+   dramaPhotos:[
+     {url:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80&fit=crop&crop=top",cap:"ILLIT · My World airport"},
+     {url:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80&fit=crop&crop=top",cap:"Seongsu-dong · spring street"},
+     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80&fit=crop&crop=top",cap:"NMIXX · Dare concept"}
+   ],
+   outfit:[
+     {icon:"○",name:"Balloon cargo trousers",desc:"Wide at hip/knee, cinched at ankle — intentional architecture, not just big pants"},
+     {icon:"◈",name:"Fitted crop hoodie",desc:"Tight top balances extreme wide silhouette below"},
+     {icon:"✦",name:"Wide utility belt",desc:"Creates the X-silhouette — worn at natural waist, the trend's signature"},
+     {icon:"△",name:"Chunky platform boots",desc:"Grounds the volume — prevents ballooning from reading as sloppy"}
+   ],
+   dramas:[
+     {name:"ILLIT — My World era",detail:"Stage + airport · April 2026",badge:"high",rating:"58M streams"},
+     {name:"Seongsu-dong street",detail:"Spring 2026 editorial",badge:"high",rating:"Trending district"},
+     {name:"NMIXX — Dare comeback",detail:"Concept wardrobe",badge:"mid",rating:"44M streams"}
+   ],
+   shop:[
+     {name:"Balloon cargo trousers",brand:"Weekday",price:"$65",retailer:"ASOS",url:"https://www.asos.com",img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=300&q=70&fit=crop"},
+     {name:"Cropped zip hoodie",brand:"H&M",price:"$29",retailer:"H&M",url:"https://www.hm.com",img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300&q=70&fit=crop"},
+     {name:"Wide utility belt",brand:"Mango",price:"$25",retailer:"Mango",url:"https://www.mango.com",img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&q=70&fit=crop"},
+     {name:"Platform combat boots",brand:"Public Desire",price:"$55",retailer:"ASOS",url:"https://www.asos.com",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&q=70&fit=crop"}
+   ]},
+  {id:6,name:"Unisex power tailoring",meta:"Stray Kids · (G)I-DLE · gender-fluid 2026",tags:["kpop","drama"],
+   gt:70,hs:72,vs:74,cv:2100,nlr:0.80,liked:false,disliked:false,delta:"u",dv:3,
+   img:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop",
+   idolRef:"Stray Kids — ATE comeback tailoring concept",idolRating:"88M streams",idolGroup:"Stray Kids",
+   dramaPhotos:[
+     {url:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80&fit=crop&crop=top",cap:"Stray Kids · ATE comeback"},
+     {url:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80&fit=crop&crop=top",cap:"(G)I-DLE · suit concept"},
+     {url:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80&fit=crop&crop=top",cap:"Phantom Lawyer · wardrobe"}
+   ],
+   outfit:[
+     {icon:"◈",name:"Wide-shoulder oversized blazer",desc:"Masculine silhouette for all genders — shoulder falls off the natural shoulder"},
+     {icon:"○",name:"Cropped wide-leg trousers",desc:"High-rise, tailored in heavy fabric — power bottom to slouchy top"},
+     {icon:"△",name:"Lace or pearl accessories",desc:"Feminine counterpoint — one pearl pin softens hard tailoring"},
+     {icon:"✦",name:"Oxford shoes or loafers",desc:"Gender-neutral — no heel, no sneaker, maximum gravitas"}
+   ],
+   dramas:[
+     {name:"Stray Kids — ATE comeback",detail:"Stage tailoring concept",badge:"high",rating:"88M streams"},
+     {name:"(G)I-DLE — Power styling",detail:"Suit concept · April 2026",badge:"high",rating:"62M streams"},
+     {name:"Phantom Lawyer (JTBC)",detail:"Lead wardrobe reference",badge:"mid",rating:"8.2% viewership"}
+   ],
+   shop:[
+     {name:"Oversized blazer",brand:"Weekday",price:"$89",retailer:"ASOS",url:"https://www.asos.com",img:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=300&q=70&fit=crop"},
+     {name:"Wide-leg tailored trousers",brand:"COS",price:"$99",retailer:"COS",url:"https://www.cos.com",img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=70&fit=crop"},
+     {name:"Pearl collar brooch",brand:"ASOS",price:"$12",retailer:"ASOS",url:"https://www.asos.com",img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&q=70&fit=crop"},
+     {name:"Leather loafers",brand:"Mango",price:"$99",retailer:"Mango",url:"https://www.mango.com",img:"https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&q=70&fit=crop"}
+   ]},
+  {id:7,name:"Sheer spring layers",meta:"Le Sserafim · EASY mv · concert tour",tags:["kpop","drama"],
+   gt:68,hs:70,vs:69,cv:1890,nlr:0.78,liked:false,disliked:false,delta:"u",dv:2,
+   img:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80&fit=crop",
+   idolRef:"Le Sserafim — EASY mv mesh layering",idolRating:"72M streams",idolGroup:"Le Sserafim",
+   dramaPhotos:[
+     {url:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80&fit=crop&crop=top",cap:"Le Sserafim · EASY mv"},
+     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80&fit=crop&crop=top",cap:"Filing for Love · Shin Hye-sun"},
+     {url:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80&fit=crop&crop=top",cap:"Seongsu spring editorial"}
+   ],
+   outfit:[
+     {icon:"○",name:"Sheer lace blouse",desc:"Over fitted camisole or bralette — layering essential, never fully exposed"},
+     {icon:"◈",name:"Mesh overlay dress",desc:"Second skin over structured lining — ethereal without being impractical"},
+     {icon:"✦",name:"Leather jacket contrast",desc:"Hard-soft pairing anchors sheer pieces"},
+     {icon:"△",name:"Delicate strappy sandal",desc:"Low profile, thin strap — lets fabric flow naturally"}
+   ],
+   dramas:[
+     {name:"Le Sserafim — EASY mv",detail:"Mesh layering concept",badge:"high",rating:"72M streams"},
+     {name:"Filing for Love (Netflix)",detail:"Shin Hye-sun spring wardrobe",badge:"high",rating:"Top 10 KR"},
+     {name:"Korean spring street 2026",detail:"Seongsu editorial",badge:"mid",rating:"Trending"}
+   ],
+   shop:[
+     {name:"Sheer lace blouse",brand:"Zara",price:"$49",retailer:"Zara",url:"https://www.zara.com",img:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&q=70&fit=crop"},
+     {name:"Mesh overlay dress",brand:"ASOS Design",price:"$55",retailer:"ASOS",url:"https://www.asos.com",img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300&q=70&fit=crop"},
+     {name:"Faux leather jacket",brand:"Mango",price:"$89",retailer:"Mango",url:"https://www.mango.com",img:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=300&q=70&fit=crop"},
+     {name:"Strappy heeled sandal",brand:"Steve Madden",price:"$65",retailer:"ASOS",url:"https://www.asos.com",img:"https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&q=70&fit=crop"}
+   ]}
+];
+
+S.forEach(s=>{
+  s.ds=Math.round(0.35*s.gt+0.35*s.hs+0.30*s.vs);
+  s.vs2=Math.round(s.nlr*100);
+  s.fs=Math.round(0.60*s.ds+0.40*s.vs2);
+});
+
+let openId=null;
+function gc(v){return v>=80?'g':v>=60?'m':'lo'}
+
+function render(){
+  const sorted=[...S].sort((a,b)=>b.fs-a.fs);
+  const top=sorted[0].fs;
+  document.getElementById('grid').innerHTML=sorted.map((s,i)=>{
+    const rank=i+1;
+    const bar=Math.round(s.fs/top*100);
+    const dl=s.delta==='u'?`<span class="delta u">▲${s.dv}</span>`:s.delta==='d'?`<span class="delta d">▼${s.dv}</span>`:`<span class="delta f">—</span>`;
+    const tgs=s.tags.map(t=>`<span class="tag ${t}">${t==='drama'?'K-Drama':t==='kpop'?'K-Pop':t==='street'?'Seoul St.':'Rising'}</span>`).join('');
+    const gq=encodeURIComponent(`${s.idolRef} fashion outfit style`);
+    const gurl=`https://www.google.com/search?q=${gq}&tbm=isch`;
+    return`<div class="idol-card${rank===1?' top':''}" onclick="openDrawer(${s.id})">
+      <div class="ic-photo-wrap">
+        <img class="ic-photo" src="${s.img}" alt="${s.name}" loading="lazy">
+        <div class="ic-rank-badge${rank===1?' gold':''}">No.${String(rank).padStart(2,'0')}</div>
+        <div class="ic-group-badge">${s.idolGroup} · ${s.idolRating}</div>
+        <div class="ic-view-hint">Details + Shop</div>
+      </div>
+      <div class="ic-signals">
+        <div class="ic-sig">Trends<span class="ic-sig-v ${gc(s.gt)}">${s.gt}</span></div>
+        <div class="ic-sig">Hashtag<span class="ic-sig-v ${gc(s.hs)}">${s.hs}</span></div>
+        <div class="ic-sig">Streams<span class="ic-sig-v ${gc(s.vs)}">${s.vs}</span></div>
+        <div class="ic-sig">Score<span class="ic-sig-v">${s.fs}</span></div>
+      </div>
+      <div class="ic-body">
+        <div class="ic-rank">No.${String(rank).padStart(2,'0')} · April 2026</div>
+        <div class="ic-name">${s.name} ${dl}</div>
+        <div class="ic-meta">${s.meta}</div>
+        <a class="ic-idol-ref" href="${gurl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+          <span class="ic-idol-icon">🎤</span>
+          <div style="flex:1"><div class="ic-idol-text">${s.idolRef}</div><div class="ic-idol-sub">${s.idolRating}</div></div>
+          <span class="ic-idol-arrow">See photos ↗</span>
+        </a>
+        <div class="tags">${tgs}</div>
+      </div>
+      <div class="ic-foot">
+        <div>
+          <div class="ic-score">${s.fs}<sub> /100</sub></div>
+          <div class="ic-votes">${s.cv.toLocaleString()} votes</div>
+          <div class="bar-track" style="width:70px"><div class="bar-fill" style="width:${bar}%"></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+          <span style="font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--hint)">Wear·Skip</span>
+          <div class="vbtns">
+            <button class="vb${s.liked?' vup':''}" onclick="event.stopPropagation();vote(${s.id},1)">▲</button>
+            <button class="vb${s.disliked?' vdn':''}" onclick="event.stopPropagation();vote(${s.id},-1)">▼</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  if(openId!==null){const s=S.find(x=>x.id===openId);if(s){const sorted2=[...S].sort((a,b)=>b.fs-a.fs);fillDrawer(s,sorted2.indexOf(s)+1);}}
+}
+
+function fillDrawer(s,rank){
+  document.getElementById('d-hero').src=s.img;
+  document.getElementById('d-hero').alt=s.name;
+  const tgs=s.tags.map(t=>`<span class="tag ${t}" style="font-size:8px;padding:2px 6px">${t==='drama'?'K-Drama':t==='kpop'?'K-Pop':t==='street'?'Seoul Street':'Rising'}</span>`).join('');
+  document.getElementById('d-body').innerHTML=`
+    <div class="d-eyebrow">No.${String(rank).padStart(2,'0')} · April 2026 · K-Pop</div>
+    <div class="d-title">${s.name}</div>
+    <div class="tags" style="margin:5px 0 14px">${tgs}</div>
+    <div class="spotted-label">✦ Spotted in</div>
+    <div class="spotted-list">
+      ${s.dramas.map(d=>{
+        const q=encodeURIComponent(`${d.name} ${d.detail} fashion outfit`);
+        const gurl=`https://www.google.com/search?q=${q}&tbm=isch`;
+        const isH=d.badge==='high';
+        return`<a class="spotted-card${isH?'':' mid-card'}" href="${gurl}" target="_blank" rel="noopener">
+          <div class="spotted-left"><div class="spotted-icon">${isH?'★':'◆'}</div></div>
+          <div class="spotted-mid"><div class="spotted-name">${d.name}</div><div class="spotted-detail">${d.detail}</div></div>
+          <div class="spotted-right"><div class="spotted-rating">${d.rating}</div><div class="spotted-cta">See photos ↗</div></div>
+        </a>`;
+      }).join('')}
+    </div>
+    <div class="score-row">
+      <div class="score-box"><div class="score-box-l">Final score</div><div class="score-box-v gold">${s.fs}<span style="font-size:9px;color:var(--hint);font-family:'Montserrat',sans-serif"> /100</span></div></div>
+      <div class="score-box"><div class="score-box-l">Data 60%</div><div class="score-box-v">${s.ds}</div></div>
+      <div class="score-box"><div class="score-box-l">Votes 40%</div><div class="score-box-v">${s.vs2}</div></div>
+    </div>
+    <div class="sig-grid">
+      <div class="sig-box"><div class="sig-box-l">Google Trends</div><div class="sig-box-v ${gc(s.gt)}">${s.gt}</div></div>
+      <div class="sig-box"><div class="sig-box-l">Hashtag</div><div class="sig-box-v ${gc(s.hs)}">${s.hs}</div></div>
+      <div class="sig-box"><div class="sig-box-l">Streams</div><div class="sig-box-v ${gc(s.vs)}">${s.vs}</div></div>
+    </div>
+    <div class="d-section">As seen in</div>
+    <div class="drama-photos">${s.dramaPhotos.map(p=>`<div class="dp-wrap"><img class="dp-img" src="${p.url}" alt="${p.cap}" loading="lazy"></div>`).join('')}</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:3px">${s.dramaPhotos.map(p=>`<div class="dp-cap">${p.cap}</div>`).join('')}</div>
+    <div class="photo-note">📷 Placeholder photos · Replace with official agency press kit images.</div>
+    <div class="d-section">Outfit breakdown</div>
+    <div class="outfit-list">${s.outfit.map(o=>`<div class="outfit-item"><div class="outfit-icon">${o.icon}</div><div><div class="outfit-name">${o.name}</div><div class="outfit-desc">${o.desc}</div></div></div>`).join('')}</div>
+    <div class="d-section">Shop this look</div>
+    <div class="shop-grid">${s.shop.map(p=>`<a class="shop-card" href="${p.url}" target="_blank" rel="noopener"><img class="shop-photo" src="${p.img}" alt="${p.name}" loading="lazy"><div class="shop-body"><div class="shop-name">${p.name}</div><div class="shop-brand">${p.brand}</div><div class="shop-price">${p.price}</div><div class="shop-cta">Shop at ${p.retailer} ↗</div></div></a>`).join('')}</div>
+    <div class="shop-disclaimer">Editorial suggestions — replace with affiliate links to earn commission.</div>
+    <div class="d-vote-row">
+      <div><div class="d-vote-label">Cast your vote</div><div class="d-vote-sub">${s.cv.toLocaleString()} votes · live score</div></div>
+      <div class="d-vbtns">
+        <button class="d-vb${s.liked?' dvup':''}" onclick="vote(${s.id},1)">▲ Wear it</button>
+        <button class="d-vb${s.disliked?' dvdn':''}" onclick="vote(${s.id},-1)">▼ Skip it</button>
+      </div>
+    </div>`;
+}
+
+function openDrawer(id){
+  openId=id;
+  const sorted=[...S].sort((a,b)=>b.fs-a.fs);
+  const s=S.find(x=>x.id===id);
+  fillDrawer(s,sorted.indexOf(s)+1);
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer').scrollTop=0;
+}
+function closeDrawer(){
+  openId=null;
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+function vote(id,dir){
+  const s=S.find(x=>x.id===id);if(!s)return;
+  if(dir===1){if(s.liked){s.liked=false;s.cv--;s.nlr=Math.max(0,s.nlr-0.01);showToast('Vote removed')}else{if(s.disliked){s.disliked=false;s.cv--;s.nlr=Math.min(1,s.nlr+0.01)}s.liked=true;s.cv++;s.nlr=Math.min(1,s.nlr+0.01);showToast('Wear it — noted')}}
+  else{if(s.disliked){s.disliked=false;s.cv--;s.nlr=Math.min(1,s.nlr+0.01);showToast('Vote removed')}else{if(s.liked){s.liked=false;s.cv--;s.nlr=Math.max(0,s.nlr-0.01)}s.disliked=true;s.cv++;s.nlr=Math.max(0,s.nlr-0.01);showToast('Skip it — noted')}}
+  s.vs2=Math.round(s.nlr*100);s.fs=Math.round(0.60*s.ds+0.40*s.vs2);render();
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),1800)}
+render();
+</script>
+</body>
+</html>

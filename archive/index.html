@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KStyleRank — Archive</title>
+<meta name="description" content="Monthly archive of Korean drama and K-pop fashion style rankings. Browse past issues from 2026.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#0a0a0a;--cream:#f5f2ee;--warm:#ece7e0;--muted:#7a7672;--hint:#a09c97;--rule:rgba(10,10,10,0.1);--gold:#b8975a}
+body{background:var(--cream);color:var(--ink);font-family:'Montserrat',sans-serif;font-weight:300;font-size:13px}
+.nav{position:sticky;top:0;z-index:50;background:var(--cream);border-bottom:0.5px solid var(--rule);padding:11px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:19px;letter-spacing:0.18em;text-transform:uppercase;white-space:nowrap;text-decoration:none;color:var(--ink)}
+.logo b{color:var(--gold);font-weight:300}
+.nav-links{display:flex;gap:20px}
+.nl{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nl:hover,.nl.active{color:var(--ink)}
+.issue-label{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--hint)}
+.page-header{padding:32px 28px 24px;border-bottom:0.5px solid var(--rule)}
+.ph-eyebrow{font-size:8px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.ph-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;letter-spacing:0.04em;line-height:1.1;margin-bottom:8px}
+.ph-title em{font-style:italic;color:var(--muted)}
+.ph-sub{font-size:10px;color:var(--muted);letter-spacing:0.08em;line-height:1.8}
+.main{padding:24px 28px 48px}
+.year-label{font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--hint);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.year-label::after{content:'';flex:1;height:0.5px;background:var(--rule)}
+.archive-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:32px}
+@media(max-width:600px){.archive-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:380px){.archive-grid{grid-template-columns:1fr}}
+.issue-card{border:0.5px solid var(--rule);border-radius:6px;overflow:hidden;text-decoration:none;display:block;transition:border-color .15s;background:var(--cream);position:relative}
+.issue-card:hover{border-color:rgba(10,10,10,0.3)}
+.issue-card.current{border-color:var(--gold)}
+.issue-card.upcoming{opacity:0.45;cursor:default;pointer-events:none}
+.issue-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--warm)}
+.issue-body{padding:9px 10px 11px}
+.issue-num{font-size:7px;letter-spacing:0.2em;text-transform:uppercase;color:var(--hint);margin-bottom:3px}
+.issue-month{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;letter-spacing:0.04em;color:var(--ink);margin-bottom:3px}
+.issue-top{font-size:9px;color:var(--muted);font-style:italic;font-family:'Cormorant Garamond',serif;margin-bottom:7px;line-height:1.3}
+.issue-stats{display:flex;gap:8px;align-items:center}
+.issue-stat{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--hint)}
+.issue-stat span{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:12px;margin-right:2px}
+.current-badge{position:absolute;top:8px;right:8px;background:var(--gold);color:#fff;font-size:7px;letter-spacing:0.15em;text-transform:uppercase;padding:2px 7px;border-radius:2px;font-weight:400}
+.upcoming-badge{position:absolute;top:8px;right:8px;background:var(--warm);color:var(--hint);font-size:7px;letter-spacing:0.15em;text-transform:uppercase;padding:2px 7px;border-radius:2px;border:0.5px solid var(--rule)}
+.subscribe-box{margin-top:8px;padding:20px 22px;border:0.5px solid var(--rule);border-radius:6px;background:var(--warm);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.sb-left{}
+.sb-eyebrow{font-size:8px;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sb-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:0.04em;color:var(--ink);margin-bottom:4px}
+.sb-sub{font-size:10px;color:var(--muted);line-height:1.5}
+.sb-form{display:flex;gap:0;border:0.5px solid var(--rule);overflow:hidden;flex-shrink:0}
+.sb-input{padding:8px 12px;font-size:11px;border:none;background:var(--cream);color:var(--ink);font-family:'Montserrat',sans-serif;font-weight:300;outline:none;width:180px}
+.sb-input::placeholder{color:var(--hint)}
+.sb-btn{padding:8px 14px;background:var(--ink);color:var(--cream);border:none;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:400;transition:background .15s;white-space:nowrap}
+.sb-btn:hover{background:#1e1e1e}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="logo" href="../index.html">K<b>Style</b> Rank</a>
+  <div class="nav-links">
+    <a class="nl" href="../index.html">Rankings</a>
+    <a class="nl" href="../drama/index.html">Dramas</a>
+    <a class="nl" href="../idols/index.html">Idols</a>
+    <a class="nl active" href="#">Archive</a>
+  </div>
+  <div class="issue-label">All issues</div>
+</nav>
+
+<div class="page-header">
+  <div class="ph-eyebrow">Monthly issues · 2026</div>
+  <div class="ph-title">The <em>archive</em></div>
+  <div class="ph-sub">Every monthly edition of KStyleRank — ranked styles, drama sources, shop links, community votes</div>
+</div>
+
+<div class="main">
+  <div class="year-label">2026</div>
+  <div class="archive-grid">
+
+    <!-- April 2026 — CURRENT -->
+    <a class="issue-card current" href="../index.html">
+      <div class="current-badge">Current</div>
+      <img class="issue-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80&fit=crop" alt="April 2026">
+      <div class="issue-body">
+        <div class="issue-num">Issue No. 04 · 2026</div>
+        <div class="issue-month">April 2026</div>
+        <div class="issue-top">#1 Liquid metallics · aespa + Perfect Crown</div>
+        <div class="issue-stats">
+          <div class="issue-stat"><span>9</span>styles</div>
+          <div class="issue-stat"><span>18.4K</span>votes</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- March 2026 -->
+    <a class="issue-card" href="#" onclick="return false" style="cursor:default">
+      <img class="issue-img" src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80&fit=crop" alt="March 2026">
+      <div class="issue-body">
+        <div class="issue-num">Issue No. 03 · 2026</div>
+        <div class="issue-month">March 2026</div>
+        <div class="issue-top">#1 Office siren · Queen of Tears era</div>
+        <div class="issue-stats">
+          <div class="issue-stat"><span>9</span>styles</div>
+          <div class="issue-stat"><span>15.2K</span>votes</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- February 2026 -->
+    <a class="issue-card" href="#" onclick="return false" style="cursor:default">
+      <img class="issue-img" src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80&fit=crop" alt="February 2026">
+      <div class="issue-body">
+        <div class="issue-num">Issue No. 02 · 2026</div>
+        <div class="issue-month">February 2026</div>
+        <div class="issue-top">#1 Clean girl aesthetic · IU dominance</div>
+        <div class="issue-stats">
+          <div class="issue-stat"><span>9</span>styles</div>
+          <div class="issue-stat"><span>12.8K</span>votes</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- January 2026 -->
+    <a class="issue-card" href="#" onclick="return false" style="cursor:default">
+      <img class="issue-img" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80&fit=crop" alt="January 2026">
+      <div class="issue-body">
+        <div class="issue-num">Issue No. 01 · 2026</div>
+        <div class="issue-month">January 2026</div>
+        <div class="issue-top">#1 Dark academia · winter drama season</div>
+        <div class="issue-stats">
+          <div class="issue-stat"><span>9</span>styles</div>
+          <div class="issue-stat"><span>9.4K</span>votes</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- May 2026 — UPCOMING -->
+    <div class="issue-card upcoming">
+      <div class="upcoming-badge">Coming soon</div>
+      <img class="issue-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80&fit=crop" alt="May 2026">
+      <div class="issue-body">
+        <div class="issue-num">Issue No. 05 · 2026</div>
+        <div class="issue-month">May 2026</div>
+        <div class="issue-top">Rankings update 1st May 2026</div>
+        <div class="issue-stats">
+          <div class="issue-stat">Subscribe for early access</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- June 2026 — UPCOMING -->
+    <div class="issue-card upcoming">
+      <div class="upcoming-badge">Coming soon</div>
+      <img class="issue-img" src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80&fit=crop" alt="June 2026">
+      <div class="issue-body">
+        <div class="issue-num">Issue No. 06 · 2026</div>
+        <div class="issue-month">June 2026</div>
+        <div class="issue-top">Rankings update 1st June 2026</div>
+        <div class="issue-stats">
+          <div class="issue-stat">Subscribe for early access</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Email subscribe -->
+  <div class="subscribe-box">
+    <div class="sb-left">
+      <div class="sb-eyebrow">Never miss an issue</div>
+      <div class="sb-title">Monthly style drops — straight to your inbox</div>
+      <div class="sb-sub">New rankings every 1st of the month · Drama spotlights · Shop edits</div>
+    </div>
+    <div class="sb-form">
+      <input class="sb-input" type="email" placeholder="your@email.com">
+      <button class="sb-btn" onclick="subscribeClick()">Subscribe ↗</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function subscribeClick(){
+  const input=document.querySelector('.sb-input');
+  const val=input.value.trim();
+  if(!val||!val.includes('@')){input.style.borderLeft='2px solid #A32D2D';return}
+  input.style.borderLeft='';
+  document.querySelector('.sb-form').innerHTML=`<div style="padding:8px 16px;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#3B6D11;background:#EAF3DE">Subscribed ✓</div>`;
+}
+</script>
+</body>
+</html>

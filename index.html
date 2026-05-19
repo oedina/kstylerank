@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KStyleRank — April 2026 Korean Fashion Rankings</title>
+<title>KStyleRank — Korean Fashion Style Rankings</title>
 <meta name="description" content="Data-driven weekly rankings of Korean drama and K-pop fashion styles. Hybrid-scored from Google Trends, drama viewership, hashtag volume and community votes.">
 <meta property="og:title" content="KStyleRank — Korean Fashion Style Rankings">
 <meta property="og:description" content="Weekly rankings of K-drama and K-pop fashion. Vote for your favourites and see what's trending in Seoul.">
@@ -12,190 +12,170 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#0a0a0a;--cream:#f5f2ee;--warm:#ece7e0;--muted:#7a7672;--hint:#a09c97;--rule:rgba(10,10,10,0.1);--gold:#b8975a;--green:#3B6D11;--red:#A32D2D}
-body{background:var(--cream);color:var(--ink);font-family:'Montserrat',sans-serif;font-weight:300;font-size:13px}
+:root{
+  --ink:#0a0a0a;--cream:#f5f2ee;--warm:#ece7e0;
+  --muted:#5a5652;--hint:#8a8480;--rule:rgba(10,10,10,0.12);
+  --gold:#b8975a;--green:#2d5a0e;--red:#8b1a1a;
+}
+body{background:var(--cream);color:var(--ink);font-family:'Montserrat',sans-serif;font-weight:400;font-size:13px}
 
-/* NAV */
-.nav{position:sticky;top:0;z-index:50;background:var(--cream);border-bottom:0.5px solid var(--rule);padding:11px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:19px;letter-spacing:0.18em;text-transform:uppercase;white-space:nowrap}
-.logo b{color:var(--gold);font-weight:300}
-.nav-links{display:flex;gap:20px}
-.nl{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);cursor:pointer;text-decoration:none;transition:color .2s}
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:50;background:var(--cream);border-bottom:0.5px solid var(--rule);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:20px;letter-spacing:0.16em;text-transform:uppercase;white-space:nowrap;text-decoration:none;color:var(--ink)}
+.logo b{color:var(--gold);font-weight:500}
+.nav-links{display:flex;gap:22px}
+.nl{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);text-decoration:none;font-weight:500;transition:color .2s}
 .nl:hover,.nl.active{color:var(--ink)}
-.issue{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--hint);white-space:nowrap}
+.issue{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--hint);white-space:nowrap;font-weight:400}
 
-/* ALGO BAR */
-.algo{display:flex;gap:8px;align-items:center;padding:7px 28px;background:var(--warm);border-bottom:0.5px solid var(--rule);flex-wrap:wrap}
-.algo-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)}
-.algo-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+/* ── HERO BANNER ── */
+.hero{position:relative;height:380px;overflow:hidden;border-bottom:0.5px solid var(--rule)}
+.hero-slides{display:flex;width:300%;height:100%;transition:transform .8s cubic-bezier(.4,0,.2,1)}
+.hero-slide{flex:1;position:relative;overflow:hidden}
+.hero-img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.55)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,10,10,0.7) 0%,rgba(10,10,10,0.2) 60%,transparent 100%)}
+.hero-content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:36px 40px}
+.hero-eyebrow{font-size:9px;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:500}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:500;line-height:1.05;letter-spacing:0.03em;color:#f5f2ee;margin-bottom:10px}
+.hero-title em{font-style:italic;color:rgba(245,242,238,0.75)}
+.hero-sub{font-size:11px;color:rgba(245,242,238,0.8);letter-spacing:0.12em;font-weight:400;line-height:1.6;max-width:420px}
+.hero-dots{position:absolute;bottom:16px;right:24px;display:flex;gap:6px}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:rgba(245,242,238,0.4);cursor:pointer;transition:background .3s}
+.hero-dot.active{background:var(--gold)}
+.hero-arrows{position:absolute;top:50%;transform:translateY(-50%);right:16px;display:flex;flex-direction:column;gap:8px}
+.hero-arrow{width:32px;height:32px;background:rgba(245,242,238,0.15);border:0.5px solid rgba(245,242,238,0.3);color:#f5f2ee;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;border-radius:2px;transition:background .2s}
+.hero-arrow:hover{background:rgba(245,242,238,0.3)}
+
+/* ── ALGO BAR ── */
+.algo{display:flex;gap:10px;align-items:center;padding:8px 28px;background:var(--warm);border-bottom:0.5px solid var(--rule);flex-wrap:wrap}
+.algo-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);font-weight:400}
+.algo-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .algo-sep{color:var(--hint);font-size:14px;line-height:1}
 
-/* MAIN */
-.main{padding:16px 28px 40px}
-.filters{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}
-.fp{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 10px;border:0.5px solid var(--rule);background:var(--cream);color:var(--muted);cursor:pointer;border-radius:3px;transition:all .15s;font-family:'Montserrat',sans-serif;font-weight:400}
+/* ── MAIN ── */
+.main{padding:18px 28px 48px}
+.filters{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap}
+.fp{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:5px 12px;border:0.5px solid var(--rule);background:var(--cream);color:var(--muted);cursor:pointer;border-radius:3px;transition:all .15s;font-family:'Montserrat',sans-serif;font-weight:500}
 .fp:hover{background:var(--warm);color:var(--ink)}
 .fp.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
-.sec-label{font-size:8px;letter-spacing:0.26em;text-transform:uppercase;color:var(--hint);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec-label{font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--hint);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:500}
 .sec-label::after{content:'';flex:1;height:0.5px;background:var(--rule)}
 
-/* GRID — 3 cols, compact cards */
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+/* ── GRID — 3 cols, small cards ── */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 @media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:440px){.grid{grid-template-columns:1fr}}
 
-/* CARD */
+/* ── CARD ── */
 .card{background:var(--cream);border:0.5px solid var(--rule);border-radius:6px;overflow:hidden;cursor:pointer;transition:border-color .15s}
-.card:hover{border-color:rgba(10,10,10,0.28)}
-.card.top{border-color:var(--gold)}
+.card:hover{border-color:rgba(10,10,10,0.32)}
+.card.top{border-color:var(--gold);border-width:1px}
 .photo-wrap{position:relative;overflow:hidden}
-/* aspect-ratio 2:3 — compact */
-.photo{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--warm);transition:transform .3s}
+/* FIX 1: reduced from 2/3 to 1/1.6 — much smaller photo */
+.photo{width:100%;aspect-ratio:1/1.4;object-fit:cover;display:block;background:var(--warm);transition:transform .3s}
 .card:hover .photo{transform:scale(1.04)}
-.rank-badge{position:absolute;top:7px;left:7px;font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:0.1em;background:rgba(245,242,238,0.92);color:var(--ink);padding:1px 6px;border:0.5px solid rgba(10,10,10,0.14)}
-.rank-badge.gold{background:rgba(184,151,90,0.9);color:#fff}
-.view-hint{position:absolute;bottom:0;left:0;right:0;background:rgba(10,10,10,0.5);color:var(--cream);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;text-align:center;padding:5px;opacity:0;transition:opacity .2s}
+.rank-badge{position:absolute;top:6px;left:6px;font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:0.1em;background:rgba(245,242,238,0.94);color:var(--ink);padding:1px 6px;border:0.5px solid rgba(10,10,10,0.16);font-weight:500}
+.rank-badge.gold{background:rgba(184,151,90,0.92);color:#fff}
+.view-hint{position:absolute;bottom:0;left:0;right:0;background:rgba(10,10,10,0.52);color:var(--cream);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;text-align:center;padding:5px;opacity:0;transition:opacity .2s;font-weight:500}
 .card:hover .view-hint{opacity:1}
 
 /* SIGNALS */
 .signals{display:flex;border-top:0.5px solid var(--rule);border-bottom:0.5px solid var(--rule)}
 .sig{flex:1;padding:3px 0;text-align:center;border-right:0.5px solid var(--rule)}
 .sig:last-child{border-right:none}
-.sig-l{font-size:6px;letter-spacing:0.06em;text-transform:uppercase;color:var(--hint);display:block}
-.sig-v{font-family:'Cormorant Garamond',serif;font-size:11px;font-weight:300}
+/* FIX 4: thicker font throughout */
+.sig-l{font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--hint);display:block;font-weight:500}
+.sig-v{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:500}
 .sig-v.g{color:var(--green)}.sig-v.m{color:var(--gold)}.sig-v.lo{color:var(--muted)}
 
 /* CARD BODY */
-.cbody{padding:7px 8px 9px}
-.crank{font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--hint);margin-bottom:2px}
-.cname{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:300;letter-spacing:0.03em;margin-bottom:1px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-.cmeta{font-size:8px;color:var(--muted);font-style:italic;font-family:'Cormorant Garamond',serif;margin-bottom:4px;line-height:1.3}
-.tags{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:5px}
-.tag{font-size:6.5px;letter-spacing:0.1em;text-transform:uppercase;padding:1px 4px;border:0.5px solid var(--rule);color:var(--muted)}
+.cbody{padding:7px 9px 9px}
+.crank{font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--hint);margin-bottom:2px;font-weight:500}
+.cname{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:500;letter-spacing:0.03em;margin-bottom:2px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.cmeta{font-size:9px;color:var(--muted);font-style:italic;font-family:'Cormorant Garamond',serif;margin-bottom:5px;line-height:1.3;font-weight:400}
+.tags{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px}
+.tag{font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:1px 5px;border:0.5px solid var(--rule);color:var(--muted);font-weight:500}
 .tag.drama{border-color:var(--ink);color:var(--ink)}
 .tag.kpop{border-color:var(--gold);color:var(--gold)}
 .tag.hot{background:var(--ink);color:var(--cream);border-color:var(--ink)}
 .cfoot{display:flex;align-items:center;justify-content:space-between}
-.cscore{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;line-height:1}
-.cscore sub{font-size:8px;color:var(--muted);font-family:'Montserrat',sans-serif;vertical-align:baseline}
-.cvotes{font-size:7px;letter-spacing:0.07em;text-transform:uppercase;color:var(--hint);margin-top:1px}
-.delta{font-size:8px;font-weight:400}
+.cscore{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;line-height:1}
+.cscore sub{font-size:9px;color:var(--muted);font-family:'Montserrat',sans-serif;vertical-align:baseline;font-weight:400}
+.cvotes{font-size:7px;letter-spacing:0.07em;text-transform:uppercase;color:var(--hint);margin-top:1px;font-weight:500}
+.delta{font-size:9px;font-weight:600}
 .delta.u{color:var(--green)}.delta.d{color:var(--red)}.delta.f{color:var(--hint)}
 .vbtns{display:flex;border:0.5px solid var(--rule)}
-.vb{width:24px;height:20px;background:transparent;border:none;border-right:0.5px solid var(--rule);cursor:pointer;font-size:8px;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .15s}
+.vb{width:26px;height:22px;background:transparent;border:none;border-right:0.5px solid var(--rule);cursor:pointer;font-size:9px;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .15s;font-weight:600}
 .vb:last-child{border-right:none}
 .vb:hover{background:var(--warm);color:var(--ink)}
 .vb.vup{background:var(--ink);color:var(--cream)}
 .vb.vdn{background:#FCEBEB;color:var(--red)}
-.bar-track{height:1px;background:var(--rule);margin-top:5px;overflow:hidden}
+.bar-track{height:1px;background:var(--rule);margin-top:6px;overflow:hidden}
 .bar-fill{height:1px;background:var(--ink);transition:width .4s ease}
 
-/* OVERLAY */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s}
+/* ── OVERLAY ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.48);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s}
 .overlay.open{opacity:1;pointer-events:all}
 
-/* DRAWER */
+/* ── DRAWER ── */
 .drawer{position:fixed;top:0;right:0;width:min(420px,100vw);height:100vh;background:var(--cream);z-index:101;transform:translateX(105%);transition:transform .35s cubic-bezier(.4,0,.2,1);overflow-y:auto;border-left:0.5px solid var(--rule)}
 .drawer.open{transform:translateX(0)}
-.d-topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:var(--cream);border-bottom:0.5px solid var(--rule)}
-.d-topbar-title{font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--hint)}
-.d-close-btn{width:26px;height:26px;background:var(--warm);border:0.5px solid var(--rule);border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);transition:all .15s}
+.d-topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--cream);border-bottom:0.5px solid var(--rule)}
+.d-topbar-title{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--hint);font-weight:500}
+.d-close-btn{width:28px;height:28px;background:var(--warm);border:0.5px solid var(--rule);border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);transition:all .15s}
 .d-close-btn:hover{background:var(--ink);color:var(--cream)}
-
-/* Drawer hero 16:9 compact */
 .d-hero{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--warm)}
-.d-body{padding:13px}
-.d-eyebrow{font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
-.d-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:300;letter-spacing:0.04em;margin-bottom:3px}
-.d-source{font-size:10px;color:var(--muted);font-style:italic;font-family:'Cormorant Garamond',serif;margin-bottom:10px;line-height:1.5}
-.score-row{display:flex;gap:4px;margin-bottom:10px}
-.score-box{flex:1;padding:6px;background:var(--warm);border:0.5px solid var(--rule);border-radius:3px;text-align:center}
-.score-box-l{font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--hint);margin-bottom:2px}
-.score-box-v{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300}
+.d-body{padding:14px}
+.d-eyebrow{font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;font-weight:500}
+.d-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;letter-spacing:0.04em;margin-bottom:3px}
+.score-row{display:flex;gap:5px;margin-bottom:11px}
+.score-box{flex:1;padding:7px;background:var(--warm);border:0.5px solid var(--rule);border-radius:3px;text-align:center}
+.score-box-l{font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--hint);margin-bottom:2px;font-weight:500}
+.score-box-v{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500}
 .score-box-v.gold{color:var(--gold)}
-.sig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:10px}
-.sig-box{padding:5px;background:var(--warm);border-radius:3px;text-align:center}
-.sig-box-l{font-size:6.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--hint);margin-bottom:2px}
-.sig-box-v{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:300}
-.d-section{font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--hint);margin:11px 0 6px;padding-bottom:4px;border-bottom:0.5px solid var(--rule)}
-
-/* Drama photos — 3 col, 3:4 portrait */
+.sig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:11px}
+.sig-box{padding:6px;background:var(--warm);border-radius:3px;text-align:center}
+.sig-box-l{font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--hint);margin-bottom:2px;font-weight:500}
+.sig-box-v{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500}
+.d-section{font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--hint);margin:12px 0 7px;padding-bottom:5px;border-bottom:0.5px solid var(--rule);font-weight:600}
 .drama-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:3px}
 .dp-wrap{border-radius:3px;overflow:hidden}
 .dp-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:var(--warm)}
-.dp-cap{font-size:8px;color:var(--muted);text-align:center;font-style:italic;font-family:'Cormorant Garamond',serif;line-height:1.3;margin-top:2px}
-.photo-note{font-size:8px;color:var(--hint);margin:6px 0 10px;padding:5px 7px;background:var(--warm);border-radius:3px;border-left:2px solid var(--gold);line-height:1.5}
-
-/* Outfit */
+.dp-cap{font-size:8px;color:var(--muted);text-align:center;font-style:italic;font-family:'Cormorant Garamond',serif;line-height:1.3;margin-top:2px;font-weight:400}
+.photo-note{font-size:8px;color:var(--hint);margin:6px 0 10px;padding:5px 7px;background:var(--warm);border-radius:3px;border-left:2px solid var(--gold);line-height:1.5;font-weight:400}
 .outfit-list{display:flex;flex-direction:column;gap:4px}
-.outfit-item{display:flex;align-items:flex-start;gap:7px;padding:6px;background:var(--warm);border-radius:3px}
-.outfit-icon{width:22px;height:22px;background:var(--cream);border:0.5px solid var(--rule);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
-.outfit-name{font-size:11px;font-weight:500;color:var(--ink);margin-bottom:1px}
-.outfit-desc{font-size:9.5px;color:var(--muted);line-height:1.4}
-
-/* Drama sources */
-.drama-list{display:flex;flex-direction:column;gap:4px}
-.drama-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px;border:0.5px solid var(--rule);border-radius:3px}
-.drama-name{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:300;color:var(--ink)}
-.drama-detail{font-size:9px;color:var(--muted);margin-top:1px}
-.drama-right{text-align:right;flex-shrink:0}
-.dbadge{font-size:7px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 5px;border-radius:2px;font-weight:400}
-.dbadge.high{background:#EAF3DE;color:#27500A}
-.dbadge.mid{background:#FAEEDA;color:#633806}
-.drating{font-size:8px;color:var(--hint);margin-top:2px}
-
-/* SHOP THIS LOOK */
+.outfit-item{display:flex;align-items:flex-start;gap:8px;padding:7px;background:var(--warm);border-radius:3px}
+.outfit-icon{width:24px;height:24px;background:var(--cream);border:0.5px solid var(--rule);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.outfit-name{font-size:11px;font-weight:600;color:var(--ink);margin-bottom:1px}
+.outfit-desc{font-size:10px;color:var(--muted);line-height:1.4;font-weight:400}
 .shop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
 .shop-card{border:0.5px solid var(--rule);border-radius:3px;overflow:hidden;text-decoration:none;display:block;transition:border-color .15s;background:var(--cream)}
 .shop-card:hover{border-color:rgba(10,10,10,0.3)}
 .shop-photo{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:var(--warm)}
 .shop-body{padding:6px 7px 8px}
-.shop-name{font-size:10px;font-weight:500;color:var(--ink);margin-bottom:1px;line-height:1.3}
-.shop-brand{font-size:9px;color:var(--muted);margin-bottom:3px}
-.shop-price{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--ink)}
-.shop-cta{display:inline-block;margin-top:4px;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);border:0.5px solid var(--gold);padding:2px 6px;border-radius:2px}
-.shop-disclaimer{font-size:8px;color:var(--hint);margin-top:7px;padding:5px 7px;background:var(--warm);border-radius:3px;line-height:1.5}
-
-/* Vote row */
-.d-vote-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px;padding:8px 10px;border:0.5px solid var(--rule);border-radius:3px;background:var(--warm)}
-.d-vote-label{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
-.d-vote-sub{font-size:9px;color:var(--hint);margin-top:1px}
-.d-vbtns{display:flex;gap:4px;flex-shrink:0}
-.d-vb{padding:5px 10px;border:0.5px solid var(--rule);background:var(--cream);cursor:pointer;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);border-radius:3px;transition:all .15s;font-family:'Montserrat',sans-serif}
+.shop-name{font-size:10px;font-weight:600;color:var(--ink);margin-bottom:1px;line-height:1.3}
+.shop-brand{font-size:9px;color:var(--muted);margin-bottom:3px;font-weight:400}
+.shop-price{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--ink);font-weight:500}
+.shop-cta{display:inline-block;margin-top:4px;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);border:0.5px solid var(--gold);padding:2px 6px;border-radius:2px;font-weight:500}
+.shop-disclaimer{font-size:8px;color:var(--hint);margin-top:7px;padding:5px 7px;background:var(--warm);border-radius:3px;line-height:1.5;font-weight:400}
+.d-vote-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:9px 10px;border:0.5px solid var(--rule);border-radius:3px;background:var(--warm)}
+.d-vote-label{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.d-vote-sub{font-size:9px;color:var(--hint);margin-top:1px;font-weight:400}
+.d-vbtns{display:flex;gap:5px;flex-shrink:0}
+.d-vb{padding:6px 11px;border:0.5px solid var(--rule);background:var(--cream);cursor:pointer;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);border-radius:3px;transition:all .15s;font-family:'Montserrat',sans-serif;font-weight:500}
 .d-vb:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
 .d-vb.dvup{background:var(--ink);color:var(--cream);border-color:var(--ink)}
 .d-vb.dvdn{background:#FCEBEB;color:var(--red);border-color:#F7C1C1}
 
-/* Toast */
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(5px);z-index:200;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;background:var(--ink);color:var(--cream);padding:7px 16px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ── SPOTTED IN — prominent clickable source cards ── */
-.spotted-label{
-  font-size:9px;letter-spacing:0.26em;text-transform:uppercase;
-  color:var(--gold);font-weight:500;margin-bottom:7px;
-  display:flex;align-items:center;gap:7px;
-}
+/* SPOTTED IN */
+.spotted-label{font-size:9px;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:7px;display:flex;align-items:center;gap:7px}
 .spotted-label::after{content:'';flex:1;height:1px;background:var(--gold);opacity:0.3}
 .spotted-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-
-.spotted-card{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 12px;
-  background:var(--ink);color:var(--cream);
-  border-radius:5px;text-decoration:none;
-  border:1px solid transparent;
-  transition:background .18s,border-color .18s;
-  position:relative;overflow:hidden;
-}
-.spotted-card::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(184,151,90,0.12) 0%,transparent 60%);
-  pointer-events:none;
-}
+.spotted-card{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--ink);color:var(--cream);border-radius:5px;text-decoration:none;border:1px solid transparent;transition:background .18s,border-color .18s;position:relative;overflow:hidden}
+.spotted-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,151,90,0.12) 0%,transparent 60%);pointer-events:none}
 .spotted-card:hover{background:#1e1e1e;border-color:var(--gold)}
 .spotted-card.mid-card{background:var(--warm);border:1px solid var(--rule)}
 .spotted-card.mid-card .spotted-name{color:var(--ink)}
@@ -203,58 +183,94 @@ body{background:var(--cream);color:var(--ink);font-family:'Montserrat',sans-seri
 .spotted-card.mid-card .spotted-rating{color:var(--muted)}
 .spotted-card.mid-card .spotted-cta{color:var(--gold);border-color:var(--gold)}
 .spotted-card.mid-card:hover{border-color:var(--ink)}
-
 .spotted-left{flex-shrink:0}
-.spotted-icon{
-  width:32px;height:32px;border-radius:4px;
-  background:rgba(184,151,90,0.22);
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;color:var(--gold);
-}
+.spotted-icon{width:32px;height:32px;border-radius:4px;background:rgba(184,151,90,0.22);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--gold)}
 .spotted-card.mid-card .spotted-icon{background:rgba(10,10,10,0.08);color:var(--muted)}
-
 .spotted-mid{flex:1;min-width:0}
-.spotted-name{
-  font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:400;
-  letter-spacing:0.03em;color:var(--cream);line-height:1.2;
-  margin-bottom:3px;
-}
-.spotted-detail{font-size:10px;color:rgba(245,242,238,0.65);line-height:1.3;font-weight:300}
-
+.spotted-name{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:500;letter-spacing:0.03em;color:var(--cream);line-height:1.2;margin-bottom:3px}
+.spotted-detail{font-size:10px;color:rgba(245,242,238,0.7);line-height:1.3;font-weight:400}
 .spotted-right{flex-shrink:0;text-align:right}
-.spotted-rating{
-  font-family:'Cormorant Garamond',serif;font-size:13px;
-  color:var(--gold);font-weight:300;margin-bottom:5px;
-}
-.spotted-cta{
-  display:inline-flex;align-items:center;gap:3px;
-  font-size:8px;letter-spacing:0.16em;text-transform:uppercase;
-  color:rgba(245,242,238,0.7);border:0.5px solid rgba(245,242,238,0.3);
-  padding:3px 8px;border-radius:2px;font-weight:400;
-  transition:color .15s,border-color .15s;white-space:nowrap;
-}
+.spotted-rating{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--gold);font-weight:500;margin-bottom:5px}
+.spotted-cta{display:inline-flex;align-items:center;gap:3px;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,242,238,0.7);border:0.5px solid rgba(245,242,238,0.3);padding:3px 8px;border-radius:2px;font-weight:500;transition:color .15s,border-color .15s;white-space:nowrap}
 .spotted-card:hover .spotted-cta{color:var(--gold);border-color:var(--gold)}
+
+/* TOAST */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(5px);z-index:200;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;background:var(--ink);color:var(--cream);padding:8px 18px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;font-weight:500}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
+<!-- NAV — FIX 3: working links to subpages -->
 <nav class="nav">
-  <div class="logo">K<b>Style</b> Rank</div>
+  <a class="logo" href="index.html">K<b>Style</b> Rank</a>
   <div class="nav-links">
-    <a class="nl active" href="#">Rankings</a>
-    <a class="nl" href="#">Dramas</a>
-    <a class="nl" href="#">Idols</a>
-    <a class="nl" href="#">Archive</a>
+    <a class="nl active" href="index.html">Rankings</a>
+    <a class="nl" href="drama/index.html">Dramas</a>
+    <a class="nl" href="idols/index.html">Idols</a>
+    <a class="nl" href="archive/index.html">Archive</a>
   </div>
   <div class="issue">Issue No. 04 · April 2026</div>
 </nav>
 
+<!-- FIX 5: HERO BANNER with auto-rotating slides -->
+<div class="hero" id="hero">
+  <div class="hero-slides" id="heroSlides">
+
+    <!-- Slide 1: K-Drama -->
+    <div class="hero-slide">
+      <img class="hero-img" src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=1400&q=80&fit=crop" alt="K-Drama fashion">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">✦ K-Drama fashion · April 2026</div>
+        <div class="hero-title">What Seoul's<br><em>dramas</em> are wearing</div>
+        <div class="hero-sub">Perfect Crown · When Life Gives You Tangerines · Phantom Lawyer — ranked by viewership, hashtags &amp; community votes</div>
+      </div>
+    </div>
+
+    <!-- Slide 2: K-Pop -->
+    <div class="hero-slide">
+      <img class="hero-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1400&q=80&fit=crop" alt="K-Pop fashion">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">✦ K-Pop idol style · April 2026</div>
+        <div class="hero-title">Liquid metallics<br><em>lead the charts</em></div>
+        <div class="hero-sub">aespa's Supernova comeback + Le Sserafim's EASY era — the style signals setting the global agenda this month</div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Seoul street -->
+    <div class="hero-slide">
+      <img class="hero-img" src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=1400&q=80&fit=crop" alt="Seoul street fashion">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">✦ Seoul street · Seongsu-dong · April 2026</div>
+        <div class="hero-title">Granola-chic<br><em>takes Seongsu</em></div>
+        <div class="hero-sub">From Seongsu-dong thrift stalls to Hannam-dong weekend markets — the street is setting the agenda before the idols catch on</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Slide controls -->
+  <div class="hero-dots">
+    <div class="hero-dot active" onclick="goSlide(0)"></div>
+    <div class="hero-dot" onclick="goSlide(1)"></div>
+    <div class="hero-dot" onclick="goSlide(2)"></div>
+  </div>
+  <div class="hero-arrows">
+    <div class="hero-arrow" onclick="prevSlide()">▲</div>
+    <div class="hero-arrow" onclick="nextSlide()">▼</div>
+  </div>
+</div>
+
+<!-- ALGO BAR -->
 <div class="algo">
   <div class="algo-item"><div class="algo-dot" style="background:#0a0a0a"></div>60% data signals</div>
   <div class="algo-sep">·</div>
   <div class="algo-item"><div class="algo-dot" style="background:#b8975a"></div>40% community votes (30-day decay)</div>
   <div class="algo-sep">·</div>
-  <div class="algo-item" style="color:#a09c97;font-size:9px">Google Trends · Naver · hashtag · drama viewership</div>
+  <div class="algo-item" style="color:#8a8480">Google Trends · Naver · hashtag · drama viewership</div>
 </div>
 
 <div class="main">
@@ -278,24 +294,35 @@ body{background:var(--cream);color:var(--ink);font-family:'Montserrat',sans-seri
   <img id="d-hero" class="d-hero" src="" alt="">
   <div class="d-body" id="d-body"></div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
+// ── HERO SLIDER ──────────────────────────────────────────────────────
+let slide=0;
+const totalSlides=3;
+function goSlide(n){
+  slide=n;
+  document.getElementById('heroSlides').style.transform=`translateX(-${100/totalSlides*n}%)`;
+  document.querySelectorAll('.hero-dot').forEach((d,i)=>d.classList.toggle('active',i===n));
+}
+function nextSlide(){goSlide((slide+1)%totalSlides)}
+function prevSlide(){goSlide((slide-1+totalSlides)%totalSlides)}
+setInterval(nextSlide,5000);
+
+// ── DATA ─────────────────────────────────────────────────────────────
 const S=[
   {id:1,name:"Liquid metallics",meta:"aespa · Le Sserafim · Perfect Crown",tags:["kpop","hot"],
    gt:88,hs:92,vs:85,cv:3820,nlr:0.91,liked:false,disliked:false,delta:"u",dv:8,
-   img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80&fit=crop",
-   source:"K-Pop · aespa Givenchy era + Perfect Crown (tvN) — April 2026 highest-rated cable drama at 12.4% viewership",
+   img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=75&fit=crop",
    dramaPhotos:[
-     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80&fit=crop&crop=top",cap:"aespa · Supernova comeback"},
-     {url:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80&fit=crop&crop=top",cap:"Perfect Crown · Ep.5 gala"},
-     {url:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80&fit=crop&crop=top",cap:"Le Sserafim · EASY fanmeet"}
+     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=75&fit=crop&crop=top",cap:"aespa · Supernova comeback"},
+     {url:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=75&fit=crop&crop=top",cap:"Perfect Crown · Ep.5 gala"},
+     {url:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=75&fit=crop&crop=top",cap:"Le Sserafim · EASY fanmeet"}
    ],
    outfit:[
      {icon:"✦",name:"Liquid silver mini dress",desc:"Structured metallic sheath, mid-thigh, zip front — aespa's stage signature"},
      {icon:"◈",name:"Chrome platform boots",desc:"Chunky 7cm platform, mirror-finish — grounds the silhouette"},
-     {icon:"○",name:"Hard-shell sculptural bag",desc:"Hexagonal brushed-silver clutch — key accessory signal of the season"},
+     {icon:"○",name:"Hard-shell sculptural bag",desc:"Hexagonal brushed-silver clutch — key accessory signal"},
      {icon:"◉",name:"Glass-skin + cheekbone highlight",desc:"Pared-back base, blinding highlight on cheekbone only"}
    ],
    dramas:[
@@ -311,17 +338,16 @@ const S=[
    ]},
   {id:2,name:"Office siren",meta:"Perfect Crown · Filing for Love · tvN",tags:["drama","hot"],
    gt:85,hs:88,vs:90,cv:3540,nlr:0.88,liked:false,disliked:false,delta:"u",dv:5,
-   img:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&q=80&fit=crop",
-   source:"K-Drama · Perfect Crown (tvN) 12.4% + Filing for Love (Netflix) lead wardrobe defined this trend in April 2026",
+   img:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&q=75&fit=crop",
    dramaPhotos:[
-     {url:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80&fit=crop&crop=top",cap:"Perfect Crown · lead styling"},
-     {url:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80&fit=crop&crop=top",cap:"Filing for Love · courtroom"},
-     {url:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80&fit=crop&crop=top",cap:"Phantom Lawyer · power dressing"}
+     {url:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=75&fit=crop&crop=top",cap:"Perfect Crown · lead styling"},
+     {url:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=75&fit=crop&crop=top",cap:"Filing for Love · courtroom"},
+     {url:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=75&fit=crop&crop=top",cap:"Phantom Lawyer · power look"}
    ],
    outfit:[
      {icon:"◈",name:"Structured blazer dress",desc:"Single-button, strong shoulder, knee-length — belted for the expensive silhouette"},
      {icon:"✦",name:"Pointed kitten heel",desc:"2–4cm heel, elongates without losing the power read"},
-     {icon:"△",name:"Minimalist chain top-handle bag",desc:"Camel or black leather — quiet luxury signalling in every scene"},
+     {icon:"△",name:"Chain top-handle bag",desc:"Camel or black leather — quiet luxury in every scene"},
      {icon:"◎",name:"Sleek low bun",desc:"No loose hair, one gold pin at the nape — control is the message"}
    ],
    dramas:[
@@ -337,12 +363,11 @@ const S=[
    ]},
   {id:3,name:"Balloon silhouette",meta:"ILLIT · 5th-gen groups · Seongsu-dong",tags:["kpop","street"],
    gt:82,hs:79,vs:78,cv:2980,nlr:0.85,liked:false,disliked:false,delta:"u",dv:4,
-   img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80&fit=crop",
-   source:"K-Pop · 5th-gen idol streetwear + Seongsu-dong spring 2026 — intentional architectural volume replacing shapeless oversize",
+   img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=75&fit=crop",
    dramaPhotos:[
-     {url:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80&fit=crop&crop=top",cap:"ILLIT · My World airport"},
-     {url:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80&fit=crop&crop=top",cap:"Seongsu-dong · spring street"},
-     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80&fit=crop&crop=top",cap:"NMIXX · Dare concept shoot"}
+     {url:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=75&fit=crop&crop=top",cap:"ILLIT · My World airport"},
+     {url:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=75&fit=crop&crop=top",cap:"Seongsu-dong · spring street"},
+     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=75&fit=crop&crop=top",cap:"NMIXX · Dare concept shoot"}
    ],
    outfit:[
      {icon:"○",name:"Balloon cargo trousers",desc:"Wide at hip/knee, cinched at ankle — intentional architecture, not just big pants"},
@@ -363,12 +388,11 @@ const S=[
    ]},
   {id:4,name:"Clean girl aesthetic",meta:"When Life Gives You Tangerines · IU",tags:["drama"],
    gt:80,hs:84,vs:82,cv:2760,nlr:0.87,liked:false,disliked:false,delta:"f",dv:0,
-   img:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80&fit=crop",
-   source:"K-Drama · IU's When Life Gives You Tangerines (Netflix) — dubbed 'national drama', 1.2B viewing hours globally in early 2026",
+   img:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&q=75&fit=crop",
    dramaPhotos:[
-     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80&fit=crop&crop=top",cap:"When Life Gives You Tangerines · IU"},
-     {url:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80&fit=crop&crop=top",cap:"IU · press tour styling"},
-     {url:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80&fit=crop&crop=top",cap:"Crash Landing · Yoon Se-ri"}
+     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=75&fit=crop&crop=top",cap:"When Life Gives You Tangerines · IU"},
+     {url:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=75&fit=crop&crop=top",cap:"IU · press tour styling"},
+     {url:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=75&fit=crop&crop=top",cap:"Crash Landing · Yoon Se-ri"}
    ],
    outfit:[
      {icon:"○",name:"Cream linen co-ord set",desc:"Loose wide-leg trousers + relaxed button-down — always slightly undone, never stiff"},
@@ -389,12 +413,11 @@ const S=[
    ]},
   {id:5,name:"Granola-chic",meta:"Seongsu-dong · Hannam-dong spring 2026",tags:["street","hot"],
    gt:72,hs:76,vs:65,cv:2340,nlr:0.82,liked:false,disliked:false,delta:"u",dv:6,
-   img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&q=80&fit=crop",
-   source:"Seoul street · Gorpcore evolved into Granola-Chic — luxury meets nature in Seongsu-dong and Hannam-dong spring 2026",
+   img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=75&fit=crop",
    dramaPhotos:[
-     {url:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80&fit=crop&crop=top",cap:"Seongsu-dong · spring street"},
-     {url:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&q=80&fit=crop&crop=top",cap:"Hannam-dong · weekend market"},
-     {url:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80&fit=crop&crop=top",cap:"IU offstage · café sighting"}
+     {url:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=75&fit=crop&crop=top",cap:"Seongsu-dong · spring street"},
+     {url:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&q=75&fit=crop&crop=top",cap:"Hannam-dong · weekend market"},
+     {url:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=75&fit=crop&crop=top",cap:"IU offstage · café sighting"}
    ],
    outfit:[
      {icon:"△",name:"Hand-crocheted knit vest",desc:"Over a linen shirt — craft meets editorial. Vintage or upcycled from Seongsu thrift"},
@@ -415,17 +438,16 @@ const S=[
    ]},
   {id:6,name:"Unisex power tailoring",meta:"Phantom Lawyer · gender-fluid 2026",tags:["drama","kpop"],
    gt:70,hs:72,vs:74,cv:2100,nlr:0.80,liked:false,disliked:false,delta:"u",dv:3,
-   img:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop",
-   source:"K-Drama + K-Pop · Gender-fluid tailoring is the defining conceptual shift of 2026 across 5th-gen groups and prestige dramas",
+   img:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=75&fit=crop",
    dramaPhotos:[
-     {url:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80&fit=crop&crop=top",cap:"Phantom Lawyer · lead wardrobe"},
-     {url:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80&fit=crop&crop=top",cap:"Stray Kids · ATE stage"},
-     {url:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80&fit=crop&crop=top",cap:"(G)I-DLE · suit concept shoot"}
+     {url:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=75&fit=crop&crop=top",cap:"Phantom Lawyer · lead wardrobe"},
+     {url:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=75&fit=crop&crop=top",cap:"Stray Kids · ATE stage"},
+     {url:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=75&fit=crop&crop=top",cap:"(G)I-DLE · suit concept"}
    ],
    outfit:[
      {icon:"◈",name:"Wide-shoulder oversized blazer",desc:"Masculine silhouette for all genders — shoulder falls off the natural shoulder"},
      {icon:"○",name:"Cropped wide-leg trousers",desc:"High-rise, tailored in heavy fabric — power bottom to slouchy top"},
-     {icon:"△",name:"Lace or pearl accessories",desc:"Feminine counterpoint — one pearl pin or lace collar softens hard tailoring"},
+     {icon:"△",name:"Lace or pearl accessories",desc:"Feminine counterpoint — one pearl pin softens hard tailoring"},
      {icon:"✦",name:"Oxford shoes or loafers",desc:"Gender-neutral — no heel, no sneaker, maximum gravitas"}
    ],
    dramas:[
@@ -441,12 +463,11 @@ const S=[
    ]},
   {id:7,name:"Sheer spring layers",meta:"Le Sserafim · Filing for Love cast",tags:["drama","kpop"],
    gt:68,hs:70,vs:69,cv:1890,nlr:0.78,liked:false,disliked:false,delta:"u",dv:2,
-   img:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80&fit=crop",
-   source:"Spring 2026 · Sheer fabrics return as fusion of traditional Korean textile aesthetics with contemporary layering",
+   img:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=75&fit=crop",
    dramaPhotos:[
-     {url:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80&fit=crop&crop=top",cap:"Filing for Love · Shin Hye-sun"},
-     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80&fit=crop&crop=top",cap:"Le Sserafim · EASY mv"},
-     {url:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80&fit=crop&crop=top",cap:"Seongsu spring editorial"}
+     {url:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=75&fit=crop&crop=top",cap:"Filing for Love · Shin Hye-sun"},
+     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=75&fit=crop&crop=top",cap:"Le Sserafim · EASY mv"},
+     {url:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=75&fit=crop&crop=top",cap:"Seongsu spring editorial"}
    ],
    outfit:[
      {icon:"○",name:"Sheer lace blouse",desc:"Over fitted camisole or bralette — layering essential, never fully exposed"},
@@ -467,12 +488,11 @@ const S=[
    ]},
   {id:8,name:"Halmeoni vintage",meta:"Seongsu-dong thrift · retro street 2026",tags:["street"],
    gt:60,hs:65,vs:55,cv:1650,nlr:0.75,liked:false,disliked:false,delta:"u",dv:4,
-   img:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80&fit=crop",
-   source:"Seoul street · Halmeoni (grandmother) aesthetic — 2026 sub-trend blending thrift craftsmanship with modern streetwear contrast",
+   img:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=500&q=75&fit=crop",
    dramaPhotos:[
-     {url:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&q=80&fit=crop&crop=top",cap:"Seongsu thrift · April 2026"},
-     {url:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80&fit=crop&crop=top",cap:"Hongdae indie scene"},
-     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80&fit=crop&crop=top",cap:"TikTok KR #할머니패션"}
+     {url:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&q=75&fit=crop&crop=top",cap:"Seongsu thrift · April 2026"},
+     {url:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=75&fit=crop&crop=top",cap:"Hongdae indie scene"},
+     {url:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=75&fit=crop&crop=top",cap:"TikTok KR #할머니패션"}
    ],
    outfit:[
      {icon:"✦",name:"Vintage cardigan from thrift",desc:"Hand-knit or archival Korean knitwear — loosely over a collared shirt"},
@@ -493,29 +513,28 @@ const S=[
    ]},
   {id:9,name:"Organic monochrome",meta:"Seoul minimalists · texture dressing",tags:["drama","street"],
    gt:58,hs:62,vs:60,cv:1420,nlr:0.72,liked:false,disliked:false,delta:"f",dv:0,
-   img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&fit=crop",
-   source:"2026 minimalism evolution — monochrome elevated through material contrast rather than color variation across Seoul's minimalist community",
+   img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=75&fit=crop",
    dramaPhotos:[
-     {url:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80&fit=crop&crop=top",cap:"Seoul Fashion Week · Seongsu"},
-     {url:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80&fit=crop&crop=top",cap:"Spring 2026 drama styling"},
-     {url:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80&fit=crop&crop=top",cap:"Instagram #유기농모노크롬"}
+     {url:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=75&fit=crop&crop=top",cap:"Seoul Fashion Week · Seongsu"},
+     {url:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=75&fit=crop&crop=top",cap:"Spring 2026 drama styling"},
+     {url:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=75&fit=crop&crop=top",cap:"Instagram #유기농모노크롬"}
    ],
    outfit:[
      {icon:"○",name:"Tonal silk top",desc:"Fluid, bias-cut — same or analogous color to bottom. Slight sheen creates depth"},
      {icon:"◈",name:"Textured knit midi skirt",desc:"Same tone, different texture — bouclé or ribbed knit reads rich without color"},
      {icon:"✦",name:"Linen raw-hem trousers",desc:"Unfinished edge is intentional — natural fiber adds tactile interest"},
-     {icon:"△",name:"Tone-on-tone accessories",desc:"Bag and shoes within two color stops of outfit — breaking color creates visual static"}
+     {icon:"△",name:"Tone-on-tone accessories",desc:"Bag and shoes within two color stops — breaking color creates visual static"}
    ],
    dramas:[
      {name:"Seoul Fashion Week showrooms",detail:"Seongsu season · April 2026",badge:"high",rating:"April 2026"},
-     {name:"Spring 2026 drama styling",detail:"Background character styling code",badge:"mid",rating:"Aesthetic reference"},
+     {name:"Spring 2026 drama styling",detail:"Background character code",badge:"mid",rating:"Aesthetic reference"},
      {name:"Instagram #유기농모노크롬",detail:"Organic mono · April 2026",badge:"mid",rating:"+18% growth"}
    ],
    shop:[
      {name:"Silk bias-cut top",brand:"ARKET",price:"$89",retailer:"ARKET",url:"https://www.arket.com",img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=70&fit=crop"},
      {name:"Bouclé midi skirt",brand:"Zara",price:"$69",retailer:"Zara",url:"https://www.zara.com",img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300&q=70&fit=crop"},
      {name:"Linen wide trousers",brand:"COS",price:"$89",retailer:"COS",url:"https://www.cos.com",img:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=300&q=70&fit=crop"},
-     {name:"Tonal mini shoulder bag",brand:"Mango",price:"$49",retailer:"Mango",url:"https://www.mango.com",img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&q=70&fit=crop"}
+     {name:"Tonal mini bag",brand:"Mango",price:"$49",retailer:"Mango",url:"https://www.mango.com",img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&q=70&fit=crop"}
    ]}
 ];
 
@@ -525,7 +544,7 @@ S.forEach(s=>{
   s.fs=Math.round(0.60*s.ds+0.40*s.vs2);
 });
 
-let filter='all', openId=null;
+let filter='all',openId=null;
 function gc(v){return v>=80?'g':v>=60?'m':'lo'}
 
 function render(){
@@ -557,7 +576,7 @@ function render(){
         <div class="cfoot">
           <div><div class="cscore">${s.fs}<sub> /100</sub></div><div class="cvotes">${s.cv.toLocaleString()} votes</div></div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
-            <span style="font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--hint)">Wear·Skip</span>
+            <span style="font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--hint);font-weight:500">Wear·Skip</span>
             <div class="vbtns">
               <button class="vb${s.liked?' vup':''}" onclick="event.stopPropagation();vote(${s.id},1)">▲</button>
               <button class="vb${s.disliked?' vdn':''}" onclick="event.stopPropagation();vote(${s.id},-1)">▼</button>
@@ -568,10 +587,7 @@ function render(){
       </div>
     </div>`;
   }).join('');
-  if(openId!==null){
-    const s=S.find(x=>x.id===openId);
-    if(s){const sorted2=[...S].sort((a,b)=>b.fs-a.fs);fillDrawer(s,sorted2.indexOf(s)+1);}
-  }
+  if(openId!==null){const s=S.find(x=>x.id===openId);if(s){const s2=[...S].sort((a,b)=>b.fs-a.fs);fillDrawer(s,s2.indexOf(s)+1);}}
 }
 
 function fillDrawer(s,rank){
@@ -582,32 +598,21 @@ function fillDrawer(s,rank){
     <div class="d-eyebrow">No.${String(rank).padStart(2,'0')} · April 2026 ranking</div>
     <div class="d-title">${s.name}</div>
     <div class="tags" style="margin:5px 0 14px">${tgs}</div>
-
     <div class="spotted-label">✦ Spotted in</div>
     <div class="spotted-list">
       ${s.dramas.map(d=>{
-        const q=encodeURIComponent(`${d.name} ${s.name} fashion outfit`);
-        const imgQ=encodeURIComponent(`${d.name} ${d.detail} outfit fashion`);
-        const googleImg=`https://www.google.com/search?q=${imgQ}&tbm=isch`;
-        const isHigh=d.badge==='high';
-        return`<a class="spotted-card${isHigh?'':' mid-card'}" href="${googleImg}" target="_blank" rel="noopener noreferrer">
-          <div class="spotted-left">
-            <div class="spotted-icon">${isHigh?'★':'◆'}</div>
-          </div>
-          <div class="spotted-mid">
-            <div class="spotted-name">${d.name}</div>
-            <div class="spotted-detail">${d.detail}</div>
-          </div>
-          <div class="spotted-right">
-            <div class="spotted-rating">${d.rating}</div>
-            <div class="spotted-cta">See photos ↗</div>
-          </div>
+        const q=encodeURIComponent(`${d.name} ${d.detail} fashion outfit`);
+        const gurl=`https://www.google.com/search?q=${q}&tbm=isch`;
+        const isH=d.badge==='high';
+        return`<a class="spotted-card${isH?'':' mid-card'}" href="${gurl}" target="_blank" rel="noopener">
+          <div class="spotted-left"><div class="spotted-icon">${isH?'★':'◆'}</div></div>
+          <div class="spotted-mid"><div class="spotted-name">${d.name}</div><div class="spotted-detail">${d.detail}</div></div>
+          <div class="spotted-right"><div class="spotted-rating">${d.rating}</div><div class="spotted-cta">See photos ↗</div></div>
         </a>`;
       }).join('')}
     </div>
-
     <div class="score-row">
-      <div class="score-box"><div class="score-box-l">Final score</div><div class="score-box-v gold">${s.fs}<span style="font-size:9px;color:var(--hint);font-family:'Montserrat',sans-serif"> /100</span></div></div>
+      <div class="score-box"><div class="score-box-l">Final score</div><div class="score-box-v gold">${s.fs}<span style="font-size:9px;color:var(--hint);font-family:'Montserrat',sans-serif;font-weight:400"> /100</span></div></div>
       <div class="score-box"><div class="score-box-l">Data 60%</div><div class="score-box-v">${s.ds}</div></div>
       <div class="score-box"><div class="score-box-l">Votes 40%</div><div class="score-box-v">${s.vs2}</div></div>
     </div>
@@ -616,35 +621,15 @@ function fillDrawer(s,rank){
       <div class="sig-box"><div class="sig-box-l">Hashtag freq.</div><div class="sig-box-v ${gc(s.hs)}">${s.hs}</div></div>
       <div class="sig-box"><div class="sig-box-l">Viewership</div><div class="sig-box-v ${gc(s.vs)}">${s.vs}</div></div>
     </div>
-
     <div class="d-section">As seen in — drama &amp; concert moments</div>
-    <div class="drama-photos">
-      ${s.dramaPhotos.map(p=>`<div class="dp-wrap"><img class="dp-img" src="${p.url}" alt="${p.cap}" loading="lazy"></div>`).join('')}
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:3px">
-      ${s.dramaPhotos.map(p=>`<div class="dp-cap">${p.cap}</div>`).join('')}
-    </div>
-    <div class="photo-note">📷 Editorial placeholder photos · Replace with official press kit images from Netflix Korea, tvN, or agency PR for the live site.</div>
-
+    <div class="drama-photos">${s.dramaPhotos.map(p=>`<div class="dp-wrap"><img class="dp-img" src="${p.url}" alt="${p.cap}" loading="lazy"></div>`).join('')}</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:3px">${s.dramaPhotos.map(p=>`<div class="dp-cap">${p.cap}</div>`).join('')}</div>
+    <div class="photo-note">📷 Placeholder photos · Replace with official press kit images from Netflix Korea, tvN or agency PR for the live site.</div>
     <div class="d-section">Outfit breakdown</div>
-    <div class="outfit-list">
-      ${s.outfit.map(o=>`<div class="outfit-item"><div class="outfit-icon">${o.icon}</div><div><div class="outfit-name">${o.name}</div><div class="outfit-desc">${o.desc}</div></div></div>`).join('')}
-    </div>
-
+    <div class="outfit-list">${s.outfit.map(o=>`<div class="outfit-item"><div class="outfit-icon">${o.icon}</div><div><div class="outfit-name">${o.name}</div><div class="outfit-desc">${o.desc}</div></div></div>`).join('')}</div>
     <div class="d-section">Shop this look</div>
-    <div class="shop-grid">
-      ${s.shop.map(p=>`<a class="shop-card" href="${p.url}" target="_blank" rel="noopener noreferrer">
-        <img class="shop-photo" src="${p.img}" alt="${p.name}" loading="lazy">
-        <div class="shop-body">
-          <div class="shop-name">${p.name}</div>
-          <div class="shop-brand">${p.brand}</div>
-          <div class="shop-price">${p.price}</div>
-          <div class="shop-cta">Shop at ${p.retailer} ↗</div>
-        </div>
-      </a>`).join('')}
-    </div>
-    <div class="shop-disclaimer">Links are editorial suggestions. Replace with real affiliate links from ASOS, YesStyle, Revolve, or Musinsa affiliate programmes to earn commission.</div>
-
+    <div class="shop-grid">${s.shop.map(p=>`<a class="shop-card" href="${p.url}" target="_blank" rel="noopener"><img class="shop-photo" src="${p.img}" alt="${p.name}" loading="lazy"><div class="shop-body"><div class="shop-name">${p.name}</div><div class="shop-brand">${p.brand}</div><div class="shop-price">${p.price}</div><div class="shop-cta">Shop at ${p.retailer} ↗</div></div></a>`).join('')}</div>
+    <div class="shop-disclaimer">Editorial suggestions · Replace with affiliate links from ASOS, YesStyle, Revolve or Musinsa to earn commission.</div>
     <div class="d-vote-row">
       <div><div class="d-vote-label">Cast your vote</div><div class="d-vote-sub">${s.cv.toLocaleString()} votes · score updates live</div></div>
       <div class="d-vbtns">
@@ -663,38 +648,19 @@ function openDrawer(id){
   document.getElementById('drawer').classList.add('open');
   document.getElementById('drawer').scrollTop=0;
 }
-
 function closeDrawer(){
   openId=null;
   document.getElementById('overlay').classList.remove('open');
   document.getElementById('drawer').classList.remove('open');
 }
-
 function vote(id,dir){
   const s=S.find(x=>x.id===id);if(!s)return;
-  if(dir===1){
-    if(s.liked){s.liked=false;s.cv--;s.nlr=Math.max(0,s.nlr-0.01);showToast('Vote removed')}
-    else{if(s.disliked){s.disliked=false;s.cv--;s.nlr=Math.min(1,s.nlr+0.01)}s.liked=true;s.cv++;s.nlr=Math.min(1,s.nlr+0.01);showToast('Wear it — noted')}
-  }else{
-    if(s.disliked){s.disliked=false;s.cv--;s.nlr=Math.min(1,s.nlr+0.01);showToast('Vote removed')}
-    else{if(s.liked){s.liked=false;s.cv--;s.nlr=Math.max(0,s.nlr-0.01)}s.disliked=true;s.cv++;s.nlr=Math.max(0,s.nlr-0.01);showToast('Skip it — noted')}
-  }
-  s.vs2=Math.round(s.nlr*100);
-  s.fs=Math.round(0.60*s.ds+0.40*s.vs2);
-  render();
+  if(dir===1){if(s.liked){s.liked=false;s.cv--;s.nlr=Math.max(0,s.nlr-0.01);showToast('Vote removed')}else{if(s.disliked){s.disliked=false;s.cv--;s.nlr=Math.min(1,s.nlr+0.01)}s.liked=true;s.cv++;s.nlr=Math.min(1,s.nlr+0.01);showToast('Wear it — noted')}}
+  else{if(s.disliked){s.disliked=false;s.cv--;s.nlr=Math.min(1,s.nlr+0.01);showToast('Vote removed')}else{if(s.liked){s.liked=false;s.cv--;s.nlr=Math.max(0,s.nlr-0.01)}s.disliked=true;s.cv++;s.nlr=Math.max(0,s.nlr-0.01);showToast('Skip it — noted')}}
+  s.vs2=Math.round(s.nlr*100);s.fs=Math.round(0.60*s.ds+0.40*s.vs2);render();
 }
-
-function setF(el,f){
-  document.querySelectorAll('.fp').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');filter=f;render();
-}
-
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('on');
-  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),1800);
-}
-
+function setF(el,f){document.querySelectorAll('.fp').forEach(b=>b.classList.remove('active'));el.classList.add('active');filter=f;render();}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),1800)}
 render();
 </script>
 </body>
